@@ -27,8 +27,8 @@ namespace Tester
 
         static void Main(string[] args)
         {
-            //BaseConstructor().Wait();
-            //AuthInConstructor().Wait();
+            BaseConstructor().Wait();
+            AuthInConstructor().Wait();
             CreateTypedObject().Wait();
             CreateUntypedObject().Wait();
         }
