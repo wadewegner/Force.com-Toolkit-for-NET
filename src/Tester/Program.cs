@@ -31,6 +31,7 @@ namespace Tester
             AuthInConstructor().Wait();
             CreateTypedObject().Wait();
             CreateUntypedObject().Wait();
+            CreateUpdateTypedObject().Wait();
         }
 
         static async Task BaseConstructor()
@@ -99,5 +100,32 @@ namespace Tester
             }
         }
 
+
+        static async Task CreateUpdateTypedObject()
+        {
+            try
+            {
+                var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
+
+                var account = new Account() { Name = "New Name", Description = "New Description" };
+                var id = await client.Create("Account", account);
+
+                account.Name = "New Name 2";
+
+                var success = await client.Update("Account", id, account);
+
+                if (success)
+                {
+                    //TODO: add check by searching for ID and confirming
+                }
+
+
+                Console.WriteLine(id);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+        }
     }
 }

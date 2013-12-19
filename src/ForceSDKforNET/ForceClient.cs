@@ -122,6 +122,37 @@ namespace ForceSDKforNET
             throw new ForceException(errorResponse.message, errorResponse.errorCode);
         }
 
+        public async Task<bool> Update(string objectName, string recordId, object record)
+        {
+            var url = FormatUrl("sobjects") + "/" + objectName + "/" + recordId;
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
+
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = new HttpMethod("PATCH")
+            };
+
+            var json = JsonConvert.SerializeObject(record);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            request.Content = content;
+            request.Headers.Add("Authorization", "Bearer " + AccessToken);
+
+            var responseMessage = await client.SendAsync(request);
+            var response = await responseMessage.Content.ReadAsStringAsync();
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+            throw new ForceException(errorResponse.error, errorResponse.error_description);
+        }
+
         protected string FormatUrl(string resourceName)
         {
             return string.Format("{0}/services/data/{1}/{2}", InstanceUrl, ApiVersion, resourceName);
