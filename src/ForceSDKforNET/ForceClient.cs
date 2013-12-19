@@ -31,7 +31,7 @@ namespace ForceSDKforNET
         {
             var tokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
             var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("forcedotcom-toolkit-dotnet/{0}", ApiVersion));
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
 
             var content = new FormUrlEncodedContent(new[] 
             {
@@ -71,7 +71,7 @@ namespace ForceSDKforNET
             var url = string.Format("{0}?q={1}", FormatUrl("query"), query);
 
             var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("forcedotcom-toolkit-dotnet/{0}", ApiVersion));
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
 
             var request = new HttpRequestMessage()
             {
@@ -104,7 +104,7 @@ namespace ForceSDKforNET
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("forcedotcom-toolkit-dotnet/{0}", ApiVersion));
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
 
             var json = JsonConvert.SerializeObject(record);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
