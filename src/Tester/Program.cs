@@ -27,8 +27,10 @@ namespace Tester
 
         static void Main(string[] args)
         {
-            BaseConstructor().Wait();
-            AuthInConstructor().Wait();
+            //BaseConstructor().Wait();
+            //AuthInConstructor().Wait();
+            CreateTypedObject().Wait();
+            CreateUntypedObject().Wait();
         }
 
         static async Task BaseConstructor()
@@ -56,6 +58,40 @@ namespace Tester
                 var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
 
                 Console.WriteLine(accounts.Count);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+        }
+
+        static async Task CreateTypedObject()
+        {
+            try
+            {
+                var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
+
+                var account = new Account() {Name = "New Name", Description = "New Description"};
+                var id = await client.Create("Account", account);
+
+                Console.WriteLine(id);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+        }
+
+        static async Task CreateUntypedObject()
+        {
+            try
+            {
+                var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
+
+                var account = new { Name = "New Name", Description = "New Description" };
+                var id = await client.Create("Account", account);
+
+                Console.WriteLine(id);
             }
             catch (Exception ex)
             {

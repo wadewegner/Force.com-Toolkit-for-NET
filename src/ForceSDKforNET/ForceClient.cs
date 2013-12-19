@@ -14,7 +14,7 @@ namespace ForceSDKforNET
     {
         public ForceClient()
         {
-            ApiVersion = "v28.0";
+            ApiVersion = "v29.0";
         }
 
         public ForceClient(string clientId, string clientSecret, string username, string password)
@@ -94,6 +94,30 @@ namespace ForceSDKforNET
             
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
             throw new ForceException(errorResponse.error, errorResponse.error_description);
+        }
+
+        public async Task<string> Create(string objectName, object record)
+        {
+            var url = FormatUrl("sobjects") + "/" + objectName;
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            var json = JsonConvert.SerializeObject(record);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var responseMessage = await client.PostAsync(url, content);
+            var response = await responseMessage.Content.ReadAsStringAsync();
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var id = JsonConvert.DeserializeObject<SuccessResponse>(response).id;
+                return id;
+            }
+            
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+            throw new ForceException(errorResponse.message, errorResponse.errorCode);
         }
 
         protected string FormatUrl(string resourceName)
