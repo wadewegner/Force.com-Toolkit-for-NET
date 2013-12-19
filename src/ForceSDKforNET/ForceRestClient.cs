@@ -9,11 +9,6 @@ using Newtonsoft.Json.Linq;
 
 namespace ForceSDKforNET
 {
-    internal class QueryResults<TRecord> where TRecord : new()
-    {
-        public List<TRecord> Records { get; set; }
-    }
-
     public class ForceRestClient
     {
         public ForceRestClient()
@@ -26,7 +21,7 @@ namespace ForceSDKforNET
         public string InstanceUrl { get; private set; }
         public string AccessToken { get; private set; }
 
-        public void Authenticate(string clientId, string clientSecret, string username, string password)
+        public async Task Authenticate(string clientId, string clientSecret, string username, string password)
         {
             var tokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
             var client = new HttpClient();
@@ -47,15 +42,15 @@ namespace ForceSDKforNET
                 Content = content
             };
 
-            var responseMessage = client.SendAsync(request).Result;
-            var response = responseMessage.Content.ReadAsStringAsync();
-            var authToken = JsonConvert.DeserializeObject<AuthToken>(response.Result);
+            var responseMessage = await client.SendAsync(request);
+            var response = await responseMessage.Content.ReadAsStringAsync();
+            var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
 
             AccessToken = authToken.access_token;
             InstanceUrl = authToken.instance_url;
         }
 
-        public IList<T> Query<T>(string query)
+        public async Task<IList<T>> Query<T>(string query)
         {
 
             var url = string.Format("{0}?q={1}", GetUrl("query"), query);
@@ -69,24 +64,19 @@ namespace ForceSDKforNET
 
             request.Headers.Add("Authorization", "Bearer " + AccessToken);
 
-            var responseMessage = client.SendAsync(request).Result;
-            var response = responseMessage.Content.ReadAsStringAsync();
+            var responseMessage = await client.SendAsync(request);
+            var response = await responseMessage.Content.ReadAsStringAsync();
 
-            var jObject = JObject.Parse(response.Result);
+            var jObject = JObject.Parse(response);
             var jToken = jObject.GetValue("records");
 
             var r = JsonConvert.DeserializeObject<IList<T>>(jToken.ToString());
             return r;
         }
 
-
         protected string GetUrl(string resourceName)
         {
             return string.Format("{0}/services/data/{1}/{2}", InstanceUrl, ApiVersion, resourceName);
         }
     }
-
-
-
-
 }

@@ -19,6 +19,12 @@ namespace Tester
     {
         static void Main(string[] args)
         {
+            MainTask().Wait();
+
+        }
+
+        static async Task MainTask()
+        {
             ForceRestClient client = new ForceRestClient();
 
             string consumerKey = "3MVG9A2kN3Bn17hsEyMqRTTaEfT8PtpprMk4qQoUe0ep4brWttwhxV1kRg5KB2dW2Hs4kWExau.h8VLEFeo37";
@@ -26,11 +32,11 @@ namespace Tester
             string username = "wade@sfdcapi.com";
             string password = "Passw0rd!";
 
-            client.Authenticate(consumerKey, consumerSecret, username, password);
+            await client.Authenticate(consumerKey, consumerSecret, username, password);
 
-            var accounts = client.Query<Account>("SELECT id, name, description FROM Account");
+            var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
 
-            //Console.WriteLine(records);
+            Console.WriteLine(accounts.Count);
 
         }
     }
