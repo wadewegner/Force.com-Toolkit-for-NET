@@ -142,13 +142,40 @@ namespace ForceSDKforNET
             request.Headers.Add("Authorization", "Bearer " + AccessToken);
 
             var responseMessage = await client.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
 
             if (responseMessage.IsSuccessStatusCode)
             {
                 return true;
             }
 
+            var response = await responseMessage.Content.ReadAsStringAsync();
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+            throw new ForceException(errorResponse.error, errorResponse.error_description);
+        }
+
+        public async Task<bool> Delete(string objectName, string recordId)
+        {
+            var url = FormatUrl("sobjects") + "/" + objectName + "/" + recordId;
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
+
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Delete
+            };
+
+            request.Headers.Add("Authorization", "Bearer " + AccessToken);
+
+            var responseMessage = await client.SendAsync(request);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            var response = await responseMessage.Content.ReadAsStringAsync();
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
             throw new ForceException(errorResponse.error, errorResponse.error_description);
         }

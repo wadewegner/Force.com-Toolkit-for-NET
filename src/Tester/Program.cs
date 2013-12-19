@@ -32,6 +32,7 @@ namespace Tester
             CreateTypedObject().Wait();
             CreateUntypedObject().Wait();
             CreateUpdateTypedObject().Wait();
+            CreateDeleteTypedObject().Wait();
         }
 
         static async Task BaseConstructor()
@@ -119,8 +120,25 @@ namespace Tester
                     //TODO: add check by searching for ID and confirming
                 }
 
-
                 Console.WriteLine(id);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+        }
+
+        static async Task CreateDeleteTypedObject()
+        {
+            try
+            {
+                var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
+
+                var account = new Account() { Name = "New Name", Description = "New Description" };
+                var id = await client.Create("Account", account);
+                var success = await client.Delete("Account", id);
+
+                Console.WriteLine(success.ToString());
             }
             catch (Exception ex)
             {
