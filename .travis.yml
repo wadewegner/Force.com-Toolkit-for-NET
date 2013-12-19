@@ -1,7 +1,0 @@
-language: c
- 
-install:
-  - sudo apt-get install mono-devel mono-gmcs nunit-console
- 
-script:
-  - xbuild ./src/Salesforce.sln /property:"Configuration=Debug;Platform=Any CPU"
