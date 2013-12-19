@@ -1,4 +1,4 @@
-﻿namespace ForceSDKforNET
+﻿namespace ForceSDKforNET.Models
 {
     public class AuthToken
     {

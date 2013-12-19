@@ -1,4 +1,5 @@
-﻿using ForceSDKforNET;
+﻿using System.Configuration;
+using ForceSDKforNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,29 +16,52 @@ namespace Tester
     }
 
 
+
     class Program
     {
+        private static string _securityToken = ConfigurationSettings.AppSettings["SecurityToken"];
+        private static string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
+        private static string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
+        private static string _username = ConfigurationSettings.AppSettings["Username"];
+        private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
+
         static void Main(string[] args)
         {
-            MainTask().Wait();
-
+            BaseConstructor().Wait();
+            AuthInConstructor().Wait();
         }
 
-        static async Task MainTask()
+        static async Task BaseConstructor()
         {
-            ForceRestClient client = new ForceRestClient();
+            try
+            {
+                var client = new ForceClient();
 
-            string consumerKey = "3MVG9A2kN3Bn17hsEyMqRTTaEfT8PtpprMk4qQoUe0ep4brWttwhxV1kRg5KB2dW2Hs4kWExau.h8VLEFeo37";
-            string consumerSecret = "2486043778523914463";
-            string username = "wade@sfdcapi.com";
-            string password = "Passw0rd!";
+                await client.Authenticate(_consumerKey, _consumerSecret, _username, _password);
+                var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
 
-            await client.Authenticate(consumerKey, consumerSecret, username, password);
-
-            var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
-
-            Console.WriteLine(accounts.Count);
-
+                Console.WriteLine(accounts.Count);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
         }
+
+        static async Task AuthInConstructor()
+        {
+            try
+            {
+                var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
+                var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
+
+                Console.WriteLine(accounts.Count);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+        }
+
     }
 }
