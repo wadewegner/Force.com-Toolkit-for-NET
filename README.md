@@ -1,6 +1,12 @@
 # Force.com-SDK-for-NET
 
-Please add all feedback - e.g. bugs, features, ideas, and so forth - as issues so that we can track them accordingly.
+*Note*: Please add all feedback - e.g. bugs, features, ideas, and so forth - as issues so that we can track them accordingly.
+
+## Why a Toolkit?
+
+Why not? =)
+
+More seriously, .NET developers represent a huge community and we want to make it as easy as possible for them to developer against Force.com. A toolkit, complete with libraries and NuGet packages, represents one of the easiest ways to get them started.
 
 ## NuGet Examples
 
