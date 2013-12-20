@@ -8,15 +8,6 @@ using System.Threading.Tasks;
 
 namespace Tester
 {
-    public class Account
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-    }
-
-
-
     class Program
     {
         private static string _securityToken = ConfigurationSettings.AppSettings["SecurityToken"];
