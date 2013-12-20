@@ -1,8 +1,8 @@
-# Force.com-SDK-for-NET
+# Force.com Toolkit for .NET
 
 *Note*: Please add all feedback - e.g. bugs, features, ideas, and so forth - as issues so that we can track them accordingly.
 
-## Why a Toolkit?
+## Why a .NET Toolkit?
 
 Why not? =)
 
