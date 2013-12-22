@@ -63,7 +63,6 @@ namespace Tester
             try
             {
                 var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
-
                 var account = new Account() {Name = "New Name", Description = "New Description"};
                 var id = await client.Create("Account", account);
 
@@ -80,7 +79,6 @@ namespace Tester
             try
             {
                 var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
-
                 var account = new { Name = "New Name", Description = "New Description" };
                 var id = await client.Create("Account", account);
 
@@ -98,7 +96,6 @@ namespace Tester
             try
             {
                 var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
-
                 var account = new Account() { Name = "New Name", Description = "New Description" };
                 var id = await client.Create("Account", account);
 

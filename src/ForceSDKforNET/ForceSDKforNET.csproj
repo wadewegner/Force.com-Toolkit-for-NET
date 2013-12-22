@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ForceException.cs" />
+    <Compile Include="IForceClient.cs" />
     <Compile Include="Models\ErrorResponse.cs" />
     <Compile Include="ForceClient.cs" />
     <Compile Include="Models\SuccessResponse.cs" />

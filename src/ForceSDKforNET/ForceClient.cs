@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ForceSDKforNET
 {
-    public class ForceClient
+    public class ForceClient : IForceClient
     {
         public ForceClient()
         {
@@ -24,8 +24,8 @@ namespace ForceSDKforNET
         }
 
         public string ApiVersion { get; set; }
-        public string InstanceUrl { get; private set; }
-        public string AccessToken { get; private set; }
+        public string InstanceUrl { get; set; }
+        public string AccessToken { get; set; }
 
         public async Task Authenticate(string clientId, string clientSecret, string username, string password)
         {
