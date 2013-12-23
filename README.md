@@ -15,7 +15,7 @@ More seriously, .NET developers represent a huge community and we want to make i
 You can try the library immmediately by installing the this unlisted package.
 
 ```
-Install-Package developerforce.restapi -Version 0.0.1
+Install-Package developerforce.restapi -Version 0.0.29
 ```
 
 ### DevTest Packages
