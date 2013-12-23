@@ -72,8 +72,6 @@ namespace ForceSDKforNET
             }
         }
 
-        
-
         public async Task<IList<T>> Query<T>(string query)
         {
             var url = string.Format("{0}?q={1}", FormatUrl("query"), query);
