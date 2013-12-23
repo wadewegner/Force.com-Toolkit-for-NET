@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
@@ -184,6 +185,15 @@ namespace ForceSDKforNET
             var response = await responseMessage.Content.ReadAsStringAsync();
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
             throw new ForceException(errorResponse.error, errorResponse.error_description);
+        }
+
+        public async Task<T> QueryById<T>(string objectName, string recordId)
+        {
+            var fields = string.Join(", ", typeof(T).GetProperties().Select(p => p.Name));
+            var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
+            var results = await Query<T>(query);
+
+            return results.FirstOrDefault();
         }
 
         protected string FormatUrl(string resourceName)

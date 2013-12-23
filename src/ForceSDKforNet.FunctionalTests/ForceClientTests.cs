@@ -104,31 +104,27 @@ namespace ForceSDKforNet.FunctionalTests
             Assert.IsTrue(success);
         }
 
-        //[Test]
-        //public async void Update_Account_NameChanged()
-        //{
-        //    var client = new ForceClient();
+        [Test]
+        public async void Update_Account_NameChanged()
+        {
+            var client = new ForceClient();
 
-        //    await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-        //    string originalName = "New Account";
-        //    string newName = "New Account 2";
+            var originalName = "New Account";
+            var newName = "New Account 2";
 
-        //    var account = new Account() { Name = originalName, Description = "New Account Description" };
-        //    var id = await client.Create("Account", account);
+            var account = new Account() { Name = originalName, Description = "New Account Description" };
+            var id = await client.Create("Account", account);
 
-        //    account.Name = newName;
+            account.Name = newName;
 
-        //    var success = await client.Update("Account", id, account);
+            await client.Update("Account", id, account);
 
-        //    if (success)
-        //    {
-        //        // query by id
-        //        Assert.True(false);
-        //    }
+            var result = await client.QueryById<Account>("Account", id);
 
-        //    Assert.IsTrue(success);
-        //}
+            Assert.True(result.Name == newName);
+        }
 
 
         [Test]
@@ -145,11 +141,21 @@ namespace ForceSDKforNet.FunctionalTests
             Assert.IsTrue(success);
         }
 
-        //[Test]
-        //public async void Delete_Account_ValidateIsGone()
-        //{
-        //    Assert.True(false);
-        //}
+        [Test]
+        public async void Delete_Account_ValidateIsGone()
+        {
+            var client = new ForceClient();
+
+            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+
+            var account = new Account() { Name = "New Account", Description = "New Account Description" };
+            var id = await client.Create("Account", account);
+            await client.Delete("Account", id);
+
+            var result = await client.QueryById<Account>("Account", id);
+
+            Assert.IsNull(result);
+        }
 
     }
 }
