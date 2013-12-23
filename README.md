@@ -8,13 +8,28 @@ Why not? =)
 
 More seriously, .NET developers represent a huge community and we want to make it as easy as possible for them to developer against Force.com. A toolkit, complete with libraries and NuGet packages, represents one of the easiest ways to get them started.
 
-## NuGet Examples
+## NuGet Packages
+
+### Published Packages
 
 You can try the library immmediately by installing the this unlisted package.
 
 ```
 Install-Package developerforce.restapi -Version 0.0.1
 ```
+
+### DevTest Packages
+
+If you want to use the most recent DevTest NuGet packages you can grab the packages built during the CI build. All you need to do is setup Visual Studio to pull from the build servers NuGet feed:
+
+1. In Visual Studios select **Tools** -> **Library Package Manager** -> **Package Manager Settings**. Choose **Package Sources**.
+2. Click **+** to add a new source.
+3. Change the **Name** to "Force.com Toolkit for .NET (DevTest)".
+4. Change the **Source** to http://dfbuild.cloudapp.net/guestAuth/app/nuget/v1/FeedService.svc/.
+
+Now you can choose to install the latest NuGet from this DevTest feed.
+
+## Sample Code
 
 Currently the following operations are supported.
 
