@@ -30,6 +30,12 @@ namespace ForceSDKforNET
         public async Task Authenticate(string clientId, string clientSecret, string username, string password)
         {
             var tokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
+
+            await Authenticate(clientId, clientSecret, username, password, tokenRequestEndpointUrl);
+        }
+
+        public async Task Authenticate(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl)
+        {
             var client = new HttpClient();
             client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
 
@@ -65,6 +71,8 @@ namespace ForceSDKforNET
                 throw new ForceException(errorResponse.error, errorResponse.error_description);
             }
         }
+
+        
 
         public async Task<IList<T>> Query<T>(string query)
         {
