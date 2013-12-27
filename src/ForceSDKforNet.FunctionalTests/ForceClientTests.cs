@@ -157,5 +157,33 @@ namespace ForceSDKforNet.FunctionalTests
             Assert.IsNull(result);
         }
 
+        [Test]
+        public async void Objects_Get_IsNotNull()
+        {
+            var client = new ForceClient();
+
+            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+
+            var objects = await client.GetObjects();
+
+            Assert.IsNotNull(objects);
+        }
+
+        [Test]
+        public async void Object_Describe()
+        {
+            var client = new ForceClient();
+
+            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+
+            var objects = await client.GetObjects();
+
+            foreach (var obj in objects)
+            {
+                await client.Describe(obj.name);
+            }
+
+            Assert.IsTrue(true);
+        }
     }
 }

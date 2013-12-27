@@ -44,6 +44,8 @@
     <Compile Include="IForceClient.cs" />
     <Compile Include="Models\ErrorResponse.cs" />
     <Compile Include="ForceClient.cs" />
+    <Compile Include="Models\RootObject.cs" />
+    <Compile Include="Models\SObject.cs" />
     <Compile Include="Models\SuccessResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\AuthToken.cs" />
