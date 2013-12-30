@@ -53,7 +53,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ForceSDKforNET\ForceToolkitForNET.csproj">
+    <ProjectReference Include="..\ForceToolkitForNET\ForceToolkitForNET.csproj">
       <Project>{1cc985bc-27f3-4f1d-8946-f4ddb084b58f}</Project>
       <Name>ForceToolkitForNET</Name>
     </ProjectReference>

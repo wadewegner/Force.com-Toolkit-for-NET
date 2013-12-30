@@ -22,10 +22,10 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\src\ForceSDKforNET\bin\Debug\ForceSDKforNet.dll" target="lib" />
-    <file src="..\..\..\src\ForceSDKforNET\bin\Debug\ForceSDKforNet.pdb" target="lib" />
+    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\ForceToolkitForNet.dll" target="lib" />
+    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\ForceToolkitForNet.pdb" target="lib" />
     <file src="..\..\tools\Install.ps1" target="tools" />
-    <file src="..\..\..\src\ForceSDKforNET\*.cs" target="src" />
-    <file src="..\..\..\src\ForceSDKforNET\Models\*.cs" target="src" />
+    <file src="..\..\..\src\ForceToolkitForNET\*.cs" target="src" />
+    <file src="..\..\..\src\ForceToolkitForNET\Models\*.cs" target="src" />
   </files>
 </package>
