@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForceSDKforNet.UnitTests
+namespace ForceToolkitForNET.UnitTests
 {
     [TestFixture]
     public class ForceClientTests

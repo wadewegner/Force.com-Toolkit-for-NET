@@ -5,11 +5,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using System.Text;
-using ForceSDKforNET.Models;
+using ForceToolkitForNET.Models;
+using ForceToolkitForNET.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ForceSDKforNET
+namespace ForceToolkitForNET
 {
     public class ForceClient : IForceClient
     {

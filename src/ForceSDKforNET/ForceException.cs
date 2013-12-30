@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ForceSDKforNET
+namespace ForceToolkitForNET
 {
     //200	“OK” success code, for GET or HEAD request.
     //201	“Created” success code, for POST request.

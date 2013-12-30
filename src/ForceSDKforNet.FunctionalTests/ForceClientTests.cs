@@ -1,6 +1,6 @@
 ﻿using System.Runtime;
-using ForceSDKforNET;
-using ForceSDKforNet.FunctionalTests.Models;
+using ForceToolkitForNET;
+using ForceToolkitForNET.FunctionalTests.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForceSDKforNet.FunctionalTests
+namespace ForceToolkitForNET.FunctionalTests
 {
     [TestFixture]
     public class ForceClientTests

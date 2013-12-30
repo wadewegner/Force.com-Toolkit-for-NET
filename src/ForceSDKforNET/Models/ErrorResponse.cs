@@ -1,4 +1,4 @@
-﻿namespace ForceSDKforNET.Models
+﻿namespace ForceToolkitForNET.Models
 {
     public class ErrorResponse
     {
