@@ -37,39 +37,41 @@ namespace ForceSDKforNET
 
         public async Task Authenticate(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl)
         {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
-
-            var content = new FormUrlEncodedContent(new[] 
+            using (var client = new HttpClient())
             {
-                new KeyValuePair<string, string>("grant_type", "password"),
-                new KeyValuePair<string, string>("client_id", clientId),
-                new KeyValuePair<string, string>("client_secret", clientSecret),
-                new KeyValuePair<string, string>("username", username),
-                new KeyValuePair<string, string>("password", password)
-            });
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
 
-            var request = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(tokenRequestEndpointUrl),
-                Content = content
-            };
+                var content = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("client_id", clientId),
+                    new KeyValuePair<string, string>("client_secret", clientSecret),
+                    new KeyValuePair<string, string>("username", username),
+                    new KeyValuePair<string, string>("password", password)
+                });
 
-            var responseMessage = await client.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+                var request = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(tokenRequestEndpointUrl),
+                    Content = content
+                };
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
+                var responseMessage = await client.SendAsync(request);
+                var response = await responseMessage.Content.ReadAsStringAsync();
 
-                AccessToken = authToken.access_token;
-                InstanceUrl = authToken.instance_url;
-            }
-            else
-            {
-                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-                throw new ForceException(errorResponse.error, errorResponse.error_description);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
+
+                    AccessToken = authToken.access_token;
+                    InstanceUrl = authToken.instance_url;
+                }
+                else
+                {
+                    var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                    throw new ForceException(errorResponse.error, errorResponse.error_description);
+                }
             }
         }
 
@@ -77,114 +79,124 @@ namespace ForceSDKforNET
         {
             var url = string.Format("{0}?q={1}", FormatUrl("query"), query);
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
-
-            var request = new HttpRequestMessage()
+            using (var client = new HttpClient())
             {
-                RequestUri = new Uri(url),
-                Method = HttpMethod.Get
-            };
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
 
-            request.Headers.Add("Authorization", "Bearer " + AccessToken);
+                var request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
 
-            var responseMessage = await client.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+                request.Headers.Add("Authorization", "Bearer " + AccessToken);
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jObject = JObject.Parse(response);
-                var jToken = jObject.GetValue("records");
+                var responseMessage = await client.SendAsync(request);
+                var response = await responseMessage.Content.ReadAsStringAsync();
 
-                var r = JsonConvert.DeserializeObject<IList<T>>(jToken.ToString());
-                return r;
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var jObject = JObject.Parse(response);
+                    var jToken = jObject.GetValue("records");
+
+                    var r = JsonConvert.DeserializeObject<IList<T>>(jToken.ToString());
+                    return r;
+                }
+
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                throw new ForceException(errorResponse.error, errorResponse.error_description);
             }
-            
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-            throw new ForceException(errorResponse.error, errorResponse.error_description);
         }
 
         public async Task<string> Create(string objectName, object record)
         {
             var url = FormatUrl("sobjects") + "/" + objectName;
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
-
-            var json = JsonConvert.SerializeObject(record);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var responseMessage = await client.PostAsync(url, content);
-            var response = await responseMessage.Content.ReadAsStringAsync();
-
-            if (responseMessage.IsSuccessStatusCode)
+            using (var client = new HttpClient())
             {
-                var id = JsonConvert.DeserializeObject<SuccessResponse>(response).id;
-                return id;
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}",
+                    ApiVersion));
+
+                var json = JsonConvert.SerializeObject(record);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var responseMessage = await client.PostAsync(url, content);
+                var response = await responseMessage.Content.ReadAsStringAsync();
+
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var id = JsonConvert.DeserializeObject<SuccessResponse>(response).id;
+                    return id;
+                }
+
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                throw new ForceException(errorResponse.message, errorResponse.errorCode);
             }
-            
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-            throw new ForceException(errorResponse.message, errorResponse.errorCode);
         }
 
         public async Task<bool> Update(string objectName, string recordId, object record)
         {
             var url = FormatUrl("sobjects") + "/" + objectName + "/" + recordId;
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
-
-            var request = new HttpRequestMessage()
+            using (var client = new HttpClient())
             {
-                RequestUri = new Uri(url),
-                Method = new HttpMethod("PATCH")
-            };
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}",
+                    ApiVersion));
 
-            var json = JsonConvert.SerializeObject(record);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri(url),
+                    Method = new HttpMethod("PATCH")
+                };
 
-            request.Content = content;
-            request.Headers.Add("Authorization", "Bearer " + AccessToken);
+                var json = JsonConvert.SerializeObject(record);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var responseMessage = await client.SendAsync(request);
+                request.Content = content;
+                request.Headers.Add("Authorization", "Bearer " + AccessToken);
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return true;
+                var responseMessage = await client.SendAsync(request);
+
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                var response = await responseMessage.Content.ReadAsStringAsync();
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                throw new ForceException(errorResponse.error, errorResponse.error_description);
             }
-
-            var response = await responseMessage.Content.ReadAsStringAsync();
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-            throw new ForceException(errorResponse.error, errorResponse.error_description);
         }
 
         public async Task<bool> Delete(string objectName, string recordId)
         {
             var url = FormatUrl("sobjects") + "/" + objectName + "/" + recordId;
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
-
-            var request = new HttpRequestMessage()
+            using (var client = new HttpClient())
             {
-                RequestUri = new Uri(url),
-                Method = HttpMethod.Delete
-            };
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
 
-            request.Headers.Add("Authorization", "Bearer " + AccessToken);
+                var request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Delete
+                };
 
-            var responseMessage = await client.SendAsync(request);
+                request.Headers.Add("Authorization", "Bearer " + AccessToken);
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return true;
+                var responseMessage = await client.SendAsync(request);
+
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                var response = await responseMessage.Content.ReadAsStringAsync();
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                throw new ForceException(errorResponse.error, errorResponse.error_description);
             }
-
-            var response = await responseMessage.Content.ReadAsStringAsync();
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-            throw new ForceException(errorResponse.error, errorResponse.error_description);
         }
 
         public async Task<T> QueryById<T>(string objectName, string recordId)
@@ -200,62 +212,68 @@ namespace ForceSDKforNET
         {
             var url = string.Format("{0}", FormatUrl("sobjects"));
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
-
-            var request = new HttpRequestMessage()
+            using (var client = new HttpClient())
             {
-                RequestUri = new Uri(url),
-                Method = HttpMethod.Get
-            };
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}",
+                    ApiVersion));
 
-            request.Headers.Add("Authorization", "Bearer " + AccessToken);
+                var request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
 
-            var responseMessage = await client.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+                request.Headers.Add("Authorization", "Bearer " + AccessToken);
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jObject = JObject.Parse(response);
-                var jToken = jObject.GetValue("sobjects");
+                var responseMessage = await client.SendAsync(request);
+                var response = await responseMessage.Content.ReadAsStringAsync();
 
-                var r = JsonConvert.DeserializeObject<List<SObject>>(jToken.ToString());
-                return r;
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var jObject = JObject.Parse(response);
+                    var jToken = jObject.GetValue("sobjects");
+
+                    var r = JsonConvert.DeserializeObject<List<SObject>>(jToken.ToString());
+                    return r;
+                }
+
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                throw new ForceException(errorResponse.error, errorResponse.error_description);
             }
-            
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-            throw new ForceException(errorResponse.error, errorResponse.error_description);
         }
 
-        public async Task Describe(string objectName)
+        public async Task<T> Describe<T>(string objectName)
         {
             var url = string.Format("{0}/{1}", FormatUrl("sobjects"), objectName);
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}", ApiVersion));
-
-            var request = new HttpRequestMessage()
+            using (var client = new HttpClient())
             {
-                RequestUri = new Uri(url),
-                Method = HttpMethod.Get
-            };
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}",
+                    ApiVersion));
 
-            request.Headers.Add("Authorization", "Bearer " + AccessToken);
+                var request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
 
-            var responseMessage = await client.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+                request.Headers.Add("Authorization", "Bearer " + AccessToken);
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jObject = JObject.Parse(response);
-                var jToken = jObject.GetValue("sobjects");
+                var responseMessage = await client.SendAsync(request);
+                var response = await responseMessage.Content.ReadAsStringAsync();
 
-                //var r = JsonConvert.DeserializeObject<List<SObject>>(jToken.ToString());
-               //return r;
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var jObject = JObject.Parse(response);
+                    var jToken = jObject.GetValue("objectDescribe");
+
+                    var r = JsonConvert.DeserializeObject<T>(jToken.ToString());
+                    return r;
+                }
+
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                throw new ForceException(errorResponse.error, errorResponse.error_description);
             }
-
-            //var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-            //throw new ForceException(errorResponse.error, errorResponse.error_description);
         }
 
         protected string FormatUrl(string resourceName)
