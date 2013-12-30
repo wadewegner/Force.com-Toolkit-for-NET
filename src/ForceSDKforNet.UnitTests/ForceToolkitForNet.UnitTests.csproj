@@ -51,9 +51,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ForceSDKforNET\ForceSDKforNET.csproj">
+    <ProjectReference Include="..\ForceSDKforNET\ForceToolkitForNET.csproj">
       <Project>{1cc985bc-27f3-4f1d-8946-f4ddb084b58f}</Project>
-      <Name>ForceSDKforNET</Name>
+      <Name>ForceToolkitForNET</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

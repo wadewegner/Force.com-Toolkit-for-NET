@@ -178,7 +178,7 @@ namespace ForceSDKforNet.FunctionalTests
 
             var accounts = await client.Describe<object>("Account");
 
-            Assert.IsTrue(true);
+            Assert.IsNotNull(accounts);
         }
     }
 }
