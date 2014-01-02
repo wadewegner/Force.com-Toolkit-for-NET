@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonToolkitForNET;
 
 namespace ForceToolkitForNET.FunctionalTests
 {
@@ -22,37 +23,13 @@ namespace ForceToolkitForNET.FunctionalTests
         private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
 
         [Test]
-        public async void Auth_ValidCreds_HasApiVersion()
-        {
-            var client = new ForceClient();
-
-            Assert.IsNotNullOrEmpty(client.ApiVersion);
-        }
-
-        [Test]
-        public async void Auth_ValidCreds_HasAccessToken()
-        {
-            var client = new ForceClient();
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
-
-            Assert.IsNotNullOrEmpty(client.AccessToken);
-        }
-
-        [Test]
-        public async void Auth_ValidCreds_HasInstanceUrl()
-        {
-            var client = new ForceClient();
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
-
-            Assert.IsNotNullOrEmpty(client.InstanceUrl);
-        }
-
-        [Test]
         public async void Query_Accounts_IsNotEmpty()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
+
             var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
 
             Assert.IsNotEmpty(accounts);
@@ -61,9 +38,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Create_Account_Typed()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             var account = new Account() { Name = "New Account", Description = "New Account Description" };
             var id = await client.Create("Account", account);
@@ -74,9 +52,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Create_Account_Untyped()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             var account = new { Name = "New Account", Description = "New Account Description" };
             var id = await client.Create("Account", account);
@@ -87,9 +66,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Update_Account_IsSuccess()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             string originalName = "New Account";
             string newName = "New Account 2";
@@ -107,9 +87,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Update_Account_NameChanged()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             var originalName = "New Account";
             var newName = "New Account 2";
@@ -130,9 +111,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Delete_Account_IsSuccess()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             var account = new Account() { Name = "New Account", Description = "New Account Description" };
             var id = await client.Create("Account", account);
@@ -144,9 +126,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Delete_Account_ValidateIsGone()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             var account = new Account() { Name = "New Account", Description = "New Account Description" };
             var id = await client.Create("Account", account);
@@ -160,9 +143,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Objects_Get_IsNotNull()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             var objects = await client.GetObjects();
 
@@ -172,9 +156,10 @@ namespace ForceToolkitForNET.FunctionalTests
         [Test]
         public async void Object_Describe_IsNotNull()
         {
-            var client = new ForceClient();
+            var auth = new AuthClient();
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
 
-            await client.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             var accounts = await client.Describe<object>("Account");
 

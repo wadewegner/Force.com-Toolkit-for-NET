@@ -53,6 +53,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Common-Toolkit-for-Net\src\CommonToolkitForNET\CommonToolkitForNET.csproj">
+      <Project>{688bc3a2-29c2-48f7-bc28-7a81abf5c3d3}</Project>
+      <Name>CommonToolkitForNET</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ForceToolkitForNET\ForceToolkitForNET.csproj">
       <Project>{1cc985bc-27f3-4f1d-8946-f4ddb084b58f}</Project>
       <Name>ForceToolkitForNET</Name>
