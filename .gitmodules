@@ -1,4 +1,4 @@
 [submodule "lib/Common-Toolkit-for-Net"]
 	path = lib/Common-Toolkit-for-Net
-	url = https://github.com/developerforce/Common-Toolkit-for-NET.git
+	url = git@github.com:developerforce/Common-Toolkit-for-NET.git
 	ignore = dirty
