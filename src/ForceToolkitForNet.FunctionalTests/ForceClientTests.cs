@@ -26,8 +26,10 @@ namespace ForceToolkitForNET.FunctionalTests
 
         public async Task<ForceClient> GetForceClient()
         {
+            const string userAgent = "forcedotcom-toolkit-dotnet";
+
             var auth = new AuthClient();
-            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl);
+            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
             return client;
@@ -90,16 +92,13 @@ namespace ForceToolkitForNET.FunctionalTests
 
             var account = new Account() { Name = originalName, Description = "New Account Description" };
             var id = await client.Create("Account", account);
-
             account.Name = newName;
-
             await client.Update("Account", id, account);
-
+            
             var result = await client.QueryById<Account>("Account", id);
 
             Assert.True(result.Name == newName);
         }
-
 
         [Test]
         public async void Delete_Account_IsSuccess()
@@ -126,7 +125,7 @@ namespace ForceToolkitForNET.FunctionalTests
         }
 
         [Test]
-        public async void Objects_Get_IsNotNull()
+        public async void Objects_GetAllObjects_IsNotNull()
         {
             var client = await GetForceClient();
             var objects = await client.GetObjects<object>();

@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="CommonToolkitForNET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\developerforce.common.0.0.5\lib\CommonToolkitForNET.dll</HintPath>
+      <HintPath>..\packages\developerforce.common.0.0.6\lib\CommonToolkitForNET.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

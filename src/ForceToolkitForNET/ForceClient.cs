@@ -19,8 +19,6 @@ namespace ForceToolkitForNET
         public string AccessToken { get; set; }
         public string ApiVersion { get; set; }
 
-        private static ToolkitHttpClientTest _toolkitHttpClientTest;
-
         private static ToolkitHttpClient _toolkitHttpClient;
         
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
@@ -29,10 +27,9 @@ namespace ForceToolkitForNET
             this.AccessToken = accessToken;
             this.ApiVersion = apiVersion;
 
-            const string userAgent = "salesforce-toolkit-dotnet";
+            const string userAgent = "forcedotcom-toolkit-dotnet";
 
             _toolkitHttpClient = new ToolkitHttpClient(instanceUrl, apiVersion, accessToken, userAgent);
-            _toolkitHttpClientTest = new ToolkitHttpClientTest(instanceUrl, apiVersion, accessToken, userAgent);
         }
       
         public async Task<IList<T>> Query<T>(string query)
@@ -68,72 +65,16 @@ namespace ForceToolkitForNET
             return results.FirstOrDefault();
         }
 
-        public async Task<List<T>> GetObjects<T>()
+        public async Task<IList<T>> GetObjects<T>()
         {
-            var url = string.Format("{0}", Common.FormatUrl("sobjects", this.InstanceUrl, this.ApiVersion));
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}",
-                    ApiVersion));
-
-                var request = new HttpRequestMessage()
-                {
-                    RequestUri = new Uri(url),
-                    Method = HttpMethod.Get
-                };
-
-                request.Headers.Add("Authorization", "Bearer " + AccessToken);
-
-                var responseMessage = await client.SendAsync(request);
-                var response = await responseMessage.Content.ReadAsStringAsync();
-
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    var jObject = JObject.Parse(response);
-                    var jToken = jObject.GetValue("sobjects");
-
-                    var r = JsonConvert.DeserializeObject<List<T>>(jToken.ToString());
-                    return r;
-                }
-
-                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-                throw new ForceException(errorResponse.error, errorResponse.error_description);
-            }
+            var response = await _toolkitHttpClient.HttpGet<IList<T>>("sobjects", "sobjects");
+            return response;
         }
 
         public async Task<T> Describe<T>(string objectName)
         {
-            var url = string.Format("{0}/{1}", Common.FormatUrl("sobjects", this.InstanceUrl, this.ApiVersion), objectName);
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(string.Format("salesforce-toolkit-dotnet/{0}",
-                    ApiVersion));
-
-                var request = new HttpRequestMessage()
-                {
-                    RequestUri = new Uri(url),
-                    Method = HttpMethod.Get
-                };
-
-                request.Headers.Add("Authorization", "Bearer " + AccessToken);
-
-                var responseMessage = await client.SendAsync(request);
-                var response = await responseMessage.Content.ReadAsStringAsync();
-
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    var jObject = JObject.Parse(response);
-                    var jToken = jObject.GetValue("objectDescribe");
-
-                    var r = JsonConvert.DeserializeObject<T>(jToken.ToString());
-                    return r;
-                }
-
-                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
-                throw new ForceException(errorResponse.error, errorResponse.error_description);
-            }
+            var response = await _toolkitHttpClient.HttpGet<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
+            return response;
         }
 
     }

@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CommonToolkitForNET">
-      <HintPath>..\packages\developerforce.common.0.0.5\lib\CommonToolkitForNET.dll</HintPath>
+      <HintPath>..\packages\developerforce.common.0.0.6\lib\CommonToolkitForNET.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\portable-net40+sl4+win8+wp71\Microsoft.Threading.Tasks.dll</HintPath>
