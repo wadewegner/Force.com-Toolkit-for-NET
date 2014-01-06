@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using System.Text;
 using CommonToolkitForNET;
-using CommonToolkitForNET.Models;
 using ForceToolkitForNET.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ForceToolkitForNET
 {
@@ -76,6 +69,5 @@ namespace ForceToolkitForNET
             var response = await _toolkitHttpClient.HttpGet<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
             return response;
         }
-
     }
 }
