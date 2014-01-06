@@ -12,9 +12,9 @@ namespace ForceToolkitForNET
         string InstanceUrl { get; set; }
         string AccessToken { get; set; }
 
-        Task<IList<T>> Query<T>(string query);
-        Task<string> Create(string objectName, object record);
-        Task<bool> Update(string objectName, string recordId, object record);
-        Task<bool> Delete(string objectName, string recordId);
+        //Task<IList<T>> Query<T>(string query);
+        //Task<string> Create(string objectName, object record);
+        //Task<bool> Update(string objectName, string recordId, object record);
+        //Task<bool> Delete(string objectName, string recordId);
     }
 }
