@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommonToolkitForNET;
-using ForceToolkitForNET.Models;
+using CommonToolkitForNET.Models;
 
 namespace ForceToolkitForNET
 {
@@ -23,6 +23,17 @@ namespace ForceToolkitForNET
             const string userAgent = "forcedotcom-toolkit-dotnet";
 
             _toolkitHttpClient = new ToolkitHttpClient(instanceUrl, apiVersion, accessToken, userAgent);
+        }
+
+        public ForceClient(string instanceUrl, string accessToken, string apiVersion, ToolkitHttpClient toolkitHttpClient)
+        {
+            this.InstanceUrl = instanceUrl;
+            this.AccessToken = accessToken;
+            this.ApiVersion = apiVersion;
+
+            const string userAgent = "forcedotcom-toolkit-dotnet";
+
+            _toolkitHttpClient = toolkitHttpClient;
         }
       
         public async Task<IList<T>> Query<T>(string query)
