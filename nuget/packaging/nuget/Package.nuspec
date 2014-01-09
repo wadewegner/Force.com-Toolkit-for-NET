@@ -1,30 +1,31 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>developerforce.restapi</id>
+    <id>DeveloperForce.Force</id>
+    <title>DeveloperForce.Force</title>
     <version>$version$</version>
-    <authors>developerforce</authors>
-    <owners></owners>
+    <authors>developerforce,wadewegner</authors>
+    <owners>developerforce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</licenseUrl>
-    <projectUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/</projectUrl>
-    <iconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/nuget/packaging/avatar.jpg</iconUrl>
+    <projectUrl>https://github.com/developerforce/Force.com-Toolkit-for-NET/</projectUrl>
+    <iconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/nuget/packaging/avatar.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The developerforce.restapi NuGet provides a .NET library for interacting with Salesforce's Force.com REST APIs.</description>
+    <description>The DeveloperForce.Force NuGet provides a .NET library for interacting with Salesforce's Force.com REST APIs.</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2013</copyright>
-    <tags>salesforce forcedotcom rest api</tags>
+    <copyright>Copyright 2014</copyright>
+    <tags>salesforce forcedotcom force.com force rest api</tags>
     <dependencies>
       <dependency id="Microsoft.Bcl" version="1.1.6" />
       <dependency id="Microsoft.Bcl.Async" version="1.0.165" />
       <dependency id="Microsoft.Bcl.Build" version="1.0.13" />
       <dependency id="Microsoft.Net.Http" version="2.2.18" />
       <dependency id="Newtonsoft.Json" version="5.0.8" />
-      <dependency id="developerforce.common" version="0.0.1" />
+      <dependency id="DeveloperForce.Common" version="0.2.1" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\ForceToolkitForNet.dll" target="lib" />
-    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\ForceToolkitForNet.pdb" target="lib" />
+    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.dll" target="lib" />
+    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.pdb" target="lib" />
     <file src="..\..\tools\Install.ps1" target="tools" />
     <file src="..\..\..\src\ForceToolkitForNET\*.cs" target="src" />
     <file src="..\..\..\src\ForceToolkitForNET\Models\*.cs" target="src" />

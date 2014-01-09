@@ -1,18 +1,10 @@
-﻿using System.Runtime;
-using ForceToolkitForNET;
-using ForceToolkitForNET.FunctionalTests.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
+﻿using System.Configuration;
 using System.Threading.Tasks;
-using CommonToolkitForNET;
+using NUnit.Framework;
+using Salesforce.Common;
+using Salesforce.Force.FunctionalTests.Models;
 
-namespace ForceToolkitForNET.FunctionalTests
+namespace Salesforce.Force.FunctionalTests
 {
     [TestFixture]
     public class ForceClientTests
@@ -29,7 +21,7 @@ namespace ForceToolkitForNET.FunctionalTests
             const string userAgent = "forcedotcom-toolkit-dotnet";
 
             var auth = new AuthClient();
-            await auth.Authenticate(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+            await auth.AuthenticatePassword(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
             return client;

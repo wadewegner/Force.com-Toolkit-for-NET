@@ -7,8 +7,8 @@
     <ProjectGuid>{F71C23A5-9BC3-44AE-AE14-1A9F2F068645}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ForceToolkitForNet.UnitTests</RootNamespace>
-    <AssemblyName>ForceToolkitForNet.UnitTests</AssemblyName>
+    <RootNamespace>Salesforce.Force.UnitTests</RootNamespace>
+    <AssemblyName>Salesforce.Force.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
