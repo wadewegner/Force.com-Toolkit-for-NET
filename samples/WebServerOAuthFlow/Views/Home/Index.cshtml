@@ -1,0 +1,21 @@
+﻿<div class="row">
+    <div class="col-md-8">
+
+        <div>
+            @if (@ViewBag.LoggedIn)
+            {
+                <h2>Congratulations! You're logged in.</h2>
+                <h3>You've retrieved the following authorization data.</h3>
+                <ul>
+                    <li><b>Access Token:</b> @ViewBag.Token</li>
+                    <li><b>API Version:</b> @ViewBag.ApiVersion</li>
+                    <li><b>Instance Url:</b> @ViewBag.InstanceUrl</li>
+                </ul>
+            }
+            else
+            {
+                @Html.ActionLink("Login to Salesforce", "Login", "Home")
+            }
+        </div>
+    </div>
+</div>
