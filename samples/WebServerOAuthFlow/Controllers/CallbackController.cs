@@ -12,7 +12,6 @@ using Salesforce.Common;
 
 namespace WebServerOAuthFlow.Controllers
 {
-
     public class CallbackController : ApiController
     {
         private readonly string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
@@ -29,14 +28,6 @@ namespace WebServerOAuthFlow.Controllers
 
             var response = new HttpResponseMessage(HttpStatusCode.Redirect);
             response.Headers.Location = new Uri(url, UriKind.Relative);
-
-            return response;
-        }
-
-        public HttpResponseMessage Get(string code)
-        {
-            var response = new HttpResponseMessage(HttpStatusCode.Redirect);
-            response.Headers.Location = new Uri("/", UriKind.Relative);
 
             return response;
         }

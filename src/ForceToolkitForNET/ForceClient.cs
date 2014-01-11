@@ -12,7 +12,7 @@ namespace Salesforce.Force
         public string AccessToken { get; set; }
         public string ApiVersion { get; set; }
 
-        private static SalesforceHttpClient _httpClient;
+        private static ServiceHttpClient _httpClient;
         
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
         {
@@ -22,10 +22,10 @@ namespace Salesforce.Force
 
             const string userAgent = "forcedotcom-toolkit-dotnet";
 
-            _httpClient = new SalesforceHttpClient(instanceUrl, apiVersion, accessToken, userAgent);
+            _httpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, userAgent);
         }
 
-        public ForceClient(string instanceUrl, string accessToken, string apiVersion, SalesforceHttpClient httpClient)
+        public ForceClient(string instanceUrl, string accessToken, string apiVersion, ServiceHttpClient httpClient)
         {
             this.InstanceUrl = instanceUrl;
             this.AccessToken = accessToken;

@@ -11,6 +11,8 @@
                     <li><b>API Version:</b> @ViewBag.ApiVersion</li>
                     <li><b>Instance Url:</b> @ViewBag.InstanceUrl</li>
                 </ul>
+
+                <a href="#" id="accounts">Get Accounts</a>
             }
             else
             {
@@ -19,3 +21,37 @@
         </div>
     </div>
 </div>
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function() {
+
+            //alert('hi');
+
+            $("#accounts").click(function() {
+
+                //alert('test1');
+
+                var instanceUrl = encodeURIComponent('@ViewBag.InstanceUrl');
+
+                //alert(instanceUrl);
+
+                var url = '/api/force?instanceUrl=' + instanceUrl + '&accessToken=@ViewBag.Token&apiVersion=@ViewBag.ApiVersion&query=';
+
+                //alert(url);
+                
+                $.getJSON(url), function (data) {
+                    alert('test2');
+                    console.log(data);
+                    alert('test3');
+                };
+
+                //alert('test4');
+            });
+
+        });
+
+    </script>
+}
