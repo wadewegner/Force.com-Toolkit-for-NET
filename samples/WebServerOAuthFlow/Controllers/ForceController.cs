@@ -14,13 +14,13 @@ namespace WebServerOAuthFlow.Controllers
 {
     public class ForceController : ApiController
     {
-        public async Task<IList<object>> Get([FromUri] string instanceUrl, [FromUri] string accessToken, [FromUri] string apiVersion, [FromUri] string query)
+        public async Task<string> Get([FromUri] string instanceUrl, [FromUri] string accessToken, [FromUri] string apiVersion, [FromUri] string query)
         {
             var client = new ForceClient(instanceUrl, accessToken, apiVersion);
-
             var queryResults = await client.Query<object>(query);
+            var response = JsonConvert.SerializeObject(queryResults);
 
-            return queryResults;
+            return response;
         }
 
     }

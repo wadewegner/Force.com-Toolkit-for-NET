@@ -13,6 +13,25 @@
                 </ul>
 
                 <a href="#" id="accounts">Get Accounts</a>
+
+                <script id="accountsRow" type="text/html">
+                    <tr data-bind="attr: { id: Id }">
+                        <td><span data-bind="text: Name"></span></td>
+                        <td><span data-bind="text: Description"></span></td>
+                    </tr>
+                </script>
+
+                <ul data-bind="template: { name: 'accountTemplate', foreach: accounts}"></ul>
+                <hr />
+
+                <script id="accountTemplate" type="text/html">
+
+                    <li><input data-bind="value:Name" /></li>
+
+                </script>
+
+
+
             }
             else
             {
@@ -25,33 +44,25 @@
 @section scripts
 {
     <script>
+        $(document).ready(function () {
 
-        $(document).ready(function() {
-
-            //alert('hi');
-
-            $("#accounts").click(function() {
-
-                //alert('test1');
+            $("#accounts").click(function () {
 
                 var instanceUrl = encodeURIComponent('@ViewBag.InstanceUrl');
+                var query = encodeURIComponent("SELECT id, name, description FROM Account LIMIT 10");
 
-                //alert(instanceUrl);
+                var url = '/api/force?instanceUrl=' + instanceUrl + '&accessToken=@ViewBag.Token&apiVersion=@ViewBag.ApiVersion&query=' + query;
 
-                var url = '/api/force?instanceUrl=' + instanceUrl + '&accessToken=@ViewBag.Token&apiVersion=@ViewBag.ApiVersion&query=';
+                $.getJSON(url, function (data) {
 
-                //alert(url);
-                
-                $.getJSON(url), function (data) {
-                    alert('test2');
-                    console.log(data);
-                    alert('test3');
-                };
+                    var viewModel = {
+                        accounts: ko.observableArray(JSON.parse(data))
+                    };
 
-                //alert('test4');
+                    ko.applyBindings(viewModel);
+
+                });
             });
-
         });
-
     </script>
 }
