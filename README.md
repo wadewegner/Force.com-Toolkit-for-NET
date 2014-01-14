@@ -1,22 +1,15 @@
 # Force.com Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
 
-
-*Note*: Please add all feedback - e.g. bugs, features, ideas, and so forth - as issues so that we can track them accordingly.
-
-## Why a .NET Toolkit?
-
-Why not? =)
-
-More seriously, .NET developers represent a huge community and we want to make it as easy as possible for them to developer against Force.com. A toolkit, complete with libraries and NuGet packages, represents one of the easiest ways to get them started.
+The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Force.com REST API using a native libraries. This toolkit is built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4/4.5, Windows Phone8, Windows 8/8.1, and Silverlight 5.
 
 ## NuGet Packages
 
 ### Published Packages
 
-You can try the library immmediately by installing the this unlisted package.
+You can try the library immmediately by installing this [NuGet package](http://www.nuget.org/packages/DeveloperForce.Force/).
 
 ```
-Install-Package developerforce.restapi -Version 0.0.29
+Install-Package DeveloperForce.Force
 ```
 
 ### DevTest Packages
@@ -30,7 +23,23 @@ If you want to use the most recent DevTest NuGet packages you can grab the packa
 
 Now you can choose to install the latest NuGet from this DevTest feed.
 
-## Sample Code
+## Samples
+
+The toolkit includes the following sample applications.
+
+### WebServerOAuthFlow
+
+You can fine this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
+
+This sample shows how you can use the [Web Server OAuth Authentication Flow](http://www.salesforce.com/us/developer/docs/api_rest/Content/intro_understanding_web_server_oauth_flow.htm) to authorize a user and query the Force.com API. This sample uses MVC 5 and WebAPIs to demonstrate how you can retrieve a user access token and make an AJAX call to your API to retrieve data from Force.com and bind to your page using Knockout.js.
+
+You can see this demo live here: https://sfdcauth.cloudapp.net/
+
+### SimpleConsole
+
+
+
+## Operations
 
 Currently the following operations are supported.
 
