@@ -1,4 +1,4 @@
-<img src=”http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon”/>
+<img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
 
 # Force.com Toolkit for .NET
 
