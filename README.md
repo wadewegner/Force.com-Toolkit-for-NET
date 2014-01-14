@@ -1,6 +1,5 @@
-<img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
+# Force.com Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
 
-# Force.com Toolkit for .NET
 
 *Note*: Please add all feedback - e.g. bugs, features, ideas, and so forth - as issues so that we can track them accordingly.
 
