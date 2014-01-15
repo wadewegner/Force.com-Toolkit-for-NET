@@ -43,13 +43,38 @@ Currently the following operations are supported.
 
 To access the Force.com APIs you must have a valid Access Token. Currently there are two ways to generate an Access Token: the [Username-Password Authentication Flow](http://help.salesforce.com/HTViewHelpDoc?id=remoteaccess_oauth_username_password_flow.htm&language=en_US) and the [Web Server Authentication Flow](http://help.salesforce.com/apex/HTViewHelpDoc?id=remoteaccess_oauth_web_server_flow.htm&language=en_US)
 
-#### Web-Server Authentication Flow
+#### Username-Password Authentication Flow
+
+The Username-Password Authentication Flow is a straightforward way to get an access token. Simply provide your consumer key, consumer secret, username, and password.
 
 ```
 var auth = new AuthenticationClient();
 
 await auth.UsernamePassword("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME", "YOURPASSWORD");
 ```
+
+#### Web-Server Authentication Flow
+
+The Web-Server Authentication Flow requires a few additional steps but has the advantage of allowing you to authenticate your users and let them interact with the Force.com using their own access token.
+
+First, you need to authetnicate your user. You can do this by creating a URL that directs the user to the Salesforce authentication service. You'll pass along some key information, including your consumer key (which identifies your Connected App) and a callback URL to your service.
+
+```
+var url =
+    Common.FormatAuthUrl(
+        "https://login.salesforce.com/services/oauth2/authorize", // if using test org then replace login with text
+        ResponseTypes.Code,
+        "YOURCONSUMERKEY",
+        HttpUtility.UrlEncode("YOURCALLBACKURL"));
+```
+
+After the user logs in you'll need to handle the callback and retrieve the code that is returned. Using this code, you can then request an access token.
+
+```
+await auth.WebServer("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURCALLBACKURL", code);
+```
+
+#### Creating the ForceClient
 
 After this completes successfully you will receive a valid Access Token and Instance URL. The Instance URL returned identifies the web service URL you'll use to call the Force.com REST APIs, passing in the Access Token. Additionally, the authentication client will return the API version number, which is used to construct a valid HTTP request.
 
