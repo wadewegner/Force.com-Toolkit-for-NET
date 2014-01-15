@@ -1,6 +1,6 @@
 # Force.com Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
 
-The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Force.com REST API using a native libraries. This toolkit is built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4/4.5, Windows Phone8, Windows 8/8.1, and Silverlight 5.
+The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Force.com REST API using a native libraries. This toolkit is built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4/4.5, Windows Phone 8, Windows 8/8.1, and Silverlight 5.
 
 ## NuGet Packages
 
