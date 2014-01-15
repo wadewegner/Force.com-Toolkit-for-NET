@@ -35,37 +35,32 @@ This sample shows how you can use the [Web Server OAuth Authentication Flow](htt
 
 You can see this demo live here: https://sfdcauth.cloudapp.net/
 
-### SimpleConsole
-
-
-
 ## Operations
 
 Currently the following operations are supported.
 
-### Authenticate
+### Authentication
 
-I'd recommend getting the values out of a App.Config or Web.Config file:
+To access the Force.com APIs you must have a valid Access Token. Currently there are two ways to generate an Access Token: the [Username-Password Authentication Flow](http://help.salesforce.com/HTViewHelpDoc?id=remoteaccess_oauth_username_password_flow.htm&language=en_US) and the [Web Server Authentication Flow](http://help.salesforce.com/apex/HTViewHelpDoc?id=remoteaccess_oauth_web_server_flow.htm&language=en_US)
+
+#### Web-Server Authentication Flow
 
 ```
-private static string _securityToken = ConfigurationSettings.AppSettings["SecurityToken"];
-private static string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
-private static string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
-private static string _username = ConfigurationSettings.AppSettings["Username"];
-private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
+var auth = new AuthenticationClient();
+
+await auth.UsernamePassword("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME", "YOURPASSWORD");
 ```
 
-You can call *Authenticate* directly or you can have it implicitly called in the constructor by passing in the appropriate values:
+After this completes successfully you will receive a valid Access Token and Instance URL. The Instance URL returned identifies the web service URL you'll use to call the Force.com REST APIs, passing in the Access Token. Additionally, the authentication client will return the API version number, which is used to construct a valid HTTP request.
+
+Using this information, we can now construct our Force.com client.
 
 ````
-var client = new ForceClient();
-await client.Authenticate(_consumerKey, _consumerSecret, _username, _password);
-```
+var instanceUrl = auth.InstanceUrl;
+var accessToken = auth.AccessToken;
+var apiVersion = auth.ApiVersion;
 
-... or ...
-
-```
-var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
+var client = new ForceClient(instanceUrl, accessToken, apiVersion);
 ```
 
 ### Create
@@ -82,8 +77,7 @@ public class Account
 
 ...
 
-var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
-var account = new Account() {Name = "New Name", Description = "New Description"};
+var account = new Account() { Name = "New Account", Description = "New Account Description" };
 var id = await client.Create("Account", account);
 ```
 
@@ -100,7 +94,6 @@ var id = await client.Create("Account", account);
 You can update an object:
 
 ```
-var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
 var account = new Account() { Name = "New Name", Description = "New Description" };
 var id = await client.Create("Account", account);
 
@@ -114,8 +107,6 @@ var success = await client.Update("Account", id, account);
 You can delete an object:
 
 ```
-var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
-
 var account = new Account() { Name = "New Name", Description = "New Description" };
 var id = await client.Create("Account", account);
 var success = await client.Delete("Account", id)
@@ -136,6 +127,5 @@ public class Account
 
 ...
 
-var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
 var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
 ```
