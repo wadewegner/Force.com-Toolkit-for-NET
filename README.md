@@ -90,7 +90,11 @@ var apiVersion = auth.ApiVersion;
 var client = new ForceClient(instanceUrl, accessToken, apiVersion);
 ```
 
-### Create
+### Sample Code
+
+Below you'll find a few examples that show how to use the toolkit.
+
+#### Create
 
 You can create with the following code:
 
@@ -116,7 +120,7 @@ var account = new { Name = "New Name", Description = "New Description" };
 var id = await client.Create("Account", account);
 ```
 
-### Update
+#### Update
 
 You can update an object:
 
@@ -129,7 +133,7 @@ account.Name = "New Name 2";
 var success = await client.Update("Account", id, account);
 ```
 
-### Delete
+#### Delete
 
 You can delete an object:
 
@@ -139,7 +143,7 @@ var id = await client.Create("Account", account);
 var success = await client.Delete("Account", id)
 ```
 
-### Query
+#### Query
 
 You can query for objects:
 
