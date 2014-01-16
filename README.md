@@ -29,11 +29,17 @@ The toolkit includes the following sample applications.
 
 ### WebServerOAuthFlow
 
-You can fine this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
+You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
 
 This sample shows how you can use the [Web Server OAuth Authentication Flow](http://www.salesforce.com/us/developer/docs/api_rest/Content/intro_understanding_web_server_oauth_flow.htm) to authorize a user and query the Force.com API. This sample uses MVC 5 and WebAPIs to demonstrate how you can retrieve a user access token and make an AJAX call to your API to retrieve data from Force.com and bind to your page using Knockout.js.
 
 You can see this demo live here: https://sfdcauth.cloudapp.net/
+
+### Simple Console Application
+
+You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/SimpleConsole
+
+This sample shows how to write a console application that leverages the async/await paradigm of .NET 4.5 and uses the toolkit to log in to and communicate with a Salesforce organization. Useful for quick POC applications and scheduled jobs.
 
 ## Operations
 
