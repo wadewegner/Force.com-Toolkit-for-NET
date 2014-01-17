@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
-using CredentialManagement;
 using Salesforce.Common;
 using Salesforce.Force;
 using System.Threading.Tasks;
@@ -9,18 +9,15 @@ namespace SimpleConsole
 {
     class Program
     {
-        // this sample uses the CredentialManagement NuGet package to load credentials and
-        // tokens from the Windows Credential Vault. To set this up, open the vault and add
-        // two entries with the keys you specify below.
-        // CRED_KEY is for your username and password
-        // TOKEN_KEY is for the consumer token and secret
+#pragma warning disable 618
+        private static readonly string SecurityToken = ConfigurationSettings.AppSettings["SecurityToken"];
+        private static readonly string ConsumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
+        private static readonly string ConsumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
+        private static readonly string Username = ConfigurationSettings.AppSettings["Username"];
+        private static readonly string Password = ConfigurationSettings.AppSettings["Password"] + SecurityToken;
+#pragma warning restore 618
 
-        // this is used to load the username/password from the windows credential vault
-        private const String CRED_KEY = "ndrees@23demo.com";
-        // this is used to load the consumer 
-        private const String TOKEN_KEY = "ndrees@23demo.com-token";
-
-        static void Main(string[] args)
+        static void Main()
         {
             try
             {
@@ -32,8 +29,8 @@ namespace SimpleConsole
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                Exception innerException = e.InnerException;
-                while (innerException != null) 
+                var innerException = e.InnerException;
+                while (innerException != null)
                 {
                     Console.WriteLine(innerException.Message);
                     Console.WriteLine(innerException.StackTrace);
@@ -47,56 +44,70 @@ namespace SimpleConsole
         {
             var auth = new AuthenticationClient();
 
-            // load credentials from credential vault
-            // this uses the CredentialManagement NuGet package
-            using (var cred = new Credential { Target = CRED_KEY })
-            using (var token = new Credential { Target = TOKEN_KEY })
-            {
-                if (!cred.Load())
-                    throw new ArgumentException(CRED_KEY);
-                if (!token.Load())
-                    throw new ArgumentException(TOKEN_KEY);
-
-                // authenticate with salesforce
-                Console.WriteLine("Authenticating with Salesforce");
-                await auth.UsernamePassword(token.Username, token.Password, cred.Username, cred.Password);
-                Console.WriteLine("Connected to Salesforce");
-            }
+            // Authenticate with Salesforce
+            Console.WriteLine("Authenticating with Salesforce");
+            await auth.UsernamePassword(ConsumerKey, ConsumerSecret, Username, Password);
+            Console.WriteLine("Connected to Salesforce");
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
-            
+
             // Create a sample record
-            Console.WriteLine("Creating test account.");
+            Console.WriteLine("Creating test record.");
             var account = new Account { Name = "Test Account" };
             account.Id = await client.Create(Account.SObjectTypeName, account);
             if (account.Id == null)
             {
-                Console.WriteLine("Failed to create test account.");
+                Console.WriteLine("Failed to create test record.");
                 return;
             }
 
+            Console.WriteLine("Successfully created test record.");
+
             // Update the sample record
-            // shows that annonymous types can be used as well
+            // Shows that annonymous types can be used as well
+            Console.WriteLine("Updating test record.");
             var success = await client.Update(Account.SObjectTypeName, account.Id, new { Name = "Test Update" });
             if (!success)
-                Console.WriteLine("Failed to update account!");
+            {
+                Console.WriteLine("Failed to update test record!");
+                return;
+            }
+
+            Console.WriteLine("Successfully updated the record.");
 
             // Retrieve the sample record
-            // how to retrieve a single record if the id is known
+            // How to retrieve a single record if the id is known
+            Console.WriteLine("Retrieving the record by ID.");
             account = await client.QueryById<Account>(Account.SObjectTypeName, account.Id);
             if (account == null)
-                Console.WriteLine("Failed to retrieve account be id!");
+            {
+                Console.WriteLine("Failed to retrieve the record by ID!");
+                return;
+            }
+
+            Console.WriteLine("Retrieved the record by ID.");
 
             // Query for record by name
+            Console.WriteLine("Querying the record by name.");
             var accounts = await client.Query<Account>("SELECT ID, Name FROM Account WHERE Name = '" + account.Name + "'");
             account = accounts.FirstOrDefault();
             if (account == null)
+            {
                 Console.WriteLine("Failed to retrieve account by query!");
+                return;
+            }
+
+            Console.WriteLine("Retrieved the record by name.");
 
             // Delete account
+            Console.WriteLine("Deleting the record by ID.");
             success = await client.Delete(Account.SObjectTypeName, account.Id);
             if (!success)
-                Console.WriteLine("Failed to delete account record!");
+            {
+                Console.WriteLine("Failed to delete the record by ID!");
+                return;
+            }
+            Console.WriteLine("Deleted the record by ID.");
         }
 
         private class Account
