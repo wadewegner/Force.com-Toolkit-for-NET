@@ -9,10 +9,6 @@ namespace Salesforce.Force
 {
     public class ForceClient : IForceClient
     {
-        public string InstanceUrl { get; set; }
-        public string AccessToken { get; set; }
-        public string ApiVersion { get; set; }
-
         private static ServiceHttpClient _serviceHttpClient;
         private static string _userAgent = "common-libraries-dotnet";
         
@@ -23,10 +19,6 @@ namespace Salesforce.Force
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
         {
-            this.InstanceUrl = instanceUrl;
-            this.AccessToken = accessToken;
-            this.ApiVersion = apiVersion;
-
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, _userAgent, httpClient);
         }
       

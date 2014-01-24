@@ -5,9 +5,6 @@ namespace Salesforce.Force
 {
     interface IForceClient
     {
-        string InstanceUrl { get; set; }
-        string AccessToken { get; set; }
-        string ApiVersion { get; set; }
         Task<IList<T>> Query<T>(string query);
         Task<string> Create(string objectName, object record);
         Task<bool> Update(string objectName, string recordId, object record);
