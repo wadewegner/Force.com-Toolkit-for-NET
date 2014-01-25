@@ -20,7 +20,7 @@
       <dependency id="Microsoft.Bcl.Build" version="1.0.13" />
       <dependency id="Microsoft.Net.Http" version="2.2.18" />
       <dependency id="Newtonsoft.Json" version="5.0.8" />
-      <dependency id="DeveloperForce.Common" version="0.2.7" />
+      <dependency id="DeveloperForce.Common" version="0.2.8" />
     </dependencies>
   </metadata>
   <files>

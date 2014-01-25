@@ -41,6 +41,25 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
+        public async void Query_Accounts_BadObject()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+                    var accounts = await client.Query<Account>("SELECT id, name, description FROM BadObject");
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
+            }
+        }
+
+        [Test]
         public async void Create_Account_Typed()
         {
             using (var httpClient = new HttpClient())
@@ -58,11 +77,51 @@ namespace Salesforce.Force.FunctionalTests
         {
             using (var httpClient = new HttpClient())
             {
-                var client = await GetForceClient(new HttpClient());
+                var client = await GetForceClient(httpClient);
                 var account = new { Name = "New Account", Description = "New Account Description" };
                 var id = await client.Create("Account", account);
 
                 Assert.IsNotNullOrEmpty(id);
+            }
+        }
+
+        [Test]
+        public async void Create_Account_Untyped_BadObject()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+                    var account = new { Name = "New Account", Description = "New Account Description" };
+                    var id = await client.Create("BadAccount", account);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
+            }
+        }
+
+        [Test]
+        public async void Create_Account_Untyped_BadFields()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+                    var account = new { BadName = "New Account", BadDescription = "New Account Description" };
+                    var id = await client.Create("Account", account);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
             }
         }
 
@@ -84,6 +143,62 @@ namespace Salesforce.Force.FunctionalTests
                 var success = await client.Update("Account", id, account);
 
                 Assert.IsTrue(success);
+            }
+        }
+
+        [Test]
+        public async void Update_Account_BadObject()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+
+                    var originalName = "New Account";
+                    var newName = "New Account 2";
+
+                    var account = new Account() { Name = originalName, Description = "New Account Description" };
+                    var id = await client.Create("Account", account);
+
+                    account.Name = newName;
+
+                    var success = await client.Update("BadAccount", id, account);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
+            }
+        }
+
+        [Test]
+        public async void Update_Account_BadField()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+
+                    var originalName = "New Account";
+                    var newName = "New Account 2";
+
+                    var account = new { Name = originalName, Description = "New Account Description" };
+                    var id = await client.Create("Account", account);
+
+                    var updatedAccount = new { BadName = newName, Description = "New Account Description" };
+
+                    var success = await client.Update("Account", id, updatedAccount);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
             }
         }
 
@@ -119,6 +234,49 @@ namespace Salesforce.Force.FunctionalTests
                 var success = await client.Delete("Account", id);
 
                 Assert.IsTrue(success);
+            }
+        }
+
+        [Test]
+        public async void Delete_Account_ObjectDoesNotExist()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+                    var account = new Account() { Name = "New Account", Description = "New Account Description" };
+                    var id = await client.Create("Account", account);
+                    var success = await client.Delete("BadAccount", id);
+
+                    Assert.IsTrue(success);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
+            }
+        }
+
+        [Test]
+        public async void Delete_Account_IdDoesNotExist()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+                    var id = "asdfasdfasdf";
+                    var success = await client.Delete("Account", id);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
             }
         }
 
