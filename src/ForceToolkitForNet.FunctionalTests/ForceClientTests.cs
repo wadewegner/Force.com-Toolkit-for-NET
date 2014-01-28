@@ -10,19 +10,19 @@ namespace Salesforce.Force.FunctionalTests
     [TestFixture]
     public class ForceClientTests
     {
+#pragma warning disable 618
         private static string _tokenRequestEndpointUrl = ConfigurationSettings.AppSettings["TokenRequestEndpointUrl"];
         private static string _securityToken = ConfigurationSettings.AppSettings["SecurityToken"];
         private static string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
         private static string _username = ConfigurationSettings.AppSettings["Username"];
         private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
+#pragma warning restore 618
 
         public async Task<ForceClient> GetForceClient(HttpClient httpClient)
         {
-            const string userAgent = "forcedotcom-toolkit-dotnet";
             var auth = new AuthenticationClient(httpClient);
-
-            await auth.UsernamePassword(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+            await auth.UsernamePassword(_consumerKey, _consumerSecret, _username, _password);
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion, httpClient);
             return client;
@@ -48,7 +48,7 @@ namespace Salesforce.Force.FunctionalTests
                 using (var httpClient = new HttpClient())
                 {
                     var client = await GetForceClient(httpClient);
-                    var accounts = await client.Query<Account>("SELECT id, name, description FROM BadObject");
+                    await client.Query<Account>("SELECT id, name, description FROM BadObject");
                 }
             }
             catch (ForceException ex)
@@ -65,7 +65,7 @@ namespace Salesforce.Force.FunctionalTests
             using (var httpClient = new HttpClient())
             {
                 var client = await GetForceClient(httpClient);
-                var account = new Account() { Name = "New Account", Description = "New Account Description" };
+                var account = new Account { Name = "New Account", Description = "New Account Description" };
                 var id = await client.Create("Account", account);
 
                 Assert.IsNotNullOrEmpty(id);
@@ -94,7 +94,7 @@ namespace Salesforce.Force.FunctionalTests
                 {
                     var client = await GetForceClient(httpClient);
                     var account = new { Name = "New Account", Description = "New Account Description" };
-                    var id = await client.Create("BadAccount", account);
+                    await client.Create("BadAccount", account);
                 }
             }
             catch (ForceException ex)
@@ -114,7 +114,7 @@ namespace Salesforce.Force.FunctionalTests
                 {
                     var client = await GetForceClient(httpClient);
                     var account = new { BadName = "New Account", BadDescription = "New Account Description" };
-                    var id = await client.Create("Account", account);
+                    await client.Create("Account", account);
                 }
             }
             catch (ForceException ex)
@@ -135,7 +135,7 @@ namespace Salesforce.Force.FunctionalTests
                 var originalName = "New Account";
                 var newName = "New Account 2";
 
-                var account = new Account() { Name = originalName, Description = "New Account Description" };
+                var account = new Account { Name = originalName, Description = "New Account Description" };
                 var id = await client.Create("Account", account);
 
                 account.Name = newName;
@@ -158,12 +158,12 @@ namespace Salesforce.Force.FunctionalTests
                     var originalName = "New Account";
                     var newName = "New Account 2";
 
-                    var account = new Account() { Name = originalName, Description = "New Account Description" };
+                    var account = new Account { Name = originalName, Description = "New Account Description" };
                     var id = await client.Create("Account", account);
 
                     account.Name = newName;
 
-                    var success = await client.Update("BadAccount", id, account);
+                    await client.Update("BadAccount", id, account);
                 }
             }
             catch (ForceException ex)
@@ -191,7 +191,7 @@ namespace Salesforce.Force.FunctionalTests
 
                     var updatedAccount = new { BadName = newName, Description = "New Account Description" };
 
-                    var success = await client.Update("Account", id, updatedAccount);
+                    await client.Update("Account", id, updatedAccount);
                 }
             }
             catch (ForceException ex)
@@ -212,7 +212,7 @@ namespace Salesforce.Force.FunctionalTests
                 var originalName = "New Account";
                 var newName = "New Account 2";
 
-                var account = new Account() { Name = originalName, Description = "New Account Description" };
+                var account = new Account { Name = originalName, Description = "New Account Description" };
                 var id = await client.Create("Account", account);
                 account.Name = newName;
                 await client.Update("Account", id, account);
@@ -229,7 +229,7 @@ namespace Salesforce.Force.FunctionalTests
             using (var httpClient = new HttpClient())
             {
                 var client = await GetForceClient(httpClient);
-                var account = new Account() { Name = "New Account", Description = "New Account Description" };
+                var account = new Account { Name = "New Account", Description = "New Account Description" };
                 var id = await client.Create("Account", account);
                 var success = await client.Delete("Account", id);
 
@@ -245,7 +245,7 @@ namespace Salesforce.Force.FunctionalTests
                 using (var httpClient = new HttpClient())
                 {
                     var client = await GetForceClient(httpClient);
-                    var account = new Account() { Name = "New Account", Description = "New Account Description" };
+                    var account = new Account { Name = "New Account", Description = "New Account Description" };
                     var id = await client.Create("Account", account);
                     var success = await client.Delete("BadAccount", id);
 
@@ -269,7 +269,7 @@ namespace Salesforce.Force.FunctionalTests
                 {
                     var client = await GetForceClient(httpClient);
                     var id = "asdfasdfasdf";
-                    var success = await client.Delete("Account", id);
+                    await client.Delete("Account", id);
                 }
             }
             catch (ForceException ex)
@@ -286,7 +286,7 @@ namespace Salesforce.Force.FunctionalTests
             using (var httpClient = new HttpClient())
             {
                 var client = await GetForceClient(httpClient);
-                var account = new Account() { Name = "New Account", Description = "New Account Description" };
+                var account = new Account { Name = "New Account", Description = "New Account Description" };
                 var id = await client.Create("Account", account);
                 await client.Delete("Account", id);
 
@@ -317,6 +317,18 @@ namespace Salesforce.Force.FunctionalTests
                 var accounts = await client.Describe<object>("Account");
 
                 Assert.IsNotNull(accounts);
+            }
+        }
+
+        [Test]
+        public async void Recent_IsNotNull()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var recent = await client.Recent<object>(5);
+
+                Assert.IsNotNull(recent);
             }
         }
     }

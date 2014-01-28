@@ -10,7 +10,7 @@ namespace Salesforce.Force
     public class ForceClient : IForceClient
     {
         private static ServiceHttpClient _serviceHttpClient;
-        private static string _userAgent = "common-libraries-dotnet";
+        private static string _userAgent = "forcedotcom-libraries-dotnet";
         
         public ForceClient(string instanceUrl, string accessToken, string apiVersion) 
             : this (instanceUrl, accessToken, apiVersion, new HttpClient())
@@ -64,6 +64,12 @@ namespace Salesforce.Force
         public async Task<T> Describe<T>(string objectName)
         {
             var response = await _serviceHttpClient.HttpGet<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
+            return response;
+        }
+
+        public async Task<T> Recent<T>(int limit = 200)
+        {
+            var response = await _serviceHttpClient.HttpGet<T>(string.Format("recent/?limit={0}", limit));
             return response;
         }
     }

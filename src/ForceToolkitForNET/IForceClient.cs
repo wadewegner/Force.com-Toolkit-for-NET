@@ -12,5 +12,6 @@ namespace Salesforce.Force
         Task<T> QueryById<T>(string objectName, string recordId);
         Task<IList<T>> GetObjects<T>();
         Task<T> Describe<T>(string objectName);
+        Task<T> Recent<T>(int limit);
     }
 }
