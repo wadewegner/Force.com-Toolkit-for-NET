@@ -22,7 +22,7 @@ namespace Salesforce.Force.FunctionalTests
         public async Task<ForceClient> GetForceClient(HttpClient httpClient)
         {
             var auth = new AuthenticationClient(httpClient);
-            await auth.UsernamePassword(_consumerKey, _consumerSecret, _username, _password);
+            await auth.UsernamePasswordAysnc(_consumerKey, _consumerSecret, _username, _password);
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion, httpClient);
             return client;
