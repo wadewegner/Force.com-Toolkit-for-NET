@@ -28,6 +28,12 @@ namespace Salesforce.Force
             return response;
         }
 
+        public async Task<IList<T>> QueryMoreAsync<T>(string query)
+        {
+            var response = await _serviceHttpClient.HttpGetMoreAsync<T>(string.Format("query?q={0}", query), "records");
+            return response;
+        }
+
         public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             var fields = string.Join(", ", typeof(T).GetProperties().Select(p => p.Name));
