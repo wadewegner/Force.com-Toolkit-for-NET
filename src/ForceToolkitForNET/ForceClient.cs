@@ -22,54 +22,54 @@ namespace Salesforce.Force
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, _userAgent, httpClient);
         }
       
-        public async Task<IList<T>> Query<T>(string query)
+        public async Task<IList<T>> QueryAsync<T>(string query)
         {
-            var response = await _serviceHttpClient.HttpGet<IList<T>>(string.Format("query?q={0}", query), "records");
+            var response = await _serviceHttpClient.HttpGetAsync<IList<T>>(string.Format("query?q={0}", query), "records");
             return response;
         }
 
-        public async Task<T> QueryById<T>(string objectName, string recordId)
+        public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             var fields = string.Join(", ", typeof(T).GetProperties().Select(p => p.Name));
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
-            var results = await Query<T>(query);
+            var results = await QueryAsync<T>(query);
 
             return results.FirstOrDefault();
         }
 
-        public async Task<string> Create(string objectName, object record)
+        public async Task<string> CreateAsync(string objectName, object record)
         {
-            var response = await _serviceHttpClient.HttpPost<SuccessResponse>(record, string.Format("sobjects/{0}", objectName));
+            var response = await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName));
             return response.id;
         }
 
-        public async Task<bool> Update(string objectName, string recordId, object record)
+        public async Task<bool> UpdateAsync(string objectName, string recordId, object record)
         {
-            var response = await _serviceHttpClient.HttpPatch(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
+            var response = await _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
             return response;
         }
 
-        public async Task<bool> Delete(string objectName, string recordId)
+        public async Task<bool> DeleteAsync(string objectName, string recordId)
         {
-            var response = await _serviceHttpClient.HttpDelete(string.Format("sobjects/{0}/{1}", objectName, recordId));
+            var response = await _serviceHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId));
             return response;
         }
 
-        public async Task<IList<T>> GetObjects<T>()
+        public async Task<IList<T>> GetObjectsAsync<T>()
         {
-            var response = await _serviceHttpClient.HttpGet<IList<T>>("sobjects", "sobjects");
+            var response = await _serviceHttpClient.HttpGetAsync<IList<T>>("sobjects", "sobjects");
             return response;
         }
 
-        public async Task<T> Describe<T>(string objectName)
+        public async Task<T> DescribeAsync<T>(string objectName)
         {
-            var response = await _serviceHttpClient.HttpGet<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
+            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
             return response;
         }
 
-        public async Task<T> Recent<T>(int limit = 200)
+        public async Task<T> RecentAsync<T>(int limit = 200)
         {
-            var response = await _serviceHttpClient.HttpGet<T>(string.Format("recent/?limit={0}", limit));
+            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
             return response;
         }
     }
