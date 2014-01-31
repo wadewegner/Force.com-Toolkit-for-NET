@@ -17,7 +17,7 @@ namespace Salesforce.Force.UnitTests
             try
             {
                 // suppress error; we only care about checking the header
-                var query = await forceClient.Query<object>("query");
+                var query = await forceClient.QueryAsync<object>("query");
             }
             catch (Exception)
             {
