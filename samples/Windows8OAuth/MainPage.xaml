@@ -1,0 +1,13 @@
+﻿<Page
+    x:Class="Windows8OAuth.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Windows8OAuth"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock Name="lblOutput" HorizontalAlignment="Left" Margin="77,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="419" Width="1163" FontSize="36"/>
+    </Grid>
+</Page>
