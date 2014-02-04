@@ -20,13 +20,12 @@
       <dependency id="Microsoft.Bcl.Build" version="1.0.13" />
       <dependency id="Microsoft.Net.Http" version="2.2.18" />
       <dependency id="Newtonsoft.Json" version="5.0.8" />
-      <dependency id="DeveloperForce.Common" version="0.2.8" />
+      <dependency id="DeveloperForce.Common" version="0.3.0" />
     </dependencies>
   </metadata>
   <files>
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.dll" target="lib" />
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.pdb" target="lib" />
-    <file src="..\..\tools\Install.ps1" target="tools" />
     <file src="..\..\..\src\ForceToolkitForNET\*.cs" target="src" />
   </files>
 </package>
