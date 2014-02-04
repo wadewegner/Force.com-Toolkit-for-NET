@@ -17,7 +17,7 @@ namespace WebServerOAuthFlow.Controllers
         public async Task<string> Get([FromUri] string instanceUrl, [FromUri] string accessToken, [FromUri] string apiVersion, [FromUri] string query)
         {
             var client = new ForceClient(instanceUrl, accessToken, apiVersion);
-            var queryResults = await client.Query<object>(query);
+            var queryResults = await client.QueryAsync<object>(query);
             var response = JsonConvert.SerializeObject(queryResults);
 
             return response;

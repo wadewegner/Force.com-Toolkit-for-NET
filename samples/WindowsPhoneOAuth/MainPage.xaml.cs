@@ -57,7 +57,7 @@ namespace WindowsPhoneOAuth
             }
 
             var client = new ForceClient(_instanceUrl, _accessToken, ApiVersion);
-            var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
+            var accounts = await client.QueryAsync<Account>("SELECT id, name, description FROM Account");
 
             OrganizationsList.ItemsSource = accounts;
 

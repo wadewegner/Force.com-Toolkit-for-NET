@@ -46,7 +46,7 @@ namespace SimpleConsole
 
             // Authenticate with Salesforce
             Console.WriteLine("Authenticating with Salesforce");
-            await auth.UsernamePassword(ConsumerKey, ConsumerSecret, Username, Password);
+            await auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password);
             Console.WriteLine("Connected to Salesforce");
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
@@ -54,7 +54,7 @@ namespace SimpleConsole
             // Create a sample record
             Console.WriteLine("Creating test record.");
             var account = new Account { Name = "Test Account" };
-            account.Id = await client.Create(Account.SObjectTypeName, account);
+            account.Id = await client.CreateAsync(Account.SObjectTypeName, account);
             if (account.Id == null)
             {
                 Console.WriteLine("Failed to create test record.");
@@ -66,7 +66,7 @@ namespace SimpleConsole
             // Update the sample record
             // Shows that annonymous types can be used as well
             Console.WriteLine("Updating test record.");
-            var success = await client.Update(Account.SObjectTypeName, account.Id, new { Name = "Test Update" });
+            var success = await client.UpdateAsync(Account.SObjectTypeName, account.Id, new { Name = "Test Update" });
             if (!success)
             {
                 Console.WriteLine("Failed to update test record!");
@@ -78,7 +78,7 @@ namespace SimpleConsole
             // Retrieve the sample record
             // How to retrieve a single record if the id is known
             Console.WriteLine("Retrieving the record by ID.");
-            account = await client.QueryById<Account>(Account.SObjectTypeName, account.Id);
+            account = await client.QueryByIdAsync<Account>(Account.SObjectTypeName, account.Id);
             if (account == null)
             {
                 Console.WriteLine("Failed to retrieve the record by ID!");
@@ -89,7 +89,7 @@ namespace SimpleConsole
 
             // Query for record by name
             Console.WriteLine("Querying the record by name.");
-            var accounts = await client.Query<Account>("SELECT ID, Name FROM Account WHERE Name = '" + account.Name + "'");
+            var accounts = await client.QueryAsync<Account>("SELECT ID, Name FROM Account WHERE Name = '" + account.Name + "'");
             account = accounts.FirstOrDefault();
             if (account == null)
             {
@@ -101,7 +101,7 @@ namespace SimpleConsole
 
             // Delete account
             Console.WriteLine("Deleting the record by ID.");
-            success = await client.Delete(Account.SObjectTypeName, account.Id);
+            success = await client.DeleteAsync(Account.SObjectTypeName, account.Id);
             if (!success)
             {
                 Console.WriteLine("Failed to delete the record by ID!");

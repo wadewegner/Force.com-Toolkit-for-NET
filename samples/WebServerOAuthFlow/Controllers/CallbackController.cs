@@ -21,7 +21,7 @@ namespace WebServerOAuthFlow.Controllers
         public async Task<HttpResponseMessage> Get(string display, string code)
         {
             var auth = new AuthenticationClient();
-            await auth.WebServer(_consumerKey, _consumerSecret, _callbackUrl, code);
+            await auth.WebServerAsync(_consumerKey, _consumerSecret, _callbackUrl, code);
 
             var url = string.Format("/?token={0}&api={1}&instance_url={2}", auth.AccessToken, auth.ApiVersion,
                 auth.InstanceUrl);

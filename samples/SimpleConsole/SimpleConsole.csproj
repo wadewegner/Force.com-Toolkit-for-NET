@@ -43,11 +43,13 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Salesforce.Common">
-      <HintPath>packages\DeveloperForce.Common.0.2.6\lib\Salesforce.Common.dll</HintPath>
+    <Reference Include="Salesforce.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\DeveloperForce.Common.0.3.1\lib\Salesforce.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Salesforce.Force">
-      <HintPath>packages\DeveloperForce.Force.0.2.1\lib\Salesforce.Force.dll</HintPath>
+    <Reference Include="Salesforce.Force, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\DeveloperForce.Force.0.3.1\lib\Salesforce.Force.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
