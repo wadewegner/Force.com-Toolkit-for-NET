@@ -22,7 +22,7 @@ namespace Salesforce.Force.FunctionalTests
         public async Task<ForceClient> GetForceClient(HttpClient httpClient)
         {
             var auth = new AuthenticationClient(httpClient);
-            await auth.UsernamePasswordAysnc(_consumerKey, _consumerSecret, _username, _password);
+            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password);
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion, httpClient);
             return client;
@@ -114,7 +114,7 @@ namespace Salesforce.Force.FunctionalTests
                 {
                     var client = await GetForceClient(httpClient);
                     var account = new { BadName = "New Account", BadDescription = "New Account Description" };
-                    await client.CreateAsync("Account", account);
+                    var id = await client.CreateAsync("Account", account);
                 }
             }
             catch (ForceException ex)
