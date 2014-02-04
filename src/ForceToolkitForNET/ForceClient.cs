@@ -10,7 +10,7 @@ namespace Salesforce.Force
     public class ForceClient : IForceClient
     {
         private static ServiceHttpClient _serviceHttpClient;
-        private static string _userAgent = "forcedotcom-libraries-dotnet";
+        private static string _userAgent = "forcedotcom-toolkit-dotnet";
         
         public ForceClient(string instanceUrl, string accessToken, string apiVersion) 
             : this (instanceUrl, accessToken, apiVersion, new HttpClient())
