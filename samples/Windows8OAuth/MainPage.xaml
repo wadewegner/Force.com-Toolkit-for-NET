@@ -8,6 +8,8 @@
     mc:Ignorable="d" Loaded="Page_Loaded">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Name="lblOutput" HorizontalAlignment="Left" Margin="77,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="419" Width="1163" FontSize="36"/>
+        
+        <TextBlock Name="lblOutput" HorizontalAlignment="Left" Margin="77,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="419" Width="1163" FontSize="36"/>
+        <Button x:Name="btnRefreshToken" Content="Refresh Token" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,33,0,0" Click="btnRefreshToken_Click"/>
     </Grid>
 </Page>
