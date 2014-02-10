@@ -1,4 +1,6 @@
-﻿namespace Salesforce.Force.FunctionalTests.Models
+﻿//TODO: add license header
+
+namespace Salesforce.Force.FunctionalTests.Models
 {
     public class Account
     {

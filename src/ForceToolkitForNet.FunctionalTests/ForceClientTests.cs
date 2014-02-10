@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿//TODO: add license header
+
+using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;

@@ -1,7 +1,8 @@
-﻿using System;
+﻿//TODO: add license header
+
+using System;
 using System.Net.Http;
 using NUnit.Framework;
-using Salesforce.Common;
 
 namespace Salesforce.Force.UnitTests
 {
