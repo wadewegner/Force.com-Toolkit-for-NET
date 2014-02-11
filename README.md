@@ -56,7 +56,7 @@ The Username-Password Authentication Flow is a straightforward way to get an acc
 ```
 var auth = new AuthenticationClient();
 
-await auth.UsernamePassword("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME", "YOURPASSWORD");
+await auth.UsernamePasswordAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME", "YOURPASSWORD");
 ```
 
 #### Web-Server Authentication Flow
@@ -77,7 +77,7 @@ var url =
 After the user logs in you'll need to handle the callback and retrieve the code that is returned. Using this code, you can then request an access token.
 
 ```
-await auth.WebServer("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURCALLBACKURL", code);
+await auth.WebServerAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURCALLBACKURL", code);
 ```
 
 You can see a demonstration of this in the following sample application: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
@@ -115,7 +115,7 @@ public class Account
 ...
 
 var account = new Account() { Name = "New Account", Description = "New Account Description" };
-var id = await client.Create("Account", account);
+var id = await client.CreateAsync("Account", account);
 ```
 
 You can also create with a non-strongly typed object:
@@ -123,7 +123,7 @@ You can also create with a non-strongly typed object:
 ```
 var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
 var account = new { Name = "New Name", Description = "New Description" };
-var id = await client.Create("Account", account);
+var id = await client.CreateAsync("Account", account);
 ```
 
 #### Update
@@ -132,11 +132,11 @@ You can update an object:
 
 ```
 var account = new Account() { Name = "New Name", Description = "New Description" };
-var id = await client.Create("Account", account);
+var id = await client.CreateAsync("Account", account);
 
 account.Name = "New Name 2";
 
-var success = await client.Update("Account", id, account);
+var success = await client.UpdateAsync("Account", id, account);
 ```
 
 #### Delete
@@ -146,7 +146,7 @@ You can delete an object:
 ```
 var account = new Account() { Name = "New Name", Description = "New Description" };
 var id = await client.Create("Account", account);
-var success = await client.Delete("Account", id)
+var success = await client.DeleteAsync("Account", id)
 ```
 
 #### Query
@@ -164,7 +164,7 @@ public class Account
 
 ...
 
-var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
+var accounts = await client.QueryAsync<Account>("SELECT id, name, description FROM Account");
 ```
 
 ## Contributing to the Repository ###

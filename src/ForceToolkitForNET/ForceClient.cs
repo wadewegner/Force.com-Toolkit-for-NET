@@ -13,8 +13,8 @@ namespace Salesforce.Force
     public class ForceClient : IForceClient
     {
         private static ServiceHttpClient _serviceHttpClient;
-        private const string UserAgent = "forcedotcom-libraries-dotnet";
-
+        private const string UserAgent = "forcedotcom-toolkit-dotnet";
+        
         public ForceClient(string instanceUrl, string accessToken, string apiVersion) 
             : this (instanceUrl, accessToken, apiVersion, new HttpClient())
         {
@@ -38,17 +38,17 @@ namespace Salesforce.Force
         //    return response;
         //}
 
-        public async Task<T> Query<T>(string query)
+        public async Task<T> QueryAsync<T>(string query)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
             
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGet<T>(string.Format("query?q={0}", query), "records");
+            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("query?q={0}", query), "records");
             return response;
         }
 
-        public async Task<T> QueryById<T>(string objectName, string recordId)
+        public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
@@ -57,23 +57,23 @@ namespace Salesforce.Force
 
             var fields = string.Join(", ", typeof(T).GetProperties().Select(p => p.Name));
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
-            var results = await Query<T>(query);
+            var results = await QueryAsync<T>(query);
 
             return ((IList<T>)(results)).FirstOrDefault();
         }
 
-        public async Task<string> Create(string objectName, object record)
+        public async Task<string> CreateAsync(string objectName, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (record == null) throw new ArgumentNullException("record");
 
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpPost<SuccessResponse>(record, string.Format("sobjects/{0}", objectName));
+            var response = await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName));
             return response.id;
         }
 
-        public async Task<bool> Update(string objectName, string recordId, object record)
+        public async Task<bool> UpdateAsync(string objectName, string recordId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
@@ -81,18 +81,18 @@ namespace Salesforce.Force
             
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpPatch(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
+            var response = await _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
             return response;
         }
 
-        public async Task<bool> Delete(string objectName, string recordId)
+        public async Task<bool> DeleteAsync(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
             
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpDelete(string.Format("sobjects/{0}/{1}", objectName, recordId));
+            var response = await _serviceHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId));
             return response;
         }
 
@@ -103,29 +103,28 @@ namespace Salesforce.Force
         //    return response;
         //}
 
-        public async Task<T> GetObjects<T>()
+        public async Task<T> GetObjectsAsync<T>()
         {
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGet<T>("sobjects", "sobjects");
+            var response = await _serviceHttpClient.HttpGetAsync<T>("sobjects", "sobjects");
             return response;
         }
 
-        public async Task<T> Describe<T>(string objectName)
+        public async Task<T> DescribeAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
-            
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGet<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
+            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
             return response;
         }
 
-        public async Task<T> Recent<T>(int limit = 200)
+        public async Task<T> RecentAsync<T>(int limit = 200)
         {
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGet<T>(string.Format("recent/?limit={0}", limit));
+            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
             return response;
         }
     }

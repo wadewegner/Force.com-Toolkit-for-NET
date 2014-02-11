@@ -12,10 +12,11 @@ namespace WindowsPhoneOAuth
     {
         private const string AuthorizationEndpointUrl = "https://login.salesforce.com/services/oauth2/authorize";
         private const string ConsumerKey = "YOURCONSUMERKEY";
-        private const string ConsumerSecret = "YOURCONSUMERSECRET";
         private const string CallbackUrl = "sfdc://success";
-        
-        public string AccessToken { get; set; }
+        private const string ApiVersion = "v29.0";
+
+        private string _accessToken;
+        private string _instanceUrl;
         
         public MainPage()
         {
@@ -24,16 +25,20 @@ namespace WindowsPhoneOAuth
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (NavigationContext.QueryString.ContainsKey("Token"))
+            if (NavigationContext.QueryString.ContainsKey("AccessToken"))
             {
-                AccessToken = NavigationContext.QueryString["Token"];
+                _accessToken = NavigationContext.QueryString["AccessToken"];
+            }
+            if (NavigationContext.QueryString.ContainsKey("InstanceUrl"))
+            {
+                _instanceUrl = NavigationContext.QueryString["InstanceUrl"];
             }
             base.OnNavigatedTo(e);
         }
 
         async private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(AccessToken))
+            if (string.IsNullOrEmpty(_accessToken))
             {
                 OrganizationsList.Visibility = Visibility.Collapsed;
                 AuthBrowser.Visibility = Visibility.Visible;
@@ -41,7 +46,7 @@ namespace WindowsPhoneOAuth
                 var url =
                     Common.FormatAuthUrl(
                         AuthorizationEndpointUrl,
-                        ResponseTypes.Code,
+                        ResponseTypes.Token,
                         ConsumerKey,
                         CallbackUrl,
                         DisplayTypes.Touch);
@@ -51,17 +56,13 @@ namespace WindowsPhoneOAuth
                 return;
             }
 
-            var auth = new AuthenticationClient();
-            await auth.WebServer(ConsumerKey, ConsumerSecret, CallbackUrl, AccessToken);
+            var client = new ForceClient(_instanceUrl, _accessToken, ApiVersion);
+            var accounts = await client.QueryAsync<Account>("SELECT id, name, description FROM Account");
 
-            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
-            var accounts = await client.Query<Account>("SELECT id, name, description FROM Account");
+            OrganizationsList.ItemsSource = accounts;
 
             OrganizationsList.Visibility = Visibility.Visible;
             AuthBrowser.Visibility = Visibility.Collapsed;
-
-            OrganizationsList.ItemsSource = accounts;
         }
-
     }
 }
