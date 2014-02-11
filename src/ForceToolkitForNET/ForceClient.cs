@@ -31,20 +31,14 @@ namespace Salesforce.Force
 
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, UserAgent, httpClient);
         }
-      
-        //public async Task<IList<T>> Query<T>(string query)
-        //{
-        //    var response = await _serviceHttpClient.HttpGet<IList<T>>(string.Format("query?q={0}", query), "records");
-        //    return response;
-        //}
 
-        public async Task<T> QueryAsync<T>(string query)
+        public async Task<QueryResult<T>> QueryAsync<T>(string query)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
             
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("query?q={0}", query), "records");
+            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", query));
             return response;
         }
 
@@ -59,7 +53,7 @@ namespace Salesforce.Force
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query);
 
-            return ((IList<T>)(results)).FirstOrDefault();
+            return results.records.FirstOrDefault();
         }
 
         public async Task<string> CreateAsync(string objectName, object record)
@@ -96,18 +90,11 @@ namespace Salesforce.Force
             return response;
         }
 
-        //TODO: Does this actually need to change?
-        //public async Task<IList<T>> GetObjects<T>()
-        //{
-        //    var response = await _serviceHttpClient.HttpGet<IList<T>>("sobjects", "sobjects");
-        //    return response;
-        //}
-
-        public async Task<T> GetObjectsAsync<T>()
+        public async Task<DescribeGlobalResult<T>> GetObjectsAsync<T>()
         {
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGetAsync<T>("sobjects", "sobjects");
+            var response = await _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
             return response;
         }
 
@@ -116,7 +103,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName), "objectDescribe");
+            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
             return response;
         }
 

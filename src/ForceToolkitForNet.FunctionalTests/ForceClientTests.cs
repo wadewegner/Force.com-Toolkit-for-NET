@@ -31,6 +31,18 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
+        public async void Query_Count()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var accounts = await client.QueryAsync<Account>("SELECT count() FROM Account");
+
+                Assert.IsNotNull(accounts);
+            }
+        }
+
+        [Test]
         public async void Query_Accounts_IsNotEmpty()
         {
             using (var httpClient = new HttpClient())

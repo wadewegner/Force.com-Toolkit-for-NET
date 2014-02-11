@@ -55,7 +55,7 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\portable-net40+sl4+wp7+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Salesforce.Common">
-      <HintPath>..\packages\DeveloperForce.Common.0.3.2\lib\Salesforce.Common.dll</HintPath>
+      <HintPath>..\packages\DeveloperForce.Common.0.3.3\lib\Salesforce.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.IO">
       <HintPath>..\packages\Microsoft.Bcl.1.1.6\lib\portable-net40+sl5+win8+wp8\System.IO.dll</HintPath>
@@ -75,12 +75,6 @@
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.1.6\lib\portable-net40+sl5+win8+wp8\System.Threading.Tasks.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Common-Libraries-for-NET\src\CommonLibrariesForNET\CommonLibrariesForNET.csproj">
-      <Project>{688bc3a2-29c2-48f7-bc28-7a81abf5c3d3}</Project>
-      <Name>CommonLibrariesForNET</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" />
