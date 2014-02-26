@@ -1,15 +1,25 @@
-# Force.com Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
+# Force.com Toolkit for .NET
 
-The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Force.com REST API using a native libraries. This toolkit is built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4/4.5, Windows Phone 8, Windows 8/8.1, and Silverlight 5.
+### Force.com Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
+
+### Chatter Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ChatterToolkitForNet_DebugCiBuild/statusIcon" />
+
+### Common Libraries for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:CommonLibrariesForNet_DebugCiBuild/statusIcon" />
+
+The Force.com & Chatter Toolkits for .NET provides an easy way for .NET developers to interact with the Force.com & Chatter REST API using a native libraries. These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4/4.5, Windows Phone 8, Windows 8/8.1, and Silverlight 5.
+
+The Common Libraries for .NET provides functionality used by the [Force.com Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET) and the [Chatter Toolkit for .NET](https://github.com/developerforce/Chatter-Toolkit-for-NET). While you can use the Common Libraries for .NET independently, it is recommended that you use it through one of the toolkits.
 
 ## NuGet Packages
 
 ### Published Packages
 
-You can try the library immmediately by installing this [NuGet package](http://www.nuget.org/packages/DeveloperForce.Force/).
+You can try the libraries immmediately by installing the following DeveloperForce [NuGet packages](https://www.nuget.org/profiles/DeveloperForce/).
 
 ```
 Install-Package DeveloperForce.Force
+Install-Package DeveloperForce.Chatter
+Install-Package DeveloperForce.Common
 ```
 
 ### DevTest Packages
