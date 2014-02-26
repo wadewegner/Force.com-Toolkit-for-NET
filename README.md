@@ -1,10 +1,10 @@
 # Force.com Toolkit for .NET
 
-### Force.com Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
+##### Force.com Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ForceComToolkitForNet_DebugCiBuild/statusIcon" />
 
-### Chatter Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ChatterToolkitForNet_DebugCiBuild/statusIcon" />
+##### Chatter Toolkit for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:ChatterToolkitForNet_DebugCiBuild/statusIcon" />
 
-### Common Libraries for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:CommonLibrariesForNet_DebugCiBuild/statusIcon" />
+##### Common Libraries for .NET <img src="http://dfbuild.cloudapp.net/app/rest/builds/buildType:CommonLibrariesForNet_DebugCiBuild/statusIcon" />
 
 The Force.com & Chatter Toolkits for .NET provides an easy way for .NET developers to interact with the Force.com & Chatter REST API using a native libraries. These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4/4.5, Windows Phone 8, Windows 8/8.1, and Silverlight 5.
 
