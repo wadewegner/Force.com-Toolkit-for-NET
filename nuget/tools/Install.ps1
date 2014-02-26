@@ -1,4 +1,4 @@
 param($installPath, $toolsPath, $package, $project)
 
-$readmeFile = "https://github.com/developerforce/Force.com-Toolkit-for-NET/wiki/Getting-Started"
+$readmeFile = "http://www.wadewegner.com/2014/01/announcing-the-salesforce-toolkits-for-net/"
 $DTE.ItemOperations.Navigate($readmeFile, [EnvDTE.vsNavigateOptions]::vsNavigateOptionsNewWindow)

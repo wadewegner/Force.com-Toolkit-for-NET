@@ -26,6 +26,7 @@
   <files>
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.dll" target="lib" />
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.pdb" target="lib" />
+    <file src="..\..\tools\Install.ps1" target="tools" />
     <file src="..\..\..\src\ForceToolkitForNET\*.cs" target="src" />
   </files>
 </package>

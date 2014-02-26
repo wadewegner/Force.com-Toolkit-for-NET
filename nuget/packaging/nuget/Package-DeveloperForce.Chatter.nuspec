@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DeveloperForce.Chatter</id>
+    <title>DeveloperForce.Chatter</title>
+    <version>$version$</version>
+    <authors>DeveloperForce,wadewegner</authors>
+    <owners>DeveloperForce,wadewegner</owners>
+    <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/developerforce/Force-Toolkit-for-NET/</projectUrl>
+    <iconUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/nuget/packaging/avatar.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The DeveloperForce.Chatter NuGet provides a .NET library for interacting with the Salesforce Chatter APIs.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>salesforce chatter rest api</tags>
+    <dependencies>
+      <dependency id="Microsoft.Bcl" version="1.1.6" />
+      <dependency id="Microsoft.Bcl.Async" version="1.0.165" />
+      <dependency id="Microsoft.Bcl.Build" version="1.0.13" />
+      <dependency id="Microsoft.Net.Http" version="2.2.18" />
+      <dependency id="Newtonsoft.Json" version="5.0.8" />
+      <dependency id="DeveloperForce.Common" version="0.3.3" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.dll" target="lib" />
+    <file src="..\..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.pdb" target="lib" />
+    <file src="..\..\tools\Install.ps1" target="tools" />
+    <file src="..\..\..\src\ChatterToolkitForNET\*.cs" target="src" />
+    <file src="..\..\..\src\ChatterToolkitForNET\Models\*.cs" target="src" />
+  </files>
+</package>
