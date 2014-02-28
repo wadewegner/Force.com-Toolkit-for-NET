@@ -79,6 +79,19 @@ namespace Salesforce.Force
             return response;
         }
 
+        public async Task<bool> UpsertExternalAsync(string objectName, string externalID, string recordId, object record)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(externalID)) throw new ArgumentNullException("externalID");
+            if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
+            if (record == null) throw new ArgumentNullException("record");
+
+            //TODO: implement try/catch and throw auth exception if appropriate
+
+            var response = await _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalID, recordId));
+            return response;
+        }
+
         public async Task<bool> DeleteAsync(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");

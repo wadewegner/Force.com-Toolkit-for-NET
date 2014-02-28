@@ -1,6 +1,7 @@
 ﻿//TODO: add license header
 
 using System.Configuration;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -343,6 +344,91 @@ namespace Salesforce.Force.FunctionalTests
                 var recent = await client.RecentAsync<object>(5);
 
                 Assert.IsNotNull(recent);
+            }
+        }
+
+        [Test]
+        //This test assumes that an external ID field, “ExternalID__c” has been added to Account. 
+        public async void Upsert_Account_IsSuccess()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+
+                var account = new Account { Name = "New Account", Description = "New Account Description" };
+
+                var success = await client.UpsertExternalAsync("Account", "ExternalID__c", "123", account);
+
+                Assert.IsTrue(success);
+            }
+        }
+
+        [Test]
+        //This test assumes that an external ID field, “ExternalID__c” has been added to Account. 
+        public async void Upsert_Account_BadObject()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+
+                    var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
+
+                    await client.UpsertExternalAsync("BadAccount", "ExternalID__c", "2", account);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
+            }
+        }
+
+        [Test]
+        //This test assumes that an external ID field, “ExternalID__c” has been added to Account. 
+        public async void Upsert_Account_BadField()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var client = await GetForceClient(httpClient);
+
+                    var accountBadName = new { BadName = "New Account", Description = "New Account Description" };
+
+                    await client.UpsertExternalAsync("Account", "ExternalID__c", "3", accountBadName);
+                }
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.IsNotNull(ex.Error);
+            }
+        }
+
+        [Test]
+        //This test assumes that an external ID field, “ExternalID__c,” has been added to Account. 
+        public async void Upsert_Account_NameChanged()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+
+                var originalName = "New Account External Upsert";
+                var newName = "New Account External Upsert 2";
+
+                var account = new Account { Name = originalName, Description = "New Account Description" };
+                await client.UpsertExternalAsync("Account", "ExternalID__c", "4", account);
+
+                account.Name = newName;
+                await client.UpsertExternalAsync("Account", "ExternalID__c", "4", account);
+
+                var accountResult = await client.QueryAsync<Account>("SELECT Name FROM Account WHERE ExternalID__c = '4'");
+
+                Assert.True(accountResult.records.FirstOrDefault().Name == newName);
             }
         }
     }
