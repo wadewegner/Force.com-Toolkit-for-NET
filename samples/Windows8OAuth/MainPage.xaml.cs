@@ -17,7 +17,7 @@ namespace Windows8OAuth
     public sealed partial class MainPage : Page
     {
         private const string AuthorizationEndpointUrl = "https://login.salesforce.com/services/oauth2/authorize";
-        private const string ConsumerKey = "3MVG9A2kN3Bn17hsEyMqRTTaEfW.t4ssmYD2zPrrftW7vokEg0kCWj3H_NwryefANj37hbxV_KyB0Qd2NLySH";
+        private const string ConsumerKey = "YOURCONSUMERKEY";
         private const string CallbackUrl = "sfdc://success";
         private Token _token;
 
