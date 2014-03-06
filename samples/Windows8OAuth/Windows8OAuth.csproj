@@ -150,6 +150,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\DeveloperForce.Common.0.3.2\lib\Salesforce.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Salesforce.Force">
+      <HintPath>packages\DeveloperForce.Force.0.3.1\lib\Salesforce.Force.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>packages\Microsoft.Net.Http.2.2.18\lib\win8\System.Net.Http.Extensions.dll</HintPath>
     </Reference>

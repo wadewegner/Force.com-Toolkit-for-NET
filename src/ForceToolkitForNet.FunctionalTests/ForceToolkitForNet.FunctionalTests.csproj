@@ -65,6 +65,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WadeWegner.Salesforce.SOAPHelpers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WadeWegner.Salesforce.SOAPHelpers.0.0.2\lib\WadeWegner.Salesforce.SOAPHelpers.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ForceClientTests.cs" />

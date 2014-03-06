@@ -1,12 +1,19 @@
 ﻿//TODO: add license header
 
+using System;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Force.FunctionalTests.Models;
+using WadeWegner.Salesforce.SOAPHelpers;
+using WadeWegner.Salesforce.SOAPHelpers.Models;
 
 namespace Salesforce.Force.FunctionalTests
 {
@@ -20,14 +27,17 @@ namespace Salesforce.Force.FunctionalTests
         private static string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
         private static string _username = ConfigurationSettings.AppSettings["Username"];
         private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
+        private static string _organizationId = ConfigurationSettings.AppSettings["OrganizationId"];
 #pragma warning restore 618
+
+        private AuthenticationClient _auth;
 
         public async Task<ForceClient> GetForceClient(HttpClient httpClient)
         {
-            var auth = new AuthenticationClient(httpClient);
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password);
+            _auth = new AuthenticationClient(httpClient);
+            await _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password);
 
-            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion, httpClient);
+            var client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion, httpClient);
             return client;
         }
 
@@ -348,23 +358,24 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        //This test assumes that an external ID field, “ExternalID__c” has been added to Account. 
         public async void Upsert_Account_IsSuccess()
         {
+            const string objectName = "Account";
+            const string fieldName = "ExternalId__c";
+
+            await CreateExternalIdField(objectName, fieldName);
+
             using (var httpClient = new HttpClient())
             {
                 var client = await GetForceClient(httpClient);
-
-                var account = new Account { Name = "New Account", Description = "New Account Description" };
-
-                var success = await client.UpsertExternalAsync("Account", "ExternalID__c", "123", account);
+                var account = new Account { Name = "Upserted Account", Description = "New Upserted Account Description" };
+                var success = await client.UpsertExternalAsync(objectName, fieldName, "123", account);
 
                 Assert.IsTrue(success);
             }
         }
 
         [Test]
-        //This test assumes that an external ID field, “ExternalID__c” has been added to Account. 
         public async void Upsert_Account_BadObject()
         {
             try
@@ -372,9 +383,7 @@ namespace Salesforce.Force.FunctionalTests
                 using (var httpClient = new HttpClient())
                 {
                     var client = await GetForceClient(httpClient);
-
                     var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
-
                     await client.UpsertExternalAsync("BadAccount", "ExternalID__c", "2", account);
                 }
             }
@@ -387,7 +396,6 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        //This test assumes that an external ID field, “ExternalID__c” has been added to Account. 
         public async void Upsert_Account_BadField()
         {
             try
@@ -395,9 +403,7 @@ namespace Salesforce.Force.FunctionalTests
                 using (var httpClient = new HttpClient())
                 {
                     var client = await GetForceClient(httpClient);
-
                     var accountBadName = new { BadName = "New Account", Description = "New Account Description" };
-
                     await client.UpsertExternalAsync("Account", "ExternalID__c", "3", accountBadName);
                 }
             }
@@ -410,9 +416,11 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        //This test assumes that an external ID field, “ExternalID__c,” has been added to Account. 
         public async void Upsert_Account_NameChanged()
         {
+            const string fieldName = "ExternalId__c";
+            await CreateExternalIdField("Account", fieldName);
+
             using (var httpClient = new HttpClient())
             {
                 var client = await GetForceClient(httpClient);
@@ -421,15 +429,25 @@ namespace Salesforce.Force.FunctionalTests
                 var newName = "New Account External Upsert 2";
 
                 var account = new Account { Name = originalName, Description = "New Account Description" };
-                await client.UpsertExternalAsync("Account", "ExternalID__c", "4", account);
+                await client.UpsertExternalAsync("Account", fieldName, "4", account);
 
                 account.Name = newName;
-                await client.UpsertExternalAsync("Account", "ExternalID__c", "4", account);
+                await client.UpsertExternalAsync("Account", fieldName, "4", account);
 
-                var accountResult = await client.QueryAsync<Account>("SELECT Name FROM Account WHERE ExternalID__c = '4'");
+                var accountResult = await client.QueryAsync<Account>(string.Format("SELECT Name FROM Account WHERE {0} = '4'", fieldName));
+                var firstOrDefault = accountResult.records.FirstOrDefault();
 
-                Assert.True(accountResult.records.FirstOrDefault().Name == newName);
+                Assert.True(firstOrDefault != null && firstOrDefault.Name == newName);
             }
+        }
+
+        private static async Task CreateExternalIdField(string objectName, string fieldName)
+        {
+            var salesforceClient = new SalesforceClient();
+            var loginResult = await salesforceClient.Login(_username, _password, _organizationId);
+
+            await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
+                    loginResult.MetadataServerUrl, true);
         }
     }
 }

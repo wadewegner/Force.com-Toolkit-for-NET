@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -6,6 +7,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows8OAuth.Models;
 using Salesforce.Common;
+using Salesforce.Force;
 
 namespace Windows8OAuth
 {
@@ -15,7 +17,7 @@ namespace Windows8OAuth
     public sealed partial class MainPage : Page
     {
         private const string AuthorizationEndpointUrl = "https://login.salesforce.com/services/oauth2/authorize";
-        private const string ConsumerKey = "YOURCONSUMERKEY";
+        private const string ConsumerKey = "3MVG9A2kN3Bn17hsEyMqRTTaEfW.t4ssmYD2zPrrftW7vokEg0kCWj3H_NwryefANj37hbxV_KyB0Qd2NLySH";
         private const string CallbackUrl = "sfdc://success";
         private Token _token;
 
@@ -59,6 +61,17 @@ namespace Windows8OAuth
             }
         }
 
+        private async void btnExpireToken_Click(object sender, RoutedEventArgs e)
+        {
+            _token.AccessToken = "GARBAGE";
+
+            List<dynamic> accounts = await RetryMethod<dynamic>(GetAccounts, 30, 0, RefreshToken);
+
+            var message = string.Format("Token Expiration & Refresh Successful:\n\n{0} accounts returned", accounts.Count);
+
+            lblOutput.Text = message;
+        }
+
         private async Task<Token> GetAccessToken()
         {
             var token = new Token();
@@ -95,6 +108,49 @@ namespace Windows8OAuth
             }
         }
 
+        private async Task RefreshToken()
+        {
+            var auth = new AuthenticationClient();
+            await auth.TokenRefreshAsync(ConsumerKey, _token.RefreshToken);
 
+            _token.AccessToken = auth.AccessToken;
+        }
+
+        private async Task<dynamic> GetAccounts()
+        {
+            var client = new ForceClient(_token.InstanceUrl, _token.AccessToken, "v29.0");
+            var accounts = await client.QueryAsync<dynamic>("SELECT id, name, description FROM Account").ToObservable().;
+
+            return accounts;
+        }
+
+        public async Task<T> RetryMethod<T>(Func<Task<T>> method, int numRetries, int retryTimeout, Func<Task> onInvalidTokenAction)
+        {
+            var refreshToken = false;
+            var retval = default(T);
+
+            do
+            {
+                if (refreshToken)
+                {
+                    await onInvalidTokenAction();
+                    refreshToken = false;
+                }
+                try
+                {
+                    retval = await method();
+                    return retval;
+                }
+                catch (ForceException ex)
+                {
+                    if (ex.Message == "Session expired or invalid")
+                    {
+                        refreshToken = true;
+                    }
+                }
+            } while (numRetries-- > 0);
+
+            return retval;
+        }
     }
 }
