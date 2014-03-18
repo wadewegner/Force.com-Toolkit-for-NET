@@ -20,6 +20,13 @@ namespace Salesforce.Common
         private readonly string _apiVersion;
         private readonly string _accessToken;
         private static HttpClient _httpClient;
+        private readonly ServiceType _serviceType;
+
+        public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, string userAgent, ServiceType serviceType, HttpClient httpClient)
+            : this(instanceUrl, apiVersion, accessToken, userAgent, httpClient)
+        {
+            _serviceType = serviceType;
+        }
 
         public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
             : this(instanceUrl, apiVersion, accessToken, _userAgent, httpClient)
@@ -33,6 +40,7 @@ namespace Salesforce.Common
             _accessToken = accessToken;
             _userAgent = userAgent;
             _httpClient = httpClient;
+            _serviceType = ServiceType.Data;
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(_userAgent, "/", _apiVersion));
         }
@@ -44,7 +52,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion, _serviceType);
 
             var request = new HttpRequestMessage()
             {
@@ -127,7 +135,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion, _serviceType);
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -150,7 +158,7 @@ namespace Salesforce.Common
 
         public async Task<bool> HttpPatchAsync(object inputObject, string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion, _serviceType);
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -179,7 +187,7 @@ namespace Salesforce.Common
 
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion, _serviceType);
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

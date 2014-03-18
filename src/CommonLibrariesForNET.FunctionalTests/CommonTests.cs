@@ -124,5 +124,103 @@ namespace Salesforce.Common.FunctionalTests
             }
         }
 
+        [Test]
+        // Test assumes the RestResource Apex class in this doc has been created. http://www.salesforce.com/us/developer/docs/apexcode/Content/apex_rest_code_sample_basic.htm
+        public async void ApexRest_ServiceType_Create_Query_Delete()
+        {
+            const string userAgent = "common-libraries-dotnet";
+
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+
+            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, ServiceType.ApexRest, new HttpClient());
+
+            var testAccount = new
+            {
+                name = "test name",
+            };
+
+            // Create test account.
+            var accountId = await serviceHttpClient.HttpPostAsync<string>(testAccount,"Account");
+
+            Assert.IsNotNullOrEmpty(accountId);
+
+            // Query test account
+            var account = await serviceHttpClient.HttpGetAsync<dynamic>(string.Format("Account/{0}", accountId));
+
+            Assert.IsTrue(account.Name == testAccount.name);
+
+            // Delete test account
+            var deleteResponse = await serviceHttpClient.HttpDeleteAsync(string.Format("Account/{0}", accountId));
+
+            Assert.IsTrue(deleteResponse);
+        }
+
+        [Test]
+        public async void Data_ServiceType_Create_Query_Delete()
+        {
+            const string userAgent = "common-libraries-dotnet";
+
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+
+            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, ServiceType.Data, new HttpClient());
+
+            var account = new { Name = "New Account", Description = "New Account Description" };
+
+            // Create account.
+            var createResponse = await serviceHttpClient.HttpPostAsync<SuccessResponse>(account, "sobjects/Account");
+            Assert.IsNotNull(createResponse);
+
+            // Query account.
+            var result = await serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q=SELECT ID FROM ACCOUNT WHERE Id = '{0}'", createResponse.id));
+            Assert.IsNotNull(result);
+
+            // Delete account.
+            var deleteResponse = await serviceHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", "Account", createResponse.id));
+            Assert.IsTrue(deleteResponse);
+        }
+
+        [Test]
+        public void FormatUrl_With_ServiceType_Data()
+        {
+            const string resourceName = "Account";
+            const string instanceUrl = "http://localhost/";
+            const string apiVersion = "1.0";
+
+            var url = Common.FormatUrl(resourceName, instanceUrl, apiVersion, ServiceType.Data);
+
+            var expectedResult = string.Format("{0}/services/{1}/{2}/{3}", instanceUrl, ServiceType.Data.ToString().ToLower(), apiVersion, resourceName);
+
+            Assert.AreEqual(url, expectedResult);
+        }
+
+        [Test]
+        public void FormatUrl_With_ServiceType_ApexRest()
+        {
+            const string resourceName = "Account";
+            const string instanceUrl = "http://localhost/";
+            const string apiVersion = "1.0";
+
+            var url = Common.FormatUrl(resourceName, instanceUrl, apiVersion, ServiceType.ApexRest);
+
+            var expectedResult = string.Format("{0}/services/{1}/{2}", instanceUrl, ServiceType.ApexRest.ToString().ToLower(), resourceName);
+
+            Assert.AreEqual(url, expectedResult);
+        }
+
+        [Test]
+        public void FormatUrl_With_Default_ServiceType()
+        {
+            const string resourceName = "Account";
+            const string instanceUrl = "http://localhost/";
+            const string apiVersion = "1.0";
+
+            var url = Common.FormatUrl(resourceName, instanceUrl, apiVersion);
+
+            var expectedResult = string.Format("{0}/services/{1}/{2}/{3}", instanceUrl, ServiceType.Data.ToString().ToLower(), apiVersion, resourceName);
+
+            Assert.AreEqual(url, expectedResult);
+        }
     }
 }
