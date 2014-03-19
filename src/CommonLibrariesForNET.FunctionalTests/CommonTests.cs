@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Net.Http;
-using System.Web;
 using NUnit.Framework;
 using Salesforce.Common.Models;
 
@@ -11,13 +8,14 @@ namespace Salesforce.Common.FunctionalTests
 	[TestFixture]
     public class CommonTests
     {
+#pragma warning disable 618
         private static string _tokenRequestEndpointUrl = ConfigurationSettings.AppSettings["TokenRequestEndpointUrl"];
         private static string _securityToken = ConfigurationSettings.AppSettings["SecurityToken"];
         private static string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
         private static string _username = ConfigurationSettings.AppSettings["Username"];
         private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
-
+#pragma warning enable 618
 
         [Test]
         public async void Query_Describe()
@@ -32,7 +30,6 @@ namespace Salesforce.Common.FunctionalTests
             var response = await serviceHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
             
             Assert.IsNotNull(response);
-
         }
 
         [Test]
