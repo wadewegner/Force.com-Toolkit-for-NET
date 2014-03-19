@@ -8,6 +8,7 @@ using Salesforce.Common.Models;
 
 namespace Salesforce.Common.FunctionalTests
 {
+	[TestFixture]
     public class CommonTests
     {
         private static string _tokenRequestEndpointUrl = ConfigurationSettings.AppSettings["TokenRequestEndpointUrl"];
