@@ -19,3 +19,4 @@ script:
  - xbuild src/ForceToolkitForNET.sln
  - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
  - .ci/nunit.sh src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
+ - .ci/nunit.sh src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
