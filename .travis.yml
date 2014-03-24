@@ -15,3 +15,4 @@ script:
  - chmod +x .ci/packagerestore.sh
  - .ci/packagerestore.sh src/CommonLibrariesForNET.sln
  - xbuild src/CommonLibrariesForNET.FunctionalTests/CommonLibrariesForNET.FunctionalTests.csproj
+ - .ci/packagerestore.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
