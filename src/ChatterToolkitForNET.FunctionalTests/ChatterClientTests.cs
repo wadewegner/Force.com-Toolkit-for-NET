@@ -7,6 +7,7 @@ using Salesforce.Common;
 
 namespace Salesforce.Chatter.FunctionalTests
 {
+    [TestFixture]
     public class ChatterClientTests
     {
         private static string _tokenRequestEndpointUrl = ConfigurationSettings.AppSettings["TokenRequestEndpointUrl"];
