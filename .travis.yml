@@ -12,4 +12,5 @@ before_install:
 
 script:
  - xbuild 
+ - chmod +x .ci/nunit.sh 
  - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
