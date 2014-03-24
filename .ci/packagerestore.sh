@@ -1,5 +1,5 @@
 #!/bin/sh -x
 
-mono --runtime=v4.0 nuget/buildsupport/NuGet.exe restore -ConfigFile src/nuget.config $@
+mono --runtime=v4.0 nuget/buildsupport/NuGet.exe restore -ConfigFile src/nuget.config -Verbosity detailed $@
 
 exit 0
