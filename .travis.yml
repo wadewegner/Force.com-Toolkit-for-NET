@@ -11,6 +11,6 @@ before_install:
  - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
 
 script:
- - xbuild 
+ - xbuild src/CommonLibrariesForNET.FunctionalTests/CommonLibrariesForNET.FunctionalTests.csproj
  - chmod +x .ci/nunit.sh 
  - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
