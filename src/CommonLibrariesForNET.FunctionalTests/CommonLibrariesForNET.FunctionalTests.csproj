@@ -69,16 +69,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <Target Name="BeforeTeamCity">
-    <Copy SourceFiles="c:\temp\ForceSDKforNet.FunctionalTests.dll.config" DestinationFolder="$(TargetDir)" />
-  </Target>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
