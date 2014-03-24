@@ -11,8 +11,6 @@ before_install:
  - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
  
 script:
- - chmod +x .ci/nunit.sh 
- - chmod +x .ci/packagerestore.sh
  - .ci/packagerestore.sh src/CommonLibrariesForNET.sln
  - .ci/packagerestore.sh src/ChatterToolkitForNET.sln
  - .ci/packagerestore.sh src/ForceToolkitForNET.sln
