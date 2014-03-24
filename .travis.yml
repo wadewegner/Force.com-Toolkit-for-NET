@@ -4,13 +4,14 @@ env:
  global:
   - EnableNuGetPackageRestore=true 
  matrix:
-  - MONO_VERSION="3.2.5"
+  - MONO_VERSION="3.2.6"
 
 before_install:
  - wget "http://download.xamarin.com/MonoFrameworkMDK/Macx86/MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg"
  - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
 
 script:
+ - xbuild src/CommonLibrariesForNET.FunctionalTests/CommonLibrariesForNET.FunctionalTests.csproj
  - xbuild src/CommonLibrariesForNET.FunctionalTests/CommonLibrariesForNET.FunctionalTests.csproj
  - chmod +x .ci/nunit.sh 
  - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
