@@ -14,5 +14,13 @@ script:
  - chmod +x .ci/nunit.sh 
  - chmod +x .ci/packagerestore.sh
  - .ci/packagerestore.sh src/CommonLibrariesForNET.sln
- - xbuild src/CommonLibrariesForNET.FunctionalTests/CommonLibrariesForNET.FunctionalTests.csproj
- - .ci/packagerestore.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
+ - .ci/packagerestore.sh src/ChatterToolkitForNET.sln
+ - .ci/packagerestore.sh src/ForceToolkitForNET.sln
+ - xbuild src/CommonLibrariesForNET.sln
+ - xbuild src/ChatterToolkitForNET.sln
+ - xbuild src/ForceToolkitForNET.sln
+ - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
+ - .ci/nunit.sh src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
+ - .ci/nunit.sh src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
+ - .ci/nunit.sh src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
+ - .ci/nunit.sh src/ForceToolkitForNET.UnitTests/bin/Debug/Salesforce.Force.UnitTests.dll
