@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace Salesforce.Common.UnitTests
 {
+    [TestFixture]
     public class CommonTests
     {
         [Test]
