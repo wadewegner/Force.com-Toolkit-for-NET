@@ -9,8 +9,7 @@ env:
 before_install:
  - wget "http://download.xamarin.com/MonoFrameworkMDK/Macx86/MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg"
  - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
- - xbuild src/CommonLibrariesForNET.FunctionalTests/CommonLibrariesForNET.FunctionalTests.csproj
-
+ 
 script:
  - xbuild src/CommonLibrariesForNET.FunctionalTests/CommonLibrariesForNET.FunctionalTests.csproj
  - chmod +x .ci/nunit.sh 
