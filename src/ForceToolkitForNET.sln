@@ -5,13 +5,6 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET", "ForceToolkitForNET\ForceToolkitForNET.csproj", "{1CC985BC-27F3-4F1D-8946-F4DDB084B58F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2FF4056E-CA4D-461F-A591-2212B4CE3741}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNet.UnitTests", "ForceToolkitForNet.UnitTests\ForceToolkitForNet.UnitTests.csproj", "{F71C23A5-9BC3-44AE-AE14-1A9F2F068645}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNet.FunctionalTests", "ForceToolkitForNet.FunctionalTests\ForceToolkitForNet.FunctionalTests.csproj", "{44EBF85A-05FE-4C7D-945F-06553AD25586}"

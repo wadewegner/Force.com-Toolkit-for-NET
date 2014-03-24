@@ -7,13 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET.FunctionalTests", "CommonLibrariesForNET.FunctionalTests\CommonLibrariesForNET.FunctionalTests.csproj", "{2FF0F8C4-8604-460B-9698-42BDF6289066}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{835590B9-825B-4B49-8CF4-69CF5F1C5376}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET.UnitTests", "CommonLibrariesForNET.UnitTests\CommonLibrariesForNET.UnitTests.csproj", "{A47AE957-E0FB-4407-B54E-44594594F616}"
 EndProject
 Global
