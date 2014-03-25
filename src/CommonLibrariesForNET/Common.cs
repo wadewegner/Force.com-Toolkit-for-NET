@@ -7,13 +7,19 @@ namespace Salesforce.Common
 {
     public static class Common
     {
-        public static string FormatUrl(string resourceName, string instanceUrl, string apiVersion)
+        public static string FormatUrl(string resourceName, string instanceUrl, string apiVersion, ServiceType serviceType = ServiceType.Data)
         {
             if (string.IsNullOrEmpty(resourceName)) throw new ArgumentNullException("resourceName");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
+
+            if (serviceType == ServiceType.ApexRest)
+            {
+                return string.Format("{0}/services/{1}/{2}", instanceUrl,  serviceType.ToString().ToLower(), resourceName);
+            }
+
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
-            
-            return string.Format("{0}/services/data/{1}/{2}", instanceUrl, apiVersion, resourceName);
+
+            return string.Format("{0}/services/{1}/{2}/{3}", instanceUrl, serviceType.ToString().ToLower(), apiVersion, resourceName);
         }
 
         public static string FormatAuthUrl(
