@@ -18,17 +18,6 @@ Install-Package DeveloperForce.Chatter
 Install-Package DeveloperForce.Common
 ```
 
-### DevTest Packages
-
-If you want to use the most recent DevTest NuGet packages you can grab the packages built during the CI build. All you need to do is setup Visual Studio to pull from the build servers NuGet feed:
-
-1. In Visual Studios select **Tools** -> **Library Package Manager** -> **Package Manager Settings**. Choose **Package Sources**.
-2. Click **+** to add a new source.
-3. Change the **Name** to "Salesforce Toolkit for .NET (DevTest)".
-4. Change the **Source** to http://dfbuild.cloudapp.net/guestAuth/app/nuget/v1/FeedService.svc/.
-
-Now you can choose to install the latest NuGet from this DevTest feed.
-
 ## Samples
 
 The toolkit includes the following sample applications.
