@@ -2,4 +2,9 @@
 
 mono --runtime=v4.0 nuget/buildsupport/NuGet.exe restore $@ -ConfigFile src/NuGet.Config -Source nuget -Verbosity detailed -NoCache -DisableParallelProcessing
 
-exit 0
+if [ $? -ne 0 ]
+then   
+ exit 1
+fi
+
+exit $?
