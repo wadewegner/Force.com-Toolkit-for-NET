@@ -4,6 +4,7 @@ using System.Linq;
 using Salesforce.Common;
 using Salesforce.Force;
 using System.Threading.Tasks;
+using System.Dynamic;
 
 namespace SimpleConsole
 {
@@ -90,7 +91,7 @@ namespace SimpleConsole
             // Query for record by name
             Console.WriteLine("Querying the record by name.");
             var accounts = await client.QueryAsync<Account>("SELECT ID, Name FROM Account WHERE Name = '" + account.Name + "'");
-            account = accounts.FirstOrDefault();
+            account = accounts.records.FirstOrDefault();
             if (account == null)
             {
                 Console.WriteLine("Failed to retrieve account by query!");
@@ -108,6 +109,51 @@ namespace SimpleConsole
                 return;
             }
             Console.WriteLine("Deleted the record by ID.");
+
+            // Selecting multiple accounts into a dynamic
+            Console.WriteLine("Querying multiple records.");
+            var dynamicAccounts = await client.QueryAsync<dynamic>("SELECT ID, Name FROM Account LIMIT 10");
+            foreach (dynamic acct in dynamicAccounts.records)
+            {
+                Console.WriteLine("Account - " + acct.Name);
+            }
+
+            // Creating parent - child records using a Dynamic
+            Console.WriteLine("Creating a parent record (Account)");
+            dynamic a = new ExpandoObject();
+            a.Name = "Account from .Net Toolkit";
+            a.Id = await client.CreateAsync("Account", a);
+            if (a.Id == null)
+            {
+                Console.WriteLine("Failed to create parent record.");
+                return;
+            }
+
+            Console.WriteLine("Creating a child record (Contact)");
+            dynamic c = new ExpandoObject();
+            c.FirstName = "Joe";
+            c.LastName = "Blow";
+            c.AccountId = a.Id;
+            c.Id = await client.CreateAsync("Contact", c);
+            if (c.Id == null)
+            {
+                Console.WriteLine("Failed to create child record.");
+                return;
+            }
+
+            Console.WriteLine("Press Enter to delete parent and child and continue");
+            Console.Read();
+
+            // Delete account (also deletes contact)
+            Console.WriteLine("Deleting the Account by Id.");
+            success = await client.DeleteAsync(Account.SObjectTypeName, a.Id);
+            if (!success)
+            {
+                Console.WriteLine("Failed to delete the record by ID!");
+                return;
+            }
+            Console.WriteLine("Deleted the Account and Contact.");
+
         }
 
         private class Account
