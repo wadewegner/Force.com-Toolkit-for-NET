@@ -14,6 +14,7 @@ using Salesforce.Common;
 using Salesforce.Force.FunctionalTests.Models;
 //using WadeWegner.Salesforce.SOAPHelpers;
 //using WadeWegner.Salesforce.SOAPHelpers.Models;
+using System.Diagnostics;
 
 namespace Salesforce.Force.FunctionalTests
 {
@@ -93,7 +94,7 @@ namespace Salesforce.Force.FunctionalTests
                 var account = new Account { Name = "New Account", Description = "New Account Description" };
                 var id = await client.CreateAsync("Account", account);
 
-                Assert.IsNotNullOrEmpty(id);
+                Assert.IsFalse(String.IsNullOrWhiteSpace(id));
             }
         }
 
@@ -106,7 +107,7 @@ namespace Salesforce.Force.FunctionalTests
                 var account = new { Name = "New Account", Description = "New Account Description" };
                 var id = await client.CreateAsync("Account", account);
 
-                Assert.IsNotNullOrEmpty(id);
+                Assert.IsFalse(String.IsNullOrWhiteSpace(id));
             }
         }
 
