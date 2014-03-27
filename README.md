@@ -160,6 +160,11 @@ public class Account
 ...
 
 var accounts = await client.QueryAsync<Account>("SELECT id, name, description FROM Account");
+
+foreach (var account in accounts.records)
+{
+    Console.WriteLine(account.Name);
+}
 ```
 
 ## Contributing to the Repository ###
