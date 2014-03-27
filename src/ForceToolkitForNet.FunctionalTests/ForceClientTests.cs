@@ -14,6 +14,7 @@ using Salesforce.Common;
 using Salesforce.Force.FunctionalTests.Models;
 //using WadeWegner.Salesforce.SOAPHelpers;
 //using WadeWegner.Salesforce.SOAPHelpers.Models;
+using System.Diagnostics;
 
 namespace Salesforce.Force.FunctionalTests
 {
