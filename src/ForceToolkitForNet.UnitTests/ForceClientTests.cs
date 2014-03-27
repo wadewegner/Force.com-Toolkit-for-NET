@@ -3,6 +3,7 @@
 using System;
 using System.Net.Http;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Salesforce.Force.UnitTests
 {
@@ -10,7 +11,7 @@ namespace Salesforce.Force.UnitTests
     public class ForceClientTests
     {
         [Test]
-        public async void Requests_CheckHttpRequestMessage_UserAgent()
+        public async Task Requests_CheckHttpRequestMessage_UserAgent()
         {
             var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v29")));
             var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v29", httpClient);
