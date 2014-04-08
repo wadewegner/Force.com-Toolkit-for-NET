@@ -7,17 +7,25 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows8OAuth.Models;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Force;
 
 namespace Windows8OAuth
 {
+    public class Account
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+    
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
     {
         private const string AuthorizationEndpointUrl = "https://login.salesforce.com/services/oauth2/authorize";
-        private const string ConsumerKey = "YOURCONSUMERKEY";
+        private const string ConsumerKey = "";
         private const string CallbackUrl = "sfdc://success";
         private Token _token;
 
@@ -65,7 +73,7 @@ namespace Windows8OAuth
         {
             _token.AccessToken = "GARBAGE";
 
-            List<dynamic> accounts = await RetryMethod<dynamic>(GetAccounts, 30, 0, RefreshToken);
+            List<Account> accounts = await RetryMethod<dynamic>(GetAccounts, 30, 0, RefreshToken);
 
             var message = string.Format("Token Expiration & Refresh Successful:\n\n{0} accounts returned", accounts.Count);
 
@@ -119,9 +127,11 @@ namespace Windows8OAuth
         private async Task<dynamic> GetAccounts()
         {
             var client = new ForceClient(_token.InstanceUrl, _token.AccessToken, "v29.0");
-            var accounts = await client.QueryAsync<dynamic>("SELECT id, name, description FROM Account").ToObservable().;
+            QueryResult<dynamic> accounts = await client.QueryAsync<dynamic>("SELECT id, name, description FROM Account");
 
-            return accounts;
+            //.ToObservable();
+
+            return accounts.records;
         }
 
         public async Task<T> RetryMethod<T>(Func<Task<T>> method, int numRetries, int retryTimeout, Func<Task> onInvalidTokenAction)
