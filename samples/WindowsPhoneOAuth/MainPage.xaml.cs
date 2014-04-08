@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Force;
 using WindowsPhoneOAuth.Models;
 
@@ -59,7 +60,7 @@ namespace WindowsPhoneOAuth
             var client = new ForceClient(_instanceUrl, _accessToken, ApiVersion);
             var accounts = await client.QueryAsync<Account>("SELECT id, name, description FROM Account");
 
-            OrganizationsList.ItemsSource = accounts;
+            OrganizationsList.ItemsSource = accounts.records;
 
             OrganizationsList.Visibility = Visibility.Visible;
             AuthBrowser.Visibility = Visibility.Collapsed;
