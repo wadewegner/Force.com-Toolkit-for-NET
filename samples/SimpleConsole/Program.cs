@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Force;
 using System.Threading.Tasks;
 
@@ -90,7 +91,7 @@ namespace SimpleConsole
             // Query for record by name
             Console.WriteLine("Querying the record by name.");
             var accounts = await client.QueryAsync<Account>("SELECT ID, Name FROM Account WHERE Name = '" + account.Name + "'");
-            account = accounts.FirstOrDefault();
+            account = accounts.records.FirstOrDefault();
             if (account == null)
             {
                 Console.WriteLine("Failed to retrieve account by query!");
