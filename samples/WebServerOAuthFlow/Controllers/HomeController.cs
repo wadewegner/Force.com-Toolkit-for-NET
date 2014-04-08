@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 
 namespace WebServerOAuthFlow.Controllers
 {

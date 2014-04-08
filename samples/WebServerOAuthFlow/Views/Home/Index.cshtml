@@ -49,7 +49,7 @@
                 $.getJSON(url, function (data) {
 
                     var viewModel = {
-                        accounts: ko.observableArray(JSON.parse(data))
+                        accounts: ko.observableArray(JSON.parse(data).records)
                     };
 
                     ko.applyBindings(viewModel);
