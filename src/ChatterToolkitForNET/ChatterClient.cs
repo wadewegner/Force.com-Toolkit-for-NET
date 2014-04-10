@@ -1,14 +1,15 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Chatter.Models;
 using Salesforce.Common;
 
 namespace Salesforce.Chatter
 {
-    public class ChatterClient : IChatterClient
+    public class ChatterClient : IChatterClient, IDisposable
     {
-        private static ServiceHttpClient _serviceHttpClient;
-        private static string _userAgent = "common-libraries-dotnet";
+        private ServiceHttpClient _serviceHttpClient;
+        private const string UserAgent = "common-libraries-dotnet";
 
         public ChatterClient(string instanceUrl, string accessToken, string apiVersion) 
             : this (instanceUrl, accessToken, apiVersion, new HttpClient())
@@ -17,7 +18,7 @@ namespace Salesforce.Chatter
 
         public ChatterClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
         {
-            _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, _userAgent, httpClient);
+            _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, UserAgent, httpClient);
         }
         
         public async Task<T> FeedsAsync<T>()
@@ -92,6 +93,11 @@ namespace Salesforce.Chatter
         {
             var users = await _serviceHttpClient.HttpGetAsync<T>("connect/topics");
             return users;
+        }
+
+        public void Dispose()
+        {
+            _serviceHttpClient.Dispose();
         }
     }
 }

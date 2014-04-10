@@ -19,7 +19,7 @@ namespace Salesforce.Common
         private readonly string _instanceUrl;
         private readonly string _apiVersion;
         private readonly string _accessToken;
-        private static HttpClient _httpClient;
+        private HttpClient _httpClient;
 
         public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
             : this(instanceUrl, apiVersion, accessToken, _userAgent, httpClient)
@@ -35,6 +35,10 @@ namespace Salesforce.Common
             _httpClient = httpClient;
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(_userAgent, "/", _apiVersion));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public void Dispose()
@@ -51,8 +55,6 @@ namespace Salesforce.Common
                 RequestUri = new Uri(url),
                 Method = HttpMethod.Get
             };
-
-            request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
             var responseMessage = await _httpClient.SendAsync(request);
             var response = await responseMessage.Content.ReadAsStringAsync();
@@ -101,8 +103,6 @@ namespace Salesforce.Common
                         Method = HttpMethod.Get
                     };
 
-                    request.Headers.Add("Authorization", "Bearer " + _accessToken);
-
                     var responseMessage = await _httpClient.SendAsync(request);
                     response = await responseMessage.Content.ReadAsStringAsync();
 
@@ -129,9 +129,6 @@ namespace Salesforce.Common
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
             var json = JsonConvert.SerializeObject(inputObject, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -151,9 +148,6 @@ namespace Salesforce.Common
         public async Task<bool> HttpPatchAsync(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var request = new HttpRequestMessage()
             {
@@ -180,9 +174,6 @@ namespace Salesforce.Common
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var request = new HttpRequestMessage()
             {
