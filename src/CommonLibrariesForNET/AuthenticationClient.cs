@@ -17,7 +17,7 @@ namespace Salesforce.Common
         public string ApiVersion { get; set; }
         private const string UserAgent = "common-libraries-dotnet";
         private const string TokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
-        private static HttpClient _httpClient;
+        private HttpClient _httpClient;
 
         public AuthenticationClient()
             : this(new HttpClient())
