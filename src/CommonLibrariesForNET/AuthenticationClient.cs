@@ -52,9 +52,6 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(tokenRequestEndpointUrl)) throw new ArgumentNullException("tokenRequestEndpointUrl");
             //TODO: check to make sure tokenRequestEndpointUrl is a valid URI
 
-            //TODO: refactor use newer technique
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
-
             var content = new FormUrlEncodedContent(new[]
                 {
                     new KeyValuePair<string, string>("grant_type", "password"),
@@ -68,8 +65,10 @@ namespace Salesforce.Common
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(tokenRequestEndpointUrl),
-                Content = content
+				Content = content
             };
+
+			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request);
             var response = await responseMessage.Content.ReadAsStringAsync();
@@ -110,9 +109,6 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(tokenRequestEndpointUrl)) throw new ArgumentNullException("tokenRequestEndpointUrl");
             //TODO: check to make sure tokenRequestEndpointUrl is a valid URI
 
-            //TODO: refactor to use newer technique
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
-
             var content = new FormUrlEncodedContent(new[]
                 {
                     new KeyValuePair<string, string>("grant_type", "authorization_code"),
@@ -128,6 +124,8 @@ namespace Salesforce.Common
                 RequestUri = new Uri(tokenRequestEndpointUrl),
                 Content = content
             };
+
+			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request);
             var response = await responseMessage.Content.ReadAsStringAsync();
@@ -159,8 +157,6 @@ namespace Salesforce.Common
 
         public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string userAgent, string tokenRequestEndpointUrl)
         {
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
-
             var url = Common.FormatRefreshTokenUrl(
                 tokenRequestEndpointUrl,
                 clientId,
@@ -172,6 +168,8 @@ namespace Salesforce.Common
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(url)
             };
+
+			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request);
             var response = await responseMessage.Content.ReadAsStringAsync();
