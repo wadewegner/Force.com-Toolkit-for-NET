@@ -11,9 +11,9 @@ using Salesforce.Common.Models;
 
 namespace Salesforce.Force
 {
-    public class ForceClient : IForceClient
+    public class ForceClient : IForceClient, IDisposable
     {
-        private static ServiceHttpClient _serviceHttpClient;
+        private ServiceHttpClient _serviceHttpClient;
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         
         public ForceClient(string instanceUrl, string accessToken, string apiVersion) 
@@ -127,6 +127,11 @@ namespace Salesforce.Force
 
             var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
             return response;
+        }
+
+        public void Dispose()
+        {
+            _serviceHttpClient.Dispose();
         }
     }
 }
