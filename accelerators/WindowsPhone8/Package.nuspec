@@ -1,0 +1,26 @@
+<?vxml version="1.0"?>
+<package >
+  <metadata>
+    <id>DeveloperForce.Force.WP8Login</id>
+    <version>0.0.5</version>
+    <authors>DeveloperForce,wadewegner</authors>
+    <owners>DeveloperForce,wadewegner</owners>
+    <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/developerforce/Force-Toolkit-for-NET/</projectUrl>
+    <iconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/nuget/packaging/avatar.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The DeveloperForce.Force.WP8Login NuGet provides pages and code to facilitate the OAuth 2.0 login process with the Salesforce1 Platform APIs.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>salesforce api aspnet mvc login oauth</tags>
+    <dependencies>
+      <dependency id="DeveloperForce.Force" version="0.4.1" />
+      <dependency id="DeveloperForce.Common" version="0.4.4" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\App_SFDC.xaml.cs.pp" target="Content" />
+    <file src="src\LoginPage.xaml.cs.pp" target="Content\Pages" />
+    <file src="src\LoginPage.xaml.pp" target="Content\Pages" />
+  </files>
+</package>
