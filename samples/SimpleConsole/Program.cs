@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Salesforce.Common;
@@ -16,6 +17,7 @@ namespace SimpleConsole
         private static readonly string ConsumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
         private static readonly string Username = ConfigurationSettings.AppSettings["Username"];
         private static readonly string Password = ConfigurationSettings.AppSettings["Password"] + SecurityToken;
+        private static readonly string IsSandboxUser = ConfigurationSettings.AppSettings["IsSandboxUser"];
 #pragma warning restore 618
 
         static void Main()
@@ -47,10 +49,31 @@ namespace SimpleConsole
 
             // Authenticate with Salesforce
             Console.WriteLine("Authenticating with Salesforce");
-            await auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password);
+            var url = IsSandboxUser.Equals("true", StringComparison.CurrentCultureIgnoreCase)
+                ? "https://test.salesforce.com/services/oauth2/token"
+                : "https://login.salesforce.com/services/oauth2/token";
+
+            await auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, ".net-api-client", url);
             Console.WriteLine("Connected to Salesforce");
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
+
+            // retrieve all accounts
+            Console.WriteLine("Get Up To 5000 Accounts");
+            var qry = "SELECT ID, Name FROM Account LIMIT 5000";
+            var accts = new List<Account>();
+            var totalSize = 0;
+            while (true)
+            {
+                var results = await client.QueryAsync<Account>(qry);
+                totalSize = results.totalSize;
+                accts.AddRange(results.records);
+                if (string.IsNullOrEmpty(results.nextRecordsUrl)) break;
+
+                //pass nextRecordsUrl back to client.QueryAsync to request next set of records
+                qry = results.nextRecordsUrl;
+            }
+            Console.WriteLine("Retrieved accounts = " + accts.Count() + ", expected size = " + totalSize);
 
             // Create a sample record
             Console.WriteLine("Creating test record.");
