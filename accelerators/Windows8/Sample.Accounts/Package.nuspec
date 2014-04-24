@@ -1,26 +1,27 @@
 <?vxml version="1.0"?>
-<package >
+<package>
   <metadata>
-    <id>DeveloperForce.Force.WP8Login</id>
-    <version>0.0.5</version>
+    <id>DeveloperForce.Windows8.Samples.Accounts</id>
+    <version>0.0.1</version>
     <authors>DeveloperForce,wadewegner</authors>
     <owners>DeveloperForce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/developerforce/Force-Toolkit-for-NET/</projectUrl>
     <iconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/nuget/packaging/avatar.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The DeveloperForce.Force.WP8Login NuGet provides pages and code to facilitate the OAuth 2.0 login process with the Salesforce1 Platform APIs.</description>
+    <description>The DeveloperForce.Windows8.Samples.Account NuGet provides pages and code to facilitate the process of querying the Salesforce1 Platform APIs and binding results to a page.</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>salesforce api aspnet mvc login oauth</tags>
     <dependencies>
       <dependency id="DeveloperForce.Force" version="0.4.1" />
       <dependency id="DeveloperForce.Common" version="0.4.4" />
+      <dependency id="DeveloperForce.Windows8.Login" version="0.0.3" />
     </dependencies>
   </metadata>
   <files>
-    <file src="src\App_SFDC.xaml.cs.pp" target="Content" />
-    <file src="src\LoginPage.xaml.cs.pp" target="Content\Pages" />
-    <file src="src\LoginPage.xaml.pp" target="Content\Pages" />
+    <file src="src\Account.cs.pp" target="Content\Models" />
+    <file src="src\AccountsPage.xaml.cs.pp" target="Content\Pages" />
+    <file src="src\AccountsPage.xaml.pp" target="Content\Pages" />
   </files>
 </package>
