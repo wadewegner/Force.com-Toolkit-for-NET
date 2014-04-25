@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DeveloperForce.Windows8.Login</id>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <authors>DeveloperForce,wadewegner</authors>
     <owners>DeveloperForce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
@@ -21,5 +21,6 @@
   <files>
     <file src="src\MainPage_SFDC.xaml.cs.pp" target="Content" />
     <file src="src\App_SFDC.xaml.cs.pp" target="Content" />
+    <file src="Install.ps1" target="tools" />
   </files>
 </package>

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>DeveloperForce.WindowsPhone8.Login</id>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <authors>DeveloperForce,wadewegner</authors>
     <owners>DeveloperForce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
@@ -22,5 +22,6 @@
     <file src="src\App_SFDC.xaml.cs.pp" target="Content" />
     <file src="src\LoginPage.xaml.cs.pp" target="Content\Pages" />
     <file src="src\LoginPage.xaml.pp" target="Content\Pages" />
+    <file src="Install.ps1" target="tools" />
   </files>
 </package>
