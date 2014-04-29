@@ -15,6 +15,7 @@ using Salesforce.Force.FunctionalTests.Models;
 //using WadeWegner.Salesforce.SOAPHelpers;
 //using WadeWegner.Salesforce.SOAPHelpers.Models;
 using System.Diagnostics;
+using WadeWegner.Salesforce.SOAPHelpers;
 
 namespace Salesforce.Force.FunctionalTests
 {
@@ -40,6 +41,40 @@ namespace Salesforce.Force.FunctionalTests
 
             var client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion, httpClient);
             return client;
+        }
+
+        [Test]
+        public async void Query_Accounts_Continuation()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var accounts = await client.QueryAsync<Account>("SELECT count() FROM Account");
+
+                if (accounts.totalSize < 1000)
+                {
+                    await CreateLotsOfAccounts(client);
+                }
+
+                var contacts = await client.QueryAsync<dynamic>("SELECT Id, Name, Description FROM Account");
+
+                var nextRecordsUrl = contacts.nextRecordsUrl;
+                var nextContacts = await client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
+
+                Assert.IsNotNull(nextContacts);
+                Assert.AreNotEqual(contacts, nextContacts);
+            }
+        }
+
+        public async Task CreateLotsOfAccounts(ForceClient client)
+        {
+            var account = new Account { Name = "Test Account", Description = "New Account Description" };
+
+            for (var i = 0; i < 1000; i++)
+            {
+                account.Name = "Test Account (" + i + ")";
+                await client.CreateAsync("Account", account);
+            }
         }
 
         [Test]
@@ -417,41 +452,39 @@ namespace Salesforce.Force.FunctionalTests
             }
         }
 
-        //TODO: fix WadeWegner nuget and readd
-        //[Test]
-        //public async void Upsert_Account_NameChanged()
-        //{
-        //    const string fieldName = "ExternalId__c";
-        //    await CreateExternalIdField("Account", fieldName);
+        [Test]
+        public async void Upsert_Account_NameChanged()
+        {
+            const string fieldName = "ExternalId__c";
+            await CreateExternalIdField("Account", fieldName);
 
-        //    using (var httpClient = new HttpClient())
-        //    {
-        //        var client = await GetForceClient(httpClient);
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
 
-        //        var originalName = "New Account External Upsert";
-        //        var newName = "New Account External Upsert 2";
+                var originalName = "New Account External Upsert";
+                var newName = "New Account External Upsert 2";
 
-        //        var account = new Account { Name = originalName, Description = "New Account Description" };
-        //        await client.UpsertExternalAsync("Account", fieldName, "4", account);
+                var account = new Account { Name = originalName, Description = "New Account Description" };
+                await client.UpsertExternalAsync("Account", fieldName, "4", account);
 
-        //        account.Name = newName;
-        //        await client.UpsertExternalAsync("Account", fieldName, "4", account);
+                account.Name = newName;
+                await client.UpsertExternalAsync("Account", fieldName, "4", account);
 
-        //        var accountResult = await client.QueryAsync<Account>(string.Format("SELECT Name FROM Account WHERE {0} = '4'", fieldName));
-        //        var firstOrDefault = accountResult.records.FirstOrDefault();
+                var accountResult = await client.QueryAsync<Account>(string.Format("SELECT Name FROM Account WHERE {0} = '4'", fieldName));
+                var firstOrDefault = accountResult.records.FirstOrDefault();
 
-        //        Assert.True(firstOrDefault != null && firstOrDefault.Name == newName);
-        //    }
-        //}
+                Assert.True(firstOrDefault != null && firstOrDefault.Name == newName);
+            }
+        }
 
-        //TODO: fix WadeWegner nuget and readd
-        //private static async Task CreateExternalIdField(string objectName, string fieldName)
-        //{
-        //    var salesforceClient = new SalesforceClient();
-        //    var loginResult = await salesforceClient.Login(_username, _password, _organizationId);
+        private static async Task CreateExternalIdField(string objectName, string fieldName)
+        {
+            var salesforceClient = new SalesforceClient();
+            var loginResult = await salesforceClient.Login(_username, _password, _organizationId);
 
-        //    await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
-        //            loginResult.MetadataServerUrl, true);
-        //}
+            await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
+                    loginResult.MetadataServerUrl, true);
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Force;
 using System.Threading.Tasks;
 using System.Dynamic;
@@ -16,6 +18,7 @@ namespace SimpleConsole
         private static readonly string ConsumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
         private static readonly string Username = ConfigurationSettings.AppSettings["Username"];
         private static readonly string Password = ConfigurationSettings.AppSettings["Password"] + SecurityToken;
+        private static readonly string IsSandboxUser = ConfigurationSettings.AppSettings["IsSandboxUser"];
 #pragma warning restore 618
 
         static void Main()
@@ -47,10 +50,46 @@ namespace SimpleConsole
 
             // Authenticate with Salesforce
             Console.WriteLine("Authenticating with Salesforce");
-            await auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password);
+            var url = IsSandboxUser.Equals("true", StringComparison.CurrentCultureIgnoreCase)
+                ? "https://test.salesforce.com/services/oauth2/token"
+                : "https://login.salesforce.com/services/oauth2/token";
+
+            await auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, ".net-api-client", url);
             Console.WriteLine("Connected to Salesforce");
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
+
+            // retrieve all accounts
+            Console.WriteLine("Get Accounts");
+            var qry = "SELECT ID, Name FROM Account";
+            var accts = new List<Account>();
+            var totalSize = 0;
+            
+            QueryResult<Account> results = await client.QueryAsync<Account>(qry);
+            totalSize = results.totalSize;
+            Console.WriteLine("Queried " + totalSize + " records.");
+
+            accts.AddRange(results.records);
+            var nextRecordsUrl = results.nextRecordsUrl;
+
+            if (!string.IsNullOrEmpty(nextRecordsUrl))
+            {
+                Console.WriteLine("Found nextRecordsUrl.");
+
+                while (true)
+                {
+                    QueryResult<Account> continuationResults = await client.QueryContinuationAsync<Account>(nextRecordsUrl);
+                    totalSize = continuationResults.totalSize;
+                    Console.WriteLine("Queried an additional " + totalSize + " records.");
+
+                    accts.AddRange(continuationResults.records);
+                    if (string.IsNullOrEmpty(continuationResults.nextRecordsUrl)) break;
+
+                    //pass nextRecordsUrl back to client.QueryAsync to request next set of records
+                    nextRecordsUrl = continuationResults.nextRecordsUrl;
+                }
+            }
+            Console.WriteLine("Retrieved accounts = " + accts.Count() + ", expected size = " + totalSize);
 
             // Create a sample record
             Console.WriteLine("Creating test record.");
