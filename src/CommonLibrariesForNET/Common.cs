@@ -13,7 +13,7 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
 
-            //is query a nextRecordUrl request?
+            // is query a nextRecordUrl request?
             if (resourceName.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase))
             {
                 return string.Format("{0}{1}", instanceUrl, resourceName);
@@ -35,7 +35,6 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(loginUrl)) throw new ArgumentNullException("loginUrl");
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
             if (string.IsNullOrEmpty(redirectUrl)) throw new ArgumentNullException("redirectUrl");
-            //TODO: check ensure that redirectUrl is a valid URI
 
             var url =
             string.Format(

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Force;
 using System.Threading.Tasks;
 using System.Dynamic;
@@ -59,19 +60,34 @@ namespace SimpleConsole
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             // retrieve all accounts
-            Console.WriteLine("Get Up To 5000 Accounts");
-            var qry = "SELECT ID, Name FROM Account LIMIT 5000";
+            Console.WriteLine("Get Accounts");
+            var qry = "SELECT ID, Name FROM Account";
             var accts = new List<Account>();
             var totalSize = 0;
-            while (true)
-            {
-                var results = await client.QueryAsync<Account>(qry);
-                totalSize = results.totalSize;
-                accts.AddRange(results.records);
-                if (string.IsNullOrEmpty(results.nextRecordsUrl)) break;
+            
+            QueryResult<Account> results = await client.QueryAsync<Account>(qry);
+            totalSize = results.totalSize;
+            Console.WriteLine("Queried " + totalSize + " records.");
 
-                //pass nextRecordsUrl back to client.QueryAsync to request next set of records
-                qry = results.nextRecordsUrl;
+            accts.AddRange(results.records);
+            var nextRecordsUrl = results.nextRecordsUrl;
+
+            if (!string.IsNullOrEmpty(nextRecordsUrl))
+            {
+                Console.WriteLine("Found nextRecordsUrl.");
+
+                while (true)
+                {
+                    QueryResult<Account> continuationResults = await client.QueryContinuationAsync<Account>(nextRecordsUrl);
+                    totalSize = continuationResults.totalSize;
+                    Console.WriteLine("Queried an additional " + totalSize + " records.");
+
+                    accts.AddRange(continuationResults.records);
+                    if (string.IsNullOrEmpty(continuationResults.nextRecordsUrl)) break;
+
+                    //pass nextRecordsUrl back to client.QueryAsync to request next set of records
+                    nextRecordsUrl = continuationResults.nextRecordsUrl;
+                }
             }
             Console.WriteLine("Retrieved accounts = " + accts.Count() + ", expected size = " + totalSize);
 
