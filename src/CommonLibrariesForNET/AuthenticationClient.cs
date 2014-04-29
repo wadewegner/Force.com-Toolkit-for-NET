@@ -13,6 +13,7 @@ namespace Salesforce.Common
     {
         public string InstanceUrl { get; set; }
         public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
         public string Id { get; set; }
         public string ApiVersion { get; set; }
         private const string UserAgent = "common-libraries-dotnet";
@@ -132,11 +133,12 @@ namespace Salesforce.Common
 
             if (responseMessage.IsSuccessStatusCode)
             {
-                var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
+                var authToken = JsonConvert.DeserializeObject<AuthTokenWithRefresh>(response);
 
                 AccessToken = authToken.access_token;
                 InstanceUrl = authToken.instance_url;
                 Id = authToken.id;
+                RefreshToken = authToken.refresh_token;
             }
             else
             {
