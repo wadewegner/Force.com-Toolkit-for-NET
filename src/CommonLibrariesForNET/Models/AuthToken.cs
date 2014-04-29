@@ -10,5 +10,6 @@ namespace Salesforce.Common.Models
         public string instance_url;
         public string signature;
         public string access_token;
+        public string refresh_token;
     }
 }

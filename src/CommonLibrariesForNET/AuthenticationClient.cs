@@ -16,6 +16,7 @@ namespace Salesforce.Common
         public string RefreshToken { get; set; }
         public string Id { get; set; }
         public string ApiVersion { get; set; }
+
         private const string UserAgent = "common-libraries-dotnet";
         private const string TokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
         private HttpClient _httpClient;
@@ -133,7 +134,7 @@ namespace Salesforce.Common
 
             if (responseMessage.IsSuccessStatusCode)
             {
-                var authToken = JsonConvert.DeserializeObject<AuthTokenWithRefresh>(response);
+                var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
 
                 AccessToken = authToken.access_token;
                 InstanceUrl = authToken.instance_url;
