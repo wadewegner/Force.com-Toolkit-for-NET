@@ -34,7 +34,11 @@ namespace $rootnamespace$.Controllers
             var auth = new AuthenticationClient();
             await auth.WebServerAsync(_consumerKey, _consumerSecret, _callbackUrl, code);
 
-            return Json(new { AccessToken = auth.AccessToken, ApiVersion = auth.ApiVersion, InstanceUrl = auth.InstanceUrl }, JsonRequestBehavior.AllowGet);
+            Session["ApiVersion"] = auth.ApiVersion;
+            Session["AccessToken"] = auth.AccessToken;
+            Session["InstanceUrl"] = auth.InstanceUrl;
+
+            return RedirectToAction("Index", "Home");
         }
 	}
 }
