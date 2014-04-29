@@ -51,11 +51,11 @@
     </Reference>
     <Reference Include="Salesforce.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Common.dll</HintPath>
+      <HintPath>packages\DeveloperForce.Common.0.4.2\lib\Salesforce.Common.dll</HintPath>
     </Reference>
     <Reference Include="Salesforce.Force, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.dll</HintPath>
+      <HintPath>packages\DeveloperForce.Force.0.3.4\lib\Salesforce.Force.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
