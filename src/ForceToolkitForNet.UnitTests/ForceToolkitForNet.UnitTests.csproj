@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="Salesforce.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DeveloperForce.Common.0.4.1\lib\Salesforce.Common.dll</HintPath>
+      <HintPath>..\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -36,10 +36,15 @@ namespace Salesforce.Force
         public async Task<QueryResult<T>> QueryAsync<T>(string query)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
-            
+
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", query));
+            //is query a nextRecordUrl request?
+            var request = query.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase)
+                ? query
+                : string.Format("query?q={0}", query);
+
+            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<T>>(request);
             return response;
         }
 

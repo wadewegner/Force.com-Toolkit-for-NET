@@ -12,7 +12,13 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(resourceName)) throw new ArgumentNullException("resourceName");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
-            
+
+            //is query a nextRecordUrl request?
+            if (resourceName.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return string.Format("{0}{1}", instanceUrl, resourceName);
+            }
+
             return string.Format("{0}/services/data/{1}/{2}", instanceUrl, apiVersion, resourceName);
         }
 
