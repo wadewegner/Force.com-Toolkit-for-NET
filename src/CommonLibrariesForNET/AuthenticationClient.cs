@@ -1,4 +1,4 @@
-﻿//TODO: add license header
+//TODO: add license header
 
 using System;
 using System.Collections.Generic;
@@ -67,10 +67,10 @@ namespace Salesforce.Common
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(tokenRequestEndpointUrl),
-				Content = content
+                Content = content
             };
 
-			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
+            request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request);
             var response = await responseMessage.Content.ReadAsStringAsync();
@@ -100,6 +100,45 @@ namespace Salesforce.Common
             await WebServerAsync(clientId, clientSecret, redirectUri, code, userAgent, TokenRequestEndpointUrl);
         }
 
+        public async Task<IdentityResponse> IdendificationService(string access_token, string id)
+        {
+            if (access_token == null)
+            {
+                if (AccessToken == null)
+                {
+                    throw new ForceException("No access token", "The AuthenticationClient has not authenticated the user, and no access token exists. Can not make a call to the Identity Service without first authenticating.");
+                }
+                else
+                {
+                    access_token = AccessToken;
+                }
+            }
+
+            var content = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("access_token", access_token)
+                });
+
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(id),
+                Content = content
+            };
+            request.Headers.UserAgent.ParseAdd(string.Concat("common-libraries-dotnet", "/", ApiVersion));
+            var responseMessage = await _httpClient.SendAsync(request);
+            var response = await responseMessage.Content.ReadAsStringAsync();
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<IdentityResponse>(response);
+            }
+            else
+            {
+                var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
+                throw new ForceAuthException(errorResponse.error, errorResponse.error_description);
+            }
+        }
+
         public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent, string tokenRequestEndpointUrl)
         {
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
@@ -127,7 +166,7 @@ namespace Salesforce.Common
                 Content = content
             };
 
-			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
+            request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request);
             var response = await responseMessage.Content.ReadAsStringAsync();
@@ -172,7 +211,7 @@ namespace Salesforce.Common
                 RequestUri = new Uri(url)
             };
 
-			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
+            request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request);
             var response = await responseMessage.Content.ReadAsStringAsync();
