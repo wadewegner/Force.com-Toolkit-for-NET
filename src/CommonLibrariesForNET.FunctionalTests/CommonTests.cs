@@ -18,6 +18,18 @@ namespace Salesforce.Common.FunctionalTests
 #pragma warning enable 618
 
         [Test]
+        public async void GetIdentityResponse()
+        {
+            const string userAgent = "common-libraries-dotnet";
+
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+            
+            var idresponse = await auth.IdendificationService(auth.AccessToken, auth.Id);
+        }
+
+
+        [Test]
         public async void Query_Describe()
         {
             const string userAgent = "common-libraries-dotnet";

@@ -51,6 +51,7 @@
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\ErrorResponse.cs" />
     <Compile Include="Models\ErrorResponses.cs" />
+    <Compile Include="Models\IdentityResponse.cs" />
     <Compile Include="Models\QueryResult.cs" />
     <Compile Include="Models\SuccessResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
