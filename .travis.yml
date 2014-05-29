@@ -1,8 +1,15 @@
-language: c
+language: objective-c
 
-install:
- - sudo apt-get install mono-devel mono-gmcs nunit-console
+env:
+ global:
+  - EnableNuGetPackageRestore=true 
+ matrix:
+  - MONO_VERSION="3.4.0"
 
+before_install:
+  - wget "http://download.mono-project.com/archive/${MONO_VERSION}/macos-10-x86/MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg"
+  - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
+ 
 script:
   - .ci/packagerestore.sh src/CommonLibrariesForNET.sln
   - .ci/packagerestore.sh src/ChatterToolkitForNET.sln
@@ -10,8 +17,8 @@ script:
   - xbuild src/CommonLibrariesForNET.sln
   - xbuild src/ChatterToolkitForNET.sln
   - xbuild src/ForceToolkitForNET.sln
-  - nunit-console src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
-  - nunit-console src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
-  - nunit-console src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
-  - nunit-console src/ForceToolkitForNET.UnitTests/bin/Debug/Salesforce.Force.UnitTests.dll
-  - nunit-console src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
+  - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
+  - .ci/nunit.sh src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
+  - .ci/nunit.sh src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
+  - .ci/nunit.sh src/ForceToolkitForNET.UnitTests/bin/Debug/Salesforce.Force.UnitTests.dll
+  - .ci/nunit.sh src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
