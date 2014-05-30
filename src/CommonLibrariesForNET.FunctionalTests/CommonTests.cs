@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http;
 using NUnit.Framework;
 using Salesforce.Common.Models;
@@ -16,6 +18,25 @@ namespace Salesforce.Common.FunctionalTests
         private static string _username = ConfigurationSettings.AppSettings["Username"];
         private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
 #pragma warning enable 618
+
+        [Test]
+        public async void Post_UserInfo()
+        {
+            const string userAgent = "common-libraries-dotnet";
+
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+
+            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
+            var objectName = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("access_token", auth.AccessToken)
+                });
+
+            var response = await serviceHttpClient.HttpPostAsync<UserInfo>(objectName, new Uri(auth.Id));
+
+            Assert.IsNotNull(response);
+        }
 
         [Test]
         public async void Query_Describe()
