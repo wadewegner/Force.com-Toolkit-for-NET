@@ -1,6 +1,7 @@
 ﻿//TODO: add license header
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using NUnit.Framework;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Force.FunctionalTests.Models;
 //using WadeWegner.Salesforce.SOAPHelpers;
 //using WadeWegner.Salesforce.SOAPHelpers.Models;
@@ -41,6 +43,18 @@ namespace Salesforce.Force.FunctionalTests
 
             var client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion, httpClient);
             return client;
+        }
+
+        [Test]
+        public async void UserInfo_IsNotNull()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var userInfo = await client.UserInfo<dynamic>(_auth.AccessToken, _auth.Id);
+
+                Assert.IsNotNull(userInfo);
+            }
         }
 
         [Test]
