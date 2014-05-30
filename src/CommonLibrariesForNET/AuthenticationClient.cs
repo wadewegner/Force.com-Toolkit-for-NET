@@ -34,14 +34,14 @@ namespace Salesforce.Common
             ApiVersion = "v29.0";
         }
 
-        public async Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password)
+        public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password)
         {
-            await UsernamePasswordAsync(clientId, clientSecret, username, password, UserAgent, TokenRequestEndpointUrl);
+            return UsernamePasswordAsync(clientId, clientSecret, username, password, UserAgent, TokenRequestEndpointUrl);
         }
 
-        public async Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string userAgent)
+        public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string userAgent)
         {
-            await UsernamePasswordAsync(clientId, clientSecret, username, password, userAgent, TokenRequestEndpointUrl);
+            return UsernamePasswordAsync(clientId, clientSecret, username, password, userAgent, TokenRequestEndpointUrl);
         }
 
         public async Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string userAgent, string tokenRequestEndpointUrl)
@@ -90,14 +90,14 @@ namespace Salesforce.Common
             }
         }
 
-        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code)
+        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code)
         {
-            await WebServerAsync(clientId, clientSecret, redirectUri, code, UserAgent, TokenRequestEndpointUrl);
+            return WebServerAsync(clientId, clientSecret, redirectUri, code, UserAgent, TokenRequestEndpointUrl);
         }
 
-        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent)
+        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent)
         {
-            await WebServerAsync(clientId, clientSecret, redirectUri, code, userAgent, TokenRequestEndpointUrl);
+            return WebServerAsync(clientId, clientSecret, redirectUri, code, userAgent, TokenRequestEndpointUrl);
         }
 
         public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent, string tokenRequestEndpointUrl)
@@ -148,14 +148,14 @@ namespace Salesforce.Common
             }
         }
 
-        public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret = "")
+        public Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret = "")
         {
-            await TokenRefreshAsync(clientId, refreshToken, clientSecret, UserAgent, TokenRequestEndpointUrl);
+            return TokenRefreshAsync(clientId, refreshToken, clientSecret, UserAgent, TokenRequestEndpointUrl);
         }
 
-        public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string userAgent)
+        public Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string userAgent)
         {
-            await TokenRefreshAsync(clientId, refreshToken, clientSecret, userAgent, TokenRequestEndpointUrl);
+            return TokenRefreshAsync(clientId, refreshToken, clientSecret, userAgent, TokenRequestEndpointUrl);
         }
 
         public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string userAgent, string tokenRequestEndpointUrl)
