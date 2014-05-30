@@ -21,78 +21,66 @@ namespace Salesforce.Chatter
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, UserAgent, httpClient);
         }
         
-        public async Task<T> FeedsAsync<T>()
+        public Task<T> FeedsAsync<T>()
         {
-            var feeds = await _serviceHttpClient.HttpGetAsync<T>("chatter/feeds");
-            return feeds;
+            return _serviceHttpClient.HttpGetAsync<T>("chatter/feeds");
         }
 
-        public async Task<T> MeAsync<T>()
+        public Task<T> MeAsync<T>()
         {
-            var me = await _serviceHttpClient.HttpGetAsync<T>("chatter/users/me");
-            return me;
+            return _serviceHttpClient.HttpGetAsync<T>("chatter/users/me");
         }
 
-        public async Task<T> PostFeedItemAsync<T>(FeedItemInput feedItemInput, string userId)
+        public Task<T> PostFeedItemAsync<T>(FeedItemInput feedItemInput, string userId)
         {
-            var feedItem = await _serviceHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/feed-items", userId));
-            return feedItem;
+            return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/feed-items", userId));
         }
 
-        public async Task<T> PostFeedItemCommentAsync<T>(FeedItemInput envelope, string feedId)
+        public Task<T> PostFeedItemCommentAsync<T>(FeedItemInput envelope, string feedId)
         {
-            var feedItem = await _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/feed-items/{0}/comments", feedId));
-            return feedItem;
+            return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/feed-items/{0}/comments", feedId));
         }
 
-        public async Task<T> LikeFeedItemAsync<T>(string feedId)
+        public Task<T> LikeFeedItemAsync<T>(string feedId)
         {
-            var like = await _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/feed-items/{0}/likes", feedId));
-            return like;
+            return _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/feed-items/{0}/likes", feedId));
         }
 
-        public async Task<T> ShareFeedItemAsync<T>(string feedId, string userId)
+        public Task<T> ShareFeedItemAsync<T>(string feedId, string userId)
         {
             var sharedFeedItem = new SharedFeedItemInput {originalFeedItemId = feedId};
 
-            var feedItem = await _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/feed-items", userId));
-            return feedItem;
+            return _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/feed-items", userId));
         }
 
-        public async Task<T> GetMyNewsFeedAsync<T>(string query = "")
+        public Task<T> GetMyNewsFeedAsync<T>(string query = "")
         {
             var url = "chatter/feeds/news/me/feed-items";
 
             if (!string.IsNullOrEmpty(query))
                 url += string.Format("?q={0}",query);
 
-            var myNewsFeed = await _serviceHttpClient.HttpGetAsync<T>(url);
-
-            return myNewsFeed;
+            return _serviceHttpClient.HttpGetAsync<T>(url);
         }
 
-        public async Task<T> GetGroupsAsync<T>()
+        public Task<T> GetGroupsAsync<T>()
         {
-            var groups = await _serviceHttpClient.HttpGetAsync<T>("chatter/groups");
-            return groups;
+            return _serviceHttpClient.HttpGetAsync<T>("chatter/groups");
         }
 
-        public async Task<T> GetGroupFeedAsync<T>(string groupId)
+        public Task<T> GetGroupFeedAsync<T>(string groupId)
         {
-            var groupFeed = await _serviceHttpClient.HttpGetAsync<T>(string.Format("chatter/feeds/record/{0}/feed-items", groupId));
-            return groupFeed;
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("chatter/feeds/record/{0}/feed-items", groupId));
         }
 
-        public async Task<T> GetUsersAsync<T>()
+        public Task<T> GetUsersAsync<T>()
         {
-            var users = await _serviceHttpClient.HttpGetAsync<T>("chatter/users");
-            return users;
+            return _serviceHttpClient.HttpGetAsync<T>("chatter/users");
         }
 
-        public async Task<T> GetTopicsAsync<T>()
+        public Task<T> GetTopicsAsync<T>()
         {
-            var users = await _serviceHttpClient.HttpGetAsync<T>("connect/topics");
-            return users;
+            return _serviceHttpClient.HttpGetAsync<T>("connect/topics");
         }
 
         public void Dispose()

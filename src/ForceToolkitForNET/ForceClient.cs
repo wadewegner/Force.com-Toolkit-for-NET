@@ -33,20 +33,18 @@ namespace Salesforce.Force
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, UserAgent, httpClient);
         }
 
-        public async Task<QueryResult<T>> QueryAsync<T>(string query)
+        public Task<QueryResult<T>> QueryAsync<T>(string query)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", query));
-            return response;
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", query));
         }
 
-        public async Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl)
+        public Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl)
         {
             if (string.IsNullOrEmpty(nextRecordsUrl)) throw new ArgumentNullException("nextRecordsUrl");
 
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<T>>(nextRecordsUrl);
-            return response;
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(nextRecordsUrl);
         }
 
         public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
@@ -58,7 +56,7 @@ namespace Salesforce.Force
 
             var fields = string.Join(", ", typeof(T).GetRuntimeProperties().Select(p => p.Name));
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
-            var results = await QueryAsync<T>(query);
+            var results = await QueryAsync<T>(query).ConfigureAwait(false);
 
             return results.records.FirstOrDefault();
         }
@@ -70,11 +68,11 @@ namespace Salesforce.Force
 
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName));
+            var response = await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
             return response.id;
         }
 
-        public async Task<bool> UpdateAsync(string objectName, string recordId, object record)
+        public Task<bool> UpdateAsync(string objectName, string recordId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
@@ -82,11 +80,10 @@ namespace Salesforce.Force
             
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
-            return response;
+            return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
         }
 
-        public async Task<bool> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record)
+        public Task<bool> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(externalFieldName)) throw new ArgumentNullException("externalFieldName");
@@ -95,44 +92,39 @@ namespace Salesforce.Force
 
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId));
-            return response;
+            return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId));
         }
 
-        public async Task<bool> DeleteAsync(string objectName, string recordId)
+        public Task<bool> DeleteAsync(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
             
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId));
-            return response;
+            return _serviceHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId));
         }
 
-        public async Task<DescribeGlobalResult<T>> GetObjectsAsync<T>()
+        public Task<DescribeGlobalResult<T>> GetObjectsAsync<T>()
         {
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
-            return response;
+            return _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
         }
 
-        public async Task<T> DescribeAsync<T>(string objectName)
+        public Task<T> DescribeAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
-            return response;
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
         }
 
-        public async Task<T> RecentAsync<T>(int limit = 200)
+        public Task<T> RecentAsync<T>(int limit = 200)
         {
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var response = await _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
-            return response;
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
         }
 
         public void Dispose()
