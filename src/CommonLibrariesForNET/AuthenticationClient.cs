@@ -72,8 +72,8 @@ namespace Salesforce.Common
 
 			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
-            var responseMessage = await _httpClient.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -129,8 +129,8 @@ namespace Salesforce.Common
 
 			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
-            var responseMessage = await _httpClient.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -174,8 +174,8 @@ namespace Salesforce.Common
 
 			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
 
-            var responseMessage = await _httpClient.SendAsync(request);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
