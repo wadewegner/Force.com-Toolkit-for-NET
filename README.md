@@ -2,7 +2,7 @@
 
 The Force.com Toolkits for .NET provide an easy way for .NET developers to interact with the Force.com & Chatter REST APIs using native libraries.
 
-These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4/4.5, Windows Phone 8, Windows 8/8.1, and Silverlight 5.
+These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4.5, Windows Phone 8, Windows 8/8.1, and iOS/Android using Xamarin and Mono.NET.
 
 The Common Libraries for .NET provides functionality used by the [Force.com Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ForceToolkitForNET) and the [Chatter Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ChatterToolkitForNET). While you can use the Common Libraries for .NET independently, it is recommended that you use it through one of the toolkits.
 
