@@ -384,6 +384,18 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
+        public async void Object_BasicInformation_IsNotNull()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var accounts = await client.GetBasicInformationAsync<object>("Account");
+
+                Assert.IsNotNull(accounts);
+            }
+        }
+
+        [Test]
         public async void Object_Describe_IsNotNull()
         {
             using (var httpClient = new HttpClient())

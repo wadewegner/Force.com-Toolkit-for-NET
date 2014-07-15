@@ -111,13 +111,21 @@ namespace Salesforce.Force
 
             return _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
         }
+        
+        public Task<T> GetBasicInformationAsync<T>(string objectName)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            //TODO: implement try/catch and throw auth exception if appropriate
+
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
+        }
 
         public Task<T> DescribeAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/", objectName));
         }
 
         public Task<T> RecentAsync<T>(int limit = 200)
