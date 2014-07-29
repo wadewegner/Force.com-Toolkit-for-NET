@@ -112,7 +112,7 @@ namespace Salesforce.Force
             return _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
         }
         
-        public Task<T> GetBasicInformationAsync<T>(string objectName)
+        public Task<T> BasicInformationAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             //TODO: implement try/catch and throw auth exception if appropriate

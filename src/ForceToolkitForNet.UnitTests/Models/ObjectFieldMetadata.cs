@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Salesforce.Force.UnitTests.DTO
+namespace Salesforce.Force.UnitTests.Models
 {
     public class ObjectFieldMetadata
     {

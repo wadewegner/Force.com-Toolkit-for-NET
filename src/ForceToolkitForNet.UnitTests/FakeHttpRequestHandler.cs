@@ -8,33 +8,21 @@ using System.Threading.Tasks;
 
 namespace Salesforce.Force.UnitTests
 {
-    internal class ServiceClientRouteHandler : DelegatingHandler
+    public class FakeHttpRequestHandler : DelegatingHandler
     {
-        Action<HttpRequestMessage> _testingAction;
+        HttpResponseMessage _expectedResponse;
 
-        public ServiceClientRouteHandler(Action<HttpRequestMessage> testingAction)
+        public FakeHttpRequestHandler(HttpResponseMessage expectedResponse)
         {
-            _testingAction = testingAction;
+            _expectedResponse = expectedResponse;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
         {
-            _testingAction(request);
-            var resp = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new JsonContent(new
-                {
-                    records = new JsonContent(new
-                    {
-                        Success = true,
-                        Message = "Success"
-                    })
-                })
-            };
-
             var tsc = new TaskCompletionSource<HttpResponseMessage>();
-            tsc.SetResult(resp);
+            tsc.SetResult(_expectedResponse);
             return tsc.Task;
         }
     }
+    
 }

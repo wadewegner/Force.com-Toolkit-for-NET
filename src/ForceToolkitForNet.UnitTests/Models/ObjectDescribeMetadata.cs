@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Salesforce.Force.UnitTests.DTO
+namespace Salesforce.Force.UnitTests.Models
 {
     public class ObjectDescribeMetadata
     {

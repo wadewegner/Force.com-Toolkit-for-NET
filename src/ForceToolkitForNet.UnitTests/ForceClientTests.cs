@@ -5,7 +5,7 @@ using System.Net.Http;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using System.Net;
-using Salesforce.Force.UnitTests.DTO;
+using Salesforce.Force.UnitTests.Models;
 
 namespace Salesforce.Force.UnitTests
 {
@@ -37,7 +37,7 @@ namespace Salesforce.Force.UnitTests
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
             var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v29", httpClient);
 
-            var result = await forceClient.GetBasicInformationAsync<object>("");
+            var result = await forceClient.BasicInformationAsync<object>("");
 
             // expects exception
         }
@@ -45,16 +45,17 @@ namespace Salesforce.Force.UnitTests
         [Test]
         public async void GetBasicInformationAsync_ValidObjectName_ReturnsParsedResponse()
         {
-            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK);
-            expectedResponse.Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json");
+            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
+            };
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
             var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v29", httpClient);
 
-            var result = await forceClient.GetBasicInformationAsync<ObjectDescribeMetadata>("ValidObjectName");
+            var result = await forceClient.BasicInformationAsync<ObjectDescribeMetadata>("ValidObjectName");
 
             Assert.IsNotNullOrEmpty(result.Name);
             Assert.AreEqual("User", result.Name);
         }
-
     }
 }

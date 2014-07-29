@@ -389,7 +389,7 @@ namespace Salesforce.Force.FunctionalTests
             using (var httpClient = new HttpClient())
             {
                 var client = await GetForceClient(httpClient);
-                var accounts = await client.GetBasicInformationAsync<object>("Account");
+                var accounts = await client.BasicInformationAsync<object>("Account");
 
                 Assert.IsNotNull(accounts);
             }

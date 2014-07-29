@@ -67,8 +67,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\ObjectDescribeMetadata.cs" />
-    <Compile Include="DTO\ObjectFieldMetadata.cs" />
+    <Compile Include="Models\ObjectDescribeMetadata.cs" />
+    <Compile Include="Models\ObjectFieldMetadata.cs" />
     <Compile Include="ForceClientTests.cs" />
     <Compile Include="JsonContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
