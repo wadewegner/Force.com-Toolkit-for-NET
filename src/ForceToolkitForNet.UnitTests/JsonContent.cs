@@ -23,6 +23,16 @@ namespace Salesforce.Force.UnitTests
             _stream.Position = 0;
 
         }
+
+        protected JsonContent(string content)
+        {
+            Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var sw = new StreamWriter(_stream);
+            sw.Write(content);
+            sw.Flush();
+            _stream.Position = 0;
+        }
+
         protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             return _stream.CopyToAsync(stream);
@@ -32,6 +42,12 @@ namespace Salesforce.Force.UnitTests
         {
             length = _stream.Length;
             return true;
+        }
+
+        public static HttpContent FromFile(string filepath)
+        {
+            string content = File.ReadAllText(filepath);
+            return new JsonContent(content);
         }
     }
 }

@@ -72,7 +72,7 @@ namespace Salesforce.Force
             return response.id;
         }
 
-        public Task<bool> UpdateAsync(string objectName, string recordId, object record)
+        public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
@@ -83,7 +83,7 @@ namespace Salesforce.Force
             return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
         }
 
-        public Task<bool> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record)
+        public Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(externalFieldName)) throw new ArgumentNullException("externalFieldName");
@@ -111,13 +111,21 @@ namespace Salesforce.Force
 
             return _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
         }
+        
+        public Task<T> BasicInformationAsync<T>(string objectName)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            //TODO: implement try/catch and throw auth exception if appropriate
+
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
+        }
 
         public Task<T> DescribeAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/", objectName));
         }
 
         public Task<T> RecentAsync<T>(int limit = 200)
