@@ -163,7 +163,7 @@ namespace Salesforce.Common
             throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
         }
 
-        public async Task<bool> HttpPatchAsync(object inputObject, string urlSuffix)
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
 
@@ -177,14 +177,20 @@ namespace Salesforce.Common
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
-                return true;
+                if (!string.IsNullOrEmpty(response))
+                {
+                    var r = JsonConvert.DeserializeObject<SuccessResponse>(response);
+                    return r;
+                }
+
+                var success = new SuccessResponse {id = "", errors = "", success = "true"};
+                return success;
             }
 
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-      
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
             throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
         }

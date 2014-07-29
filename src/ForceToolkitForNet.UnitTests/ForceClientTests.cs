@@ -15,8 +15,8 @@ namespace Salesforce.Force.UnitTests
         [Test]
         public async void Requests_CheckHttpRequestMessage_UserAgent()
         {
-            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v29")));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v29", httpClient);
+            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v30")));
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v30", httpClient);
 
            try
            {

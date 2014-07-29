@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using NUnit.Framework;
+using Salesforce.Common.FunctionalTests.Models;
 using Salesforce.Common.Models;
 
 namespace Salesforce.Common.FunctionalTests
@@ -143,5 +144,37 @@ namespace Salesforce.Common.FunctionalTests
             }
         }
 
+	    [Test]
+	    public async void Upsert_Update_CheckReturn()
+	    {
+            const string userAgent = "common-libraries-dotnet";
+
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+
+            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
+
+            var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
+            var response = await serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
+
+            Assert.IsNotNull(response);
+	    }
+
+        [Test]
+        public async void Upsert_New_CheckReturnInclude()
+        {
+            const string userAgent = "common-libraries-dotnet";
+
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
+
+            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
+
+            var account = new Account { Name = "New Account" + DateTime.Now.Ticks, Description = "New Account Description" + DateTime.Now.Ticks };
+            var response = await serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
+
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.id);
+        }
     }
 }

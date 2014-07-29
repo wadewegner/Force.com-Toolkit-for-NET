@@ -217,7 +217,7 @@ namespace Salesforce.Force.FunctionalTests
 
                 var success = await client.UpdateAsync("Account", id, account);
 
-                Assert.IsTrue(success);
+                Assert.IsNotNull(success);
             }
         }
 
@@ -419,24 +419,44 @@ namespace Salesforce.Force.FunctionalTests
             }
         }
 
-        //TODO: Fix WadeWegner nuget and readd
-        //[Test]
-        //public async void Upsert_Account_IsSuccess()
-        //{
-        //    const string objectName = "Account";
-        //    const string fieldName = "ExternalId__c";
+        [Test]
+        public async void Upsert_Account_Update_IsSuccess()
+        {
+            const string objectName = "Account";
+            const string fieldName = "ExternalId__c";
 
-        //    await CreateExternalIdField(objectName, fieldName);
+            await CreateExternalIdField(objectName, fieldName);
 
-        //    using (var httpClient = new HttpClient())
-        //    {
-        //        var client = await GetForceClient(httpClient);
-        //        var account = new Account { Name = "Upserted Account", Description = "New Upserted Account Description" };
-        //        var success = await client.UpsertExternalAsync(objectName, fieldName, "123", account);
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var account = new Account { Name = "Upserted Account", Description = "Upserted Account Description" };
+                var success = await client.UpsertExternalAsync(objectName, fieldName, "123", account);
 
-        //        Assert.IsTrue(success);
-        //    }
-        //}
+                Assert.IsNotNull(success);
+                Assert.IsEmpty(success.id);
+            }
+        }
+
+        [Test]
+        public async void Upsert_Account_Insert_IsSuccess()
+        {
+            const string objectName = "Account";
+            const string fieldName = "ExternalId__c";
+
+            await CreateExternalIdField(objectName, fieldName);
+
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var account = new Account { Name = "Upserted Account" + DateTime.Now.Ticks, Description = "New Upserted Account Description" + DateTime.Now.Ticks };
+                var success = await client.UpsertExternalAsync(objectName, fieldName, "123" + DateTime.Now.Ticks, account);
+
+                Assert.IsNotNull(success);
+                Assert.IsNotNull(success.id);
+                Assert.IsNotNullOrEmpty(success.id);
+            }
+        }
 
         [Test]
         public async void Upsert_Account_BadObject()

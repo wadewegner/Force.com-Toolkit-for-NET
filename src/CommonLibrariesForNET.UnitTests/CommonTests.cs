@@ -40,7 +40,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.IsNotNull(auth.ApiVersion);
                 Assert.IsNotNull(auth.InstanceUrl);
                 Assert.AreEqual(auth.AccessToken, "access_token");
-                Assert.AreEqual(auth.ApiVersion, "v29.0");
+                Assert.AreEqual(auth.ApiVersion, "v30.0");
                 Assert.AreEqual(auth.InstanceUrl, "instance_url");
             }
         }
@@ -50,16 +50,16 @@ namespace Salesforce.Common.UnitTests
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v29/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v29");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v29", "accessToken", client))
+            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v30", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -70,16 +70,16 @@ namespace Salesforce.Common.UnitTests
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v29/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v29");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v29", "accessToken", client))
+            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v30", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -90,16 +90,16 @@ namespace Salesforce.Common.UnitTests
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v29/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v29");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v29", "accessToken", client))
+            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v30", "accessToken", client))
             {
                 await httpClient.HttpPostAsync<object>(null, "wade");
             }
@@ -110,16 +110,16 @@ namespace Salesforce.Common.UnitTests
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v29/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v29");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v29", "accessToken", client))
+            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v30", "accessToken", client))
             {
                 await httpClient.HttpPatchAsync(null, "wade");
             }
@@ -130,16 +130,16 @@ namespace Salesforce.Common.UnitTests
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v29/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v29");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v29", "accessToken", client))
+            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v30", "accessToken", client))
             {
                 await httpClient.HttpDeleteAsync("wade");
             }
@@ -156,7 +156,7 @@ namespace Salesforce.Common.UnitTests
 
             client.DefaultRequestHeaders.Add("headername", "headervalue");
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v29", "accessToken", client))
+            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v30", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
