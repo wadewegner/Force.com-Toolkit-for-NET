@@ -8,6 +8,7 @@ namespace Salesforce.Force
     public interface IForceClient
     {
         Task<QueryResult<T>> QueryAsync<T>(string query);
+		Task<T> ExecuteRestApi<T>(string apiName, string parameters);
         Task<string> CreateAsync(string objectName, object record);
         Task<bool> UpdateAsync(string objectName, string recordId, object record);
         Task<bool> UpsertExternalAsync(string objectName, string externalId, string recordId, object record);

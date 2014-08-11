@@ -82,7 +82,21 @@ namespace Salesforce.Common
             throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
         }
 
-        public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
+		/// <summary>
+        /// Call a custom REST API
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="apiName">The name of the custom REST API</param>
+        /// <param name="parameters">Pre-formatted parameters like this: ?name1=value1&name2=value2&soon=soforth</param>
+        /// <returns></returns>
+        public async Task<T> HttpGetCustomAsync<T>(string apiName, string parameters)
+        {
+            var url = Common.FormatCustomUrl(apiName, parameters, _instanceUrl);
+
+            return await httpGetAsync<T>(url);
+        }
+        
+		public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
         {
             string next = null;
             string response = null;
