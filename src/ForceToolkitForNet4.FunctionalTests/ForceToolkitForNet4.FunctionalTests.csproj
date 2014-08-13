@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}</ProjectGuid>
+    <ProjectGuid>{59EB1689-DAD0-48DA-98FE-4EE82A905872}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommonLibrariesForNET4</RootNamespace>
-    <AssemblyName>CommonLibrariesForNET4</AssemblyName>
+    <RootNamespace>ForceToolkitForNet4.FunctionalTests</RootNamespace>
+    <AssemblyName>ForceToolkitForNet4.FunctionalTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>RUNNING_ON_4</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,7 +28,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>RUNNING_ON_4</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Threading.Tasks">
@@ -44,6 +42,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
@@ -54,11 +55,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Extensions">
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net40\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net40\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest, Version=2.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,66 +78,28 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WadeWegner.Salesforce.SOAPHelpers">
+      <HintPath>..\packages\WadeWegner.Salesforce.SOAPHelpers.0.0.3\lib\WadeWegner.Salesforce.SOAPHelpers.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonLibrariesForNET\AuthenticationClient.cs">
-      <Link>AuthenticationClient.cs</Link>
+    <Compile Include="..\ForceToolkitForNet.FunctionalTests\ForceClientTests.cs">
+      <Link>ForceClientTests.cs</Link>
     </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Common.cs">
-      <Link>Common.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\ForceAuthException.cs">
-      <Link>ForceAuthException.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\ForceException.cs">
-      <Link>ForceException.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\IAuthenticationClient.cs">
-      <Link>IAuthenticationClient.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\IForceException.cs">
-      <Link>IForceException.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\IServiceClient.cs">
-      <Link>IServiceClient.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\AuthErrorResponse.cs">
-      <Link>Models\AuthErrorResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\AuthToken.cs">
-      <Link>Models\AuthToken.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\DescribeGlobalResult.cs">
-      <Link>Models\DescribeGlobalResult.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\DisplayTypes.cs">
-      <Link>Models\DisplayTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\Error.cs">
-      <Link>Models\Error.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\ErrorResponse.cs">
-      <Link>Models\ErrorResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\ErrorResponses.cs">
-      <Link>Models\ErrorResponses.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\QueryResult.cs">
-      <Link>Models\QueryResult.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\ResponseTypes.cs">
-      <Link>Models\ResponseTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\SuccessResponse.cs">
-      <Link>Models\SuccessResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\UserInfo.cs">
-      <Link>Models\UserInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\ServiceHttpClient.cs">
-      <Link>ServiceHttpClient.cs</Link>
+    <Compile Include="..\ForceToolkitForNet.FunctionalTests\Models\Account.cs">
+      <Link>Models\Account.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLibrariesForNET4\CommonLibrariesForNET4.csproj">
+      <Project>{ddfacd65-32b7-48bb-9349-117efbf5e9cf}</Project>
+      <Name>CommonLibrariesForNET4</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ForceToolkitForNET4\ForceToolkitForNET4.csproj">
+      <Project>{b385a653-15a8-42dc-9208-73e19d70aae6}</Project>
+      <Name>ForceToolkitForNET4</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

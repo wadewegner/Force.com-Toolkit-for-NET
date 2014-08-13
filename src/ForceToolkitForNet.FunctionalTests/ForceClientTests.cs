@@ -1,22 +1,11 @@
-﻿//TODO: add license header
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 using NUnit.Framework;
 using Salesforce.Common;
-using Salesforce.Common.Models;
 using Salesforce.Force.FunctionalTests.Models;
-//using WadeWegner.Salesforce.SOAPHelpers;
-//using WadeWegner.Salesforce.SOAPHelpers.Models;
-using System.Diagnostics;
 using WadeWegner.Salesforce.SOAPHelpers;
 
 namespace Salesforce.Force.FunctionalTests

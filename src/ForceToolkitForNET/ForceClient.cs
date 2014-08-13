@@ -15,9 +15,9 @@ namespace Salesforce.Force
     {
         private ServiceHttpClient _serviceHttpClient;
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
-        
-        public ForceClient(string instanceUrl, string accessToken, string apiVersion) 
-            : this (instanceUrl, accessToken, apiVersion, new HttpClient())
+
+        public ForceClient(string instanceUrl, string accessToken, string apiVersion)
+            : this(instanceUrl, accessToken, apiVersion, new HttpClient())
         {
         }
 
@@ -54,7 +54,13 @@ namespace Salesforce.Force
 
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var fields = string.Join(", ", typeof(T).GetRuntimeProperties().Select(p => p.Name));
+            var fields = "";
+#if RUNNING_ON_4
+            fields = string.Join(", ", typeof(T).GetProperties().Select(p => p.Name));
+#else
+            fields = string.Join(", ", typeof(T).GetRuntimeProperties().Select(p => p.Name));
+#endif
+
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
 
@@ -77,7 +83,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
             if (record == null) throw new ArgumentNullException("record");
-            
+
             //TODO: implement try/catch and throw auth exception if appropriate
 
             return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
@@ -99,7 +105,7 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
-            
+
             //TODO: implement try/catch and throw auth exception if appropriate
 
             return _serviceHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId));
@@ -111,7 +117,7 @@ namespace Salesforce.Force
 
             return _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
         }
-        
+
         public Task<T> BasicInformationAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");

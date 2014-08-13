@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}</ProjectGuid>
+    <ProjectGuid>{B385A653-15A8-42DC-9208-73E19D70AAE6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommonLibrariesForNET4</RootNamespace>
-    <AssemblyName>CommonLibrariesForNET4</AssemblyName>
+    <RootNamespace>ForceToolkitForNET4</RootNamespace>
+    <AssemblyName>ForceToolkitForNET4</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <DefineConstants>RUNNING_ON_4</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,64 +78,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonLibrariesForNET\AuthenticationClient.cs">
-      <Link>AuthenticationClient.cs</Link>
+    <Compile Include="..\ForceToolkitForNET\ForceClient.cs">
+      <Link>ForceClient.cs</Link>
     </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Common.cs">
-      <Link>Common.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\ForceAuthException.cs">
-      <Link>ForceAuthException.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\ForceException.cs">
-      <Link>ForceException.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\IAuthenticationClient.cs">
-      <Link>IAuthenticationClient.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\IForceException.cs">
-      <Link>IForceException.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\IServiceClient.cs">
-      <Link>IServiceClient.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\AuthErrorResponse.cs">
-      <Link>Models\AuthErrorResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\AuthToken.cs">
-      <Link>Models\AuthToken.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\DescribeGlobalResult.cs">
-      <Link>Models\DescribeGlobalResult.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\DisplayTypes.cs">
-      <Link>Models\DisplayTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\Error.cs">
-      <Link>Models\Error.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\ErrorResponse.cs">
-      <Link>Models\ErrorResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\ErrorResponses.cs">
-      <Link>Models\ErrorResponses.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\QueryResult.cs">
-      <Link>Models\QueryResult.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\ResponseTypes.cs">
-      <Link>Models\ResponseTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\SuccessResponse.cs">
-      <Link>Models\SuccessResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\Models\UserInfo.cs">
-      <Link>Models\UserInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonLibrariesForNET\ServiceHttpClient.cs">
-      <Link>ServiceHttpClient.cs</Link>
+    <Compile Include="..\ForceToolkitForNET\IForceClient.cs">
+      <Link>IForceClient.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLibrariesForNET4\CommonLibrariesForNET4.csproj">
+      <Project>{ddfacd65-32b7-48bb-9349-117efbf5e9cf}</Project>
+      <Name>CommonLibrariesForNET4</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
