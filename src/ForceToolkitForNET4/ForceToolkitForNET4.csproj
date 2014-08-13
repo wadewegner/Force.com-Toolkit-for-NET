@@ -7,8 +7,8 @@
     <ProjectGuid>{B385A653-15A8-42DC-9208-73E19D70AAE6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ForceToolkitForNET4</RootNamespace>
-    <AssemblyName>ForceToolkitForNET4</AssemblyName>
+    <RootNamespace>Salesforce.Force</RootNamespace>
+    <AssemblyName>Salesforce.Force</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <DefineConstants>RUNNING_ON_4</DefineConstants>

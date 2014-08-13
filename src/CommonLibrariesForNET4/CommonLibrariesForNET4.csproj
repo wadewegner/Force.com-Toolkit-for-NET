@@ -7,8 +7,8 @@
     <ProjectGuid>{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommonLibrariesForNET4</RootNamespace>
-    <AssemblyName>CommonLibrariesForNET4</AssemblyName>
+    <RootNamespace>Salesforce.Common</RootNamespace>
+    <AssemblyName>Salesforce.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

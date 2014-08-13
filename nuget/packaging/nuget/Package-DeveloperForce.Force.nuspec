@@ -16,16 +16,24 @@
     <tags>salesforce forcedotcom force.com force rest api</tags>
     <dependencies>
       <dependency id="Microsoft.Bcl" version="1.1.9" />
+      <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
       <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
       <dependency id="Microsoft.Net.Http" version="2.2.22" />
-      <dependency id="Newtonsoft.Json" version="6.0.3" />
-      <dependency id="DeveloperForce.Common" version="0.4.10" />
+      <dependency id="Newtonsoft.Json" version="6.0.4" />
     </dependencies>
   </metadata>
   <files>
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.dll" target="lib" />
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.pdb" target="lib" />
+    <file src="..\..\..\src\ForceToolkitForNET4\bin\Debug\Salesforce.Force.dll" target="lib\net40\" />
+    <file src="..\..\..\src\ForceToolkitForNET4\bin\Debug\Salesforce.Force.pdb" target="lib\net40\" />    
     <file src="..\..\tools\Install.ps1" target="tools" />
     <file src="..\..\..\src\ForceToolkitForNET\*.cs" target="src" />
+    <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib" />
+    <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib" />
+    <file src="..\..\..\src\CommonLibrariesForNET4\bin\Debug\Salesforce.Common.dll" target="lib\net40\" />
+    <file src="..\..\..\src\CommonLibrariesForNET4\bin\Debug\Salesforce.Common.pdb" target="lib\net40\" />
+    <file src="..\..\..\src\CommonLibrariesForNET\*.cs" target="src" />
+    <file src="..\..\..\src\CommonLibrariesForNET\Models\*.cs" target="src" />
   </files>
 </package>
