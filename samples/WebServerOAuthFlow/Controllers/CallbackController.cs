@@ -17,11 +17,13 @@ namespace WebServerOAuthFlow.Controllers
         private readonly string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
         private readonly string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
         private readonly string _callbackUrl = ConfigurationSettings.AppSettings["CallbackUrl"];
+        private readonly string _tokenRequestEndpointUrl = ConfigurationSettings.AppSettings["TokenRequestEndpointUrl"];
+        private const string UserAgent = "forcedotcom-toolkit-dotnet";
 
         public async Task<HttpResponseMessage> Get(string display, string code)
         {
             var auth = new AuthenticationClient();
-            await auth.WebServerAsync(_consumerKey, _consumerSecret, _callbackUrl, code);
+            await auth.WebServerAsync(_consumerKey, _consumerSecret, _callbackUrl, code, UserAgent, _tokenRequestEndpointUrl);
 
             var url = string.Format("/?token={0}&api={1}&instance_url={2}", auth.AccessToken, auth.ApiVersion,
                 auth.InstanceUrl);
