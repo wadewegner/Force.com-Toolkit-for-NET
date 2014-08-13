@@ -38,10 +38,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Salesforce.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DeveloperForce.Common.0.4.10\lib\Salesforce.Common.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -83,6 +79,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonLibrariesForNET\CommonLibrariesForNET.csproj">
+      <Project>{688bc3a2-29c2-48f7-bc28-7a81abf5c3d3}</Project>
+      <Name>CommonLibrariesForNET</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ForceToolkitForNET\ForceToolkitForNET.csproj">
       <Project>{1CC985BC-27F3-4F1D-8946-F4DDB084B58F}</Project>
       <Name>ForceToolkitForNET</Name>

@@ -1,13 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET", "ForceToolkitForNET\ForceToolkitForNET.csproj", "{1CC985BC-27F3-4F1D-8946-F4DDB084B58F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNet.UnitTests", "ForceToolkitForNet.UnitTests\ForceToolkitForNet.UnitTests.csproj", "{F71C23A5-9BC3-44AE-AE14-1A9F2F068645}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNet.FunctionalTests", "ForceToolkitForNet.FunctionalTests\ForceToolkitForNet.FunctionalTests.csproj", "{44EBF85A-05FE-4C7D-945F-06553AD25586}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{94DC7ACA-033E-47CC-955D-8D88B685CAE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET", "CommonLibrariesForNET\CommonLibrariesForNET.csproj", "{688BC3A2-29C2-48F7-BC28-7A81ABF5C3D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET.FunctionalTests", "CommonLibrariesForNET.FunctionalTests\CommonLibrariesForNET.FunctionalTests.csproj", "{2FF0F8C4-8604-460B-9698-42BDF6289066}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET.UnitTests", "CommonLibrariesForNET.UnitTests\CommonLibrariesForNET.UnitTests.csproj", "{A47AE957-E0FB-4407-B54E-44594594F616}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET4", "CommonLibrariesForNET4\CommonLibrariesForNET4.csproj", "{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +37,30 @@ Global
 		{44EBF85A-05FE-4C7D-945F-06553AD25586}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44EBF85A-05FE-4C7D-945F-06553AD25586}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44EBF85A-05FE-4C7D-945F-06553AD25586}.Release|Any CPU.Build.0 = Release|Any CPU
+		{688BC3A2-29C2-48F7-BC28-7A81ABF5C3D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{688BC3A2-29C2-48F7-BC28-7A81ABF5C3D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{688BC3A2-29C2-48F7-BC28-7A81ABF5C3D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{688BC3A2-29C2-48F7-BC28-7A81ABF5C3D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FF0F8C4-8604-460B-9698-42BDF6289066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF0F8C4-8604-460B-9698-42BDF6289066}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FF0F8C4-8604-460B-9698-42BDF6289066}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FF0F8C4-8604-460B-9698-42BDF6289066}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A47AE957-E0FB-4407-B54E-44594594F616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A47AE957-E0FB-4407-B54E-44594594F616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A47AE957-E0FB-4407-B54E-44594594F616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A47AE957-E0FB-4407-B54E-44594594F616}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F71C23A5-9BC3-44AE-AE14-1A9F2F068645} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
+		{44EBF85A-05FE-4C7D-945F-06553AD25586} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
+		{2FF0F8C4-8604-460B-9698-42BDF6289066} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
+		{A47AE957-E0FB-4407-B54E-44594594F616} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
 	EndGlobalSection
 EndGlobal
