@@ -93,7 +93,7 @@ namespace Salesforce.Common
         {
             var url = Common.FormatCustomUrl(apiName, parameters, _instanceUrl);
 
-            return await httpGetAsync<T>(url);
+            return await HttpGetAsync<T>(url);
         }
         
 		public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
