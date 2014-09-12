@@ -154,7 +154,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
         {
-            //waw - don't need to do?
+            //TODO: We don't need the contract resolver here, do we?
             var json = JsonConvert.SerializeObject(inputObject, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -181,8 +181,13 @@ namespace Salesforce.Common
                 Method = new HttpMethod("PATCH")
             };
 
-            //waw
-            var json = JsonConvert.SerializeObject(inputObject);
+            var json = JsonConvert.SerializeObject(inputObject,
+                Formatting.None,
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new UpdateableContractResolver()
+                });
+
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
