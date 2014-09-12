@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Salesforce.Common.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Salesforce.Common.Serializer;
 
 namespace Salesforce.Common
 {
@@ -129,9 +130,15 @@ namespace Salesforce.Common
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
 
-            var json = JsonConvert.SerializeObject(inputObject, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonConvert.SerializeObject(inputObject, 
+                Formatting.None, 
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore, 
+                    ContractResolver = new CreateableContractResolver()
+                });
 
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
             var responseMessage = await _httpClient.PostAsync(url, content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -147,6 +154,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
         {
+            //waw - don't need to do?
             var json = JsonConvert.SerializeObject(inputObject, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -173,6 +181,7 @@ namespace Salesforce.Common
                 Method = new HttpMethod("PATCH")
             };
 
+            //waw
             var json = JsonConvert.SerializeObject(inputObject);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 

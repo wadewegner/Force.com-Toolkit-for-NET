@@ -137,6 +137,22 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
+        public async void Create_Contact_Typed_Annotations()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var client = await GetForceClient(httpClient);
+                var contact = new Contact {Id = "Id", IsDeleted = false, AccountId = "AccountId", Name = "Name", Description = "Description"};
+                var id = await client.CreateAsync("Contact", contact);
+
+                Assert.IsNotNullOrEmpty(id);
+            }
+        }
+
+        //TODO: update contact with annotations
+
+
+        [Test]
         public async void Create_Account_Untyped()
         {
             using (var httpClient = new HttpClient())
