@@ -19,7 +19,7 @@ namespace Salesforce.Force.FunctionalTests.Models
 
         public string MasterRecordId { get; set; }
 
-        [Updateable(false)]
+        [Updateable(false), Createable(false)]
         public string AccountId { get; set; }
 
         public string LastName { get; set; }
@@ -28,6 +28,7 @@ namespace Salesforce.Force.FunctionalTests.Models
 
         public string Salutation { get; set; }
 
+        [Updateable(false), Createable(false)]
         public string Name { get; set; }
 
         public string OtherStreet { get; set; }

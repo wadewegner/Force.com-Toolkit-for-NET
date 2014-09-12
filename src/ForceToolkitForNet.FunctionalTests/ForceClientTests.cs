@@ -142,7 +142,7 @@ namespace Salesforce.Force.FunctionalTests
             using (var httpClient = new HttpClient())
             {
                 var client = await GetForceClient(httpClient);
-                var contact = new Contact {Id = "Id", IsDeleted = false, AccountId = "AccountId", Name = "Name", Description = "Description"};
+                var contact = new Contact {Id = "Id", IsDeleted = false, AccountId = "AccountId", Name = "Name", FirstName = "FirstName", LastName = "LastName", Description = "Description"};
                 var id = await client.CreateAsync("Contact", contact);
 
                 Assert.IsNotNullOrEmpty(id);
