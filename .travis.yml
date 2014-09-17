@@ -11,9 +11,7 @@ before_install:
   - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
  
 script:
-  - .ci/packagerestore.sh src/ChatterToolkitForNET.sln
   - .ci/packagerestore.sh src/ForceToolkitForNET.sln
-  - xbuild src/ChatterToolkitForNET.sln
   - xbuild src/ForceToolkitForNET.sln
   - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
   - .ci/nunit.sh src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
