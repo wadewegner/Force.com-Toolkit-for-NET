@@ -12,30 +12,24 @@ namespace Salesforce.Common.Serializer
     {
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var properties = base.CreateProperties(type, memberSerialization);
-            var createableProperties = new List<JsonProperty>();
+            return base.CreateProperties(type, memberSerialization)
+                                .Where(p => IsPropertyCreatable(type, p))
+                                .ToList();
+        }
 
-            foreach (var property in properties)
+        private static bool IsPropertyCreatable(Type type, JsonProperty property)
+        {
+            var isCreateable = true;
+            var propInfo = type.GetRuntimeProperty(property.PropertyName);
+
+            if (propInfo != null)
             {
-                foreach (var o in type
-                    .GetRuntimeProperty(property.PropertyName)
-                    .GetCustomAttributes(typeof(CreateableAttribute), false))
-                {
-                    var a = (CreateableAttribute)o;
-                    if (a.Createable)
-                    {
-                        createableProperties.Add(property);
-                    }
-                }
+                var createableAttr = propInfo.GetCustomAttribute(typeof(CreateableAttribute), false);
+                isCreateable = createableAttr == null || ((CreateableAttribute)createableAttr).Createable;
             }
 
-            var additionalCreateableProperties = properties
-                .Where(p => !type.GetRuntimeProperty(p.PropertyName).GetCustomAttributes(typeof(CreateableAttribute), false).Any())
-                .ToList();
-
-            createableProperties.AddRange(additionalCreateableProperties);
-
-            return createableProperties;
+            return isCreateable;
         }
+
     }
 }

@@ -12,30 +12,23 @@ namespace Salesforce.Common.Serializer
     {
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var properties = base.CreateProperties(type, memberSerialization);
-            var updateableProperties = new List<JsonProperty>();
+            return base.CreateProperties(type, memberSerialization)
+                                .Where(p => IsPropertyUpdateable(type, p))
+                                .ToList();
+        }
 
-            foreach (var property in properties)
+        private static bool IsPropertyUpdateable(Type type, JsonProperty property)
+        {
+            var isUpdateable = true;
+            var propInfo = type.GetRuntimeProperty(property.PropertyName);
+
+            if (propInfo != null)
             {
-                foreach (var o in type
-                    .GetRuntimeProperty(property.PropertyName)
-                    .GetCustomAttributes(typeof(UpdateableAttribute), false))
-                {
-                    var a = (UpdateableAttribute)o;
-                    if (a.Updateable)
-                    {
-                        updateableProperties.Add(property);
-                    }
-                }
+                var updateableAttr = propInfo.GetCustomAttribute(typeof(UpdateableAttribute), false);
+                isUpdateable = updateableAttr == null || ((UpdateableAttribute)updateableAttr).Updateable;
             }
 
-            var additionalUpdateableProperties = properties
-                .Where(p => !type.GetRuntimeProperty(p.PropertyName).GetCustomAttributes(typeof(UpdateableAttribute), false).Any())
-                .ToList();
-
-            updateableProperties.AddRange(additionalUpdateableProperties);
-
-            return updateableProperties;
+            return isUpdateable;
         }
     }
 }
