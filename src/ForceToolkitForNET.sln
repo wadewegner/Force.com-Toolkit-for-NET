@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET", "ForceToolkitForNET\ForceToolkitForNET.csproj", "{1CC985BC-27F3-4F1D-8946-F4DDB084B58F}"
 EndProject
@@ -16,12 +16,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET.FunctionalTests", "CommonLibrariesForNET.FunctionalTests\CommonLibrariesForNET.FunctionalTests.csproj", "{2FF0F8C4-8604-460B-9698-42BDF6289066}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET.UnitTests", "CommonLibrariesForNET.UnitTests\CommonLibrariesForNET.UnitTests.csproj", "{A47AE957-E0FB-4407-B54E-44594594F616}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrariesForNET4", "CommonLibrariesForNET4\CommonLibrariesForNET4.csproj", "{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET4", "ForceToolkitForNET4\ForceToolkitForNET4.csproj", "{B385A653-15A8-42DC-9208-73E19D70AAE6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNet4.FunctionalTests", "ForceToolkitForNet4.FunctionalTests\ForceToolkitForNet4.FunctionalTests.csproj", "{59EB1689-DAD0-48DA-98FE-4EE82A905872}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatterToolkitForNET.FunctionalTests", "ChatterToolkitForNET.FunctionalTests\ChatterToolkitForNET.FunctionalTests.csproj", "{451DB133-5C2D-4401-954A-726DDBD46993}"
 EndProject
@@ -57,18 +51,6 @@ Global
 		{A47AE957-E0FB-4407-B54E-44594594F616}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A47AE957-E0FB-4407-B54E-44594594F616}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A47AE957-E0FB-4407-B54E-44594594F616}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDFACD65-32B7-48BB-9349-117EFBF5E9CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B385A653-15A8-42DC-9208-73E19D70AAE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B385A653-15A8-42DC-9208-73E19D70AAE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B385A653-15A8-42DC-9208-73E19D70AAE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B385A653-15A8-42DC-9208-73E19D70AAE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59EB1689-DAD0-48DA-98FE-4EE82A905872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59EB1689-DAD0-48DA-98FE-4EE82A905872}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59EB1689-DAD0-48DA-98FE-4EE82A905872}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59EB1689-DAD0-48DA-98FE-4EE82A905872}.Release|Any CPU.Build.0 = Release|Any CPU
 		{451DB133-5C2D-4401-954A-726DDBD46993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{451DB133-5C2D-4401-954A-726DDBD46993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{451DB133-5C2D-4401-954A-726DDBD46993}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -86,7 +68,6 @@ Global
 		{44EBF85A-05FE-4C7D-945F-06553AD25586} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
 		{2FF0F8C4-8604-460B-9698-42BDF6289066} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
 		{A47AE957-E0FB-4407-B54E-44594594F616} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
-		{59EB1689-DAD0-48DA-98FE-4EE82A905872} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
 		{451DB133-5C2D-4401-954A-726DDBD46993} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
 	EndGlobalSection
 EndGlobal

@@ -89,6 +89,9 @@
     <Compile Include="..\ForceToolkitForNet.FunctionalTests\Models\Account.cs">
       <Link>Models\Account.cs</Link>
     </Compile>
+    <Compile Include="..\ForceToolkitForNet.FunctionalTests\Models\Contact.cs">
+      <Link>Models\Contact.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

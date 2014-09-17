@@ -87,12 +87,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonLibrariesForNET4\CommonLibrariesForNET4.csproj">
-      <Project>{ddfacd65-32b7-48bb-9349-117efbf5e9cf}</Project>
-      <Name>CommonLibrariesForNET4</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
