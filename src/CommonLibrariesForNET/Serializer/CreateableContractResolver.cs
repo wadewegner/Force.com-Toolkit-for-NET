@@ -30,6 +30,5 @@ namespace Salesforce.Common.Serializer
 
             return isCreateable;
         }
-
     }
 }
