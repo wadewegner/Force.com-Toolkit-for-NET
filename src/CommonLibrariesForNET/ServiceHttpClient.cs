@@ -129,33 +129,20 @@ namespace Salesforce.Common
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
-
-            var json = JsonConvert.SerializeObject(inputObject, 
-                Formatting.None, 
-                new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore, 
-                    ContractResolver = new CreateableContractResolver()
-                });
-
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var responseMessage = await _httpClient.PostAsync(url, content).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var r = JsonConvert.DeserializeObject<T>(response);
-                return r;
-            }
-
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+            var r = await this.HttpPostAsync<T>(inputObject, new Uri(url));
+            return r;
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
         {
-            //TODO: We don't need the contract resolver here, do we?
-            var json = JsonConvert.SerializeObject(inputObject, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            var json = JsonConvert.SerializeObject(inputObject,
+                Formatting.None,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CreateableContractResolver()
+                });
+
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var responseMessage = await _httpClient.PostAsync(uri, content);
