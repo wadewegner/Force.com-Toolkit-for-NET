@@ -8,33 +8,40 @@ using Salesforce.Common.Models;
 
 namespace Salesforce.Common.FunctionalTests
 {
+    // http://github.com/
 	[TestFixture]
     public class CommonTests
     {
-#pragma warning disable 618
-        private static string _tokenRequestEndpointUrl = ConfigurationSettings.AppSettings["TokenRequestEndpointUrl"];
-        private static string _securityToken = ConfigurationSettings.AppSettings["SecurityToken"];
-        private static string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
-        private static string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
-        private static string _username = ConfigurationSettings.AppSettings["Username"];
-        private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
-#pragma warning enable 618
+        private static readonly string TokenRequestEndpointUrl = ConfigurationManager.AppSettings["TokenRequestEndpointUrl"];
+        private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
+        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private static readonly string Username = ConfigurationManager.AppSettings["Username"];
+        private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
+	    
+        private string _userAgent;
+	    private AuthenticationClient _auth;
+	    private ServiceHttpClient _serviceHttpClient;
+
+	    [TestFixtureSetUp]
+        public void Init()
+        {
+            _userAgent = "common-libraries-dotnet";
+            _auth = new AuthenticationClient();
+            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, _userAgent, TokenRequestEndpointUrl).Wait();
+
+            _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, _userAgent, new HttpClient());
+        }
 
         [Test]
         public async void Post_UserInfo()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
             var objectName = new FormUrlEncodedContent(new[]
                 {
-                    new KeyValuePair<string, string>("access_token", auth.AccessToken)
+                    new KeyValuePair<string, string>("access_token", _auth.AccessToken)
                 });
 
-            var response = await serviceHttpClient.HttpPostAsync<UserInfo>(objectName, new Uri(auth.Id));
+            var response = await _serviceHttpClient.HttpPostAsync<UserInfo>(objectName, new Uri(_auth.Id));
 
             Assert.IsNotNull(response);
         }
@@ -42,14 +49,8 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public async void Query_Describe()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
-            var objectName = "Account";
-            var response = await serviceHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
+            const string objectName = "Account";
+            var response = await _serviceHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
             
             Assert.IsNotNull(response);
         }
@@ -57,14 +58,7 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public async void Query_Objects()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
-
-            var response = await serviceHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
+            var response = await _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
 
             Assert.IsTrue(response.maxBatchSize > 0);
             Assert.IsTrue(response.sobjects.Count > 0);
@@ -73,15 +67,8 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public async void Query_Select_Account()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
-
-            var query = "SELECT id FROM Account";
-            var response = await serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            const string query = "SELECT id FROM Account";
+            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
             Assert.IsTrue(response.totalSize > 0);
             Assert.IsTrue(response.records.Count > 0);
@@ -90,51 +77,31 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public async void Query_Select_Count()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
-
-            var query = "SELECT count() FROM Account";
-            var response = await serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            const string query = "SELECT count() FROM Account";
+            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
             Assert.IsTrue(response.totalSize > 0);
             Assert.IsTrue(response.records.Count == 0);
         }
 
         [Test]
-        public async void Auth_UsernamePassword_HasAccessToken()
+        public void Auth_UsernamePassword_HasAccessToken()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            Assert.IsNotNullOrEmpty(auth.AccessToken);
+            Assert.IsNotNullOrEmpty(_auth.AccessToken);
         }
 
         [Test]
-        public async void Auth_UsernamePassword_HasInstanceUrl()
+        public void Auth_UsernamePassword_HasInstanceUrl()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            Assert.IsNotNullOrEmpty(auth.InstanceUrl);
+            Assert.IsNotNullOrEmpty(_auth.InstanceUrl);
         }
 
         [Test]
         public async void Auth_InvalidLogin()
         {
-            const string userAgent = "common-libraries-dotnet";
-
             try
             {
-                var auth = new AuthenticationClient();
-                await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, "WRONGPASSWORD", userAgent, _tokenRequestEndpointUrl);
+                await _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, "WRONGPASSWORD", _userAgent, TokenRequestEndpointUrl);
             }
             catch (ForceAuthException ex)
             {
@@ -147,15 +114,8 @@ namespace Salesforce.Common.FunctionalTests
 	    [Test]
 	    public async void Upsert_Update_CheckReturn()
 	    {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
-
             var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
-            var response = await serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
+            var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
 
             Assert.IsNotNull(response);
 	    }
@@ -163,15 +123,8 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public async void Upsert_New_CheckReturnInclude()
         {
-            const string userAgent = "common-libraries-dotnet";
-
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var serviceHttpClient = new ServiceHttpClient(auth.InstanceUrl, auth.ApiVersion, auth.AccessToken, userAgent, new HttpClient());
-
             var account = new Account { Name = "New Account" + DateTime.Now.Ticks, Description = "New Account Description" + DateTime.Now.Ticks };
-            var response = await serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
+            var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.id);

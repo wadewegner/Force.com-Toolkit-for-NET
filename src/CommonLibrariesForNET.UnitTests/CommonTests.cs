@@ -1,7 +1,4 @@
-﻿//TODO: add license header
-
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using NUnit.Framework;
 
@@ -11,7 +8,7 @@ namespace Salesforce.Common.UnitTests
     public class CommonTests
     {
         [Test]
-        public async void Auth_HasApiVersion()
+        public void Auth_HasApiVersion()
         {
             var auth = new AuthenticationClient();
             Assert.IsNotNullOrEmpty(auth.ApiVersion);
@@ -20,11 +17,11 @@ namespace Salesforce.Common.UnitTests
         [Test]
         public async void Auth_UsernamePassword_Check()
         {
-            var consumerKey = "CONSUMERKEY";
-            var consumerSecret = "CONSUMERSECRET";
-            var username = "USERNAME";
-            var password = "PASSWORD";
-            var userAgent = "USERAGENT";
+            const string consumerKey = "CONSUMERKEY";
+            const string consumerSecret = "CONSUMERSECRET";
+            const string username = "USERNAME";
+            const string password = "PASSWORD";
+            const string userAgent = "USERAGENT";
 
             var client = new HttpClient(new AuthenticationClientRouteHandler(r =>
             {

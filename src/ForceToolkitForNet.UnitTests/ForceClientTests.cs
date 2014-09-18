@@ -1,9 +1,6 @@
-﻿//TODO: add license header
-
-using System;
+﻿using System;
 using System.Net.Http;
 using NUnit.Framework;
-using System.Threading.Tasks;
 using System.Net;
 using Salesforce.Force.UnitTests.Models;
 
@@ -21,9 +18,9 @@ namespace Salesforce.Force.UnitTests
            try
            {
                // suppress error; we only care about checking the header
-               var query = await forceClient.QueryAsync<object>("query");
+               await forceClient.QueryAsync<object>("query");
            }
-           catch (Exception)
+           catch
            {
            }
         }
@@ -32,12 +29,11 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void GetBasicInformationAsync_EmptyObjectName_ThrowsException()
         {
-            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK);
-            expectedResponse.Content = new JsonContent(new { });
+            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK) {Content = new JsonContent(new {})};
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
             var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v29", httpClient);
 
-            var result = await forceClient.BasicInformationAsync<object>("");
+            await forceClient.BasicInformationAsync<object>("");
 
             // expects exception
         }
