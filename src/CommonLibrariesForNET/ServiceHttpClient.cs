@@ -145,8 +145,8 @@ namespace Salesforce.Common
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var responseMessage = await _httpClient.PostAsync(uri, content);
-            var response = await responseMessage.Content.ReadAsStringAsync();
+            var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false); ;
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false); ;
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -206,7 +206,7 @@ namespace Salesforce.Common
                 Method = HttpMethod.Delete
             };
 
-            var responseMessage = await _httpClient.SendAsync(request);
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
