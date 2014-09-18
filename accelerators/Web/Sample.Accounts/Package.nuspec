@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>DeveloperForce.Web.Samples.Accounts</id>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <authors>DeveloperForce,wadewegner</authors>
     <owners>DeveloperForce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
@@ -14,9 +14,8 @@
     <copyright>Copyright 2014</copyright>
     <tags>salesforce api aspnet mvc login oauth</tags>
     <dependencies>
-      <dependency id="DeveloperForce.Force" version="0.4.1" />
-      <dependency id="DeveloperForce.Common" version="0.4.4" />
-      <dependency id="DeveloperForce.Web.Login" version="0.0.4" />
+      <dependency id="DeveloperForce.Force" version="0.5.3" />
+      <dependency id="DeveloperForce.Web.Login" version="0.0.5" />
     </dependencies>
   </metadata>
   <files>
