@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
+﻿using System.Configuration;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -12,10 +9,10 @@ namespace $rootnamespace$.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly string _authorizationEndpointUrl = ConfigurationSettings.AppSettings["AuthorizationEndpointUrl"];
-        private readonly string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
-        private readonly string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
-        private readonly string _callbackUrl = ConfigurationSettings.AppSettings["CallbackUrl"];
+        private readonly string _authorizationEndpointUrl = ConfigurationManager.AppSettings["AuthorizationEndpointUrl"];
+        private readonly string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private readonly string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private readonly string _callbackUrl = ConfigurationManager.AppSettings["CallbackUrl"];
 
         public ActionResult Login()
         {
@@ -32,7 +29,7 @@ namespace $rootnamespace$.Controllers
         public async Task<ActionResult> Callback(string display, string code)
         {
             var auth = new AuthenticationClient();
-            await auth.WebServerAsync(_consumerKey, _consumerSecret, _callbackUrl, code);
+            await auth.WebServerAsync(_consumerKey, _consumerSecret, _callbackUrl, code, "");
 
             Session["ApiVersion"] = auth.ApiVersion;
             Session["AccessToken"] = auth.AccessToken;
@@ -40,5 +37,5 @@ namespace $rootnamespace$.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-	}
+    }
 }
