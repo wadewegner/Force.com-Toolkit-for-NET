@@ -10,37 +10,37 @@ namespace Salesforce.Chatter.FunctionalTests
     [TestFixture]
     public class ChatterClientTests
     {
-        private static string _tokenRequestEndpointUrl = ConfigurationSettings.AppSettings["TokenRequestEndpointUrl"];
-        private static string _securityToken = ConfigurationSettings.AppSettings["SecurityToken"];
-        private static string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
-        private static string _consumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
-        private static string _username = ConfigurationSettings.AppSettings["Username"];
-        private static string _password = ConfigurationSettings.AppSettings["Password"] + _securityToken;
+        private static readonly string TokenRequestEndpointUrl = ConfigurationManager.AppSettings["TokenRequestEndpointUrl"];
+        private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
+        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private static readonly string Username = ConfigurationManager.AppSettings["Username"];
+        private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
 
-        public async Task<ChatterClient> GetChatterClient()
+        private string _userAgent;
+        private AuthenticationClient _auth;
+        private ChatterClient _chatterClient;
+
+        [TestFixtureSetUp]
+        public void Init()
         {
-            const string userAgent = "chatter-toolkit-dotnet";
+            _userAgent = "chatter-toolkit-dotnet";
+            _auth = new AuthenticationClient();
+            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, _userAgent, TokenRequestEndpointUrl).Wait();
 
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, userAgent, _tokenRequestEndpointUrl);
-
-            var client = new ChatterClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
-            return client;
+            _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
 
         [Test]
-        public async void Chatter_IsNotNull()
+        public void Chatter_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-
-            Assert.IsNotNull(chatter);
+            Assert.IsNotNull(_chatterClient);
         }
 
         [Test]
         public async void Chatter_Feeds_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var feeds = await chatter.FeedsAsync<object>();
+            var feeds = await _chatterClient.FeedsAsync<object>();
 
             Assert.IsNotNull(feeds);
         }
@@ -48,8 +48,7 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Users_Me_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var me = await chatter.MeAsync<UserDetail>();
+            var me = await _chatterClient.MeAsync<UserDetail>();
 
             Assert.IsNotNull(me);
         }
@@ -57,8 +56,7 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Users_Me_Id_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var me = await chatter.MeAsync<UserDetail>();
+            var me = await _chatterClient.MeAsync<UserDetail>();
 
             Assert.IsNotNull(me.id);
         }
@@ -66,52 +64,49 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_PostFeedItem()
         {
-            var chatter = await GetChatterClient();
-            var feedItem = await postFeedItem(chatter);
+            var feedItem = await postFeedItem(_chatterClient);
             Assert.IsNotNull(feedItem);
         }
 
         [Test]
         public async void Chatter_Add_Comment()
         {
-            var chatter = await GetChatterClient();
-            var feedItem = await postFeedItem(chatter);
+            var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.id;
 
-            var messageSegment = new MessageSegmentInput()
+            var messageSegment = new MessageSegmentInput
             {
                 text = "Comment testing 1, 2, 3",
                 type = "Text"
             };
 
             var body = new MessageBodyInput { messageSegments = new List<MessageSegmentInput> { messageSegment } };
-            var commentInput = new FeedItemInput()
+            var commentInput = new FeedItemInput
             {
                 attachment = null,
                 body = body
             };
 
-            var comment = await chatter.PostFeedItemCommentAsync<Comment>(commentInput, feedId);
+            var comment = await _chatterClient.PostFeedItemCommentAsync<Comment>(commentInput, feedId);
             Assert.IsNotNull(comment);
         }
 
         [Test]
         public async void Chatter_Add_Comment_With_Mention_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var feedItem = await postFeedItem(chatter);
+            var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.id;
 
-            var me = await chatter.MeAsync<UserDetail>();
+            var me = await _chatterClient.MeAsync<UserDetail>();
             var meId = me.id;
 
-            var messageSegment1 = new MessageSegmentInput()
+            var messageSegment1 = new MessageSegmentInput
             {
                 id = meId,
                 type = "Mention",
             };
 
-            var messageSegment2 = new MessageSegmentInput()
+            var messageSegment2 = new MessageSegmentInput
             {
                 text = "Comment testing 1, 2, 3",
                 type = "Text",
@@ -125,24 +120,23 @@ namespace Salesforce.Chatter.FunctionalTests
                     messageSegment2
                 }
             };
-            var commentInput = new FeedItemInput()
+            var commentInput = new FeedItemInput
             {
                 attachment = null,
                 body = body
             };
 
-            var comment = await chatter.PostFeedItemCommentAsync<Comment>(commentInput, feedId);
+            var comment = await _chatterClient.PostFeedItemCommentAsync<Comment>(commentInput, feedId);
             Assert.IsNotNull(comment);
         }
 
         [Test]
         public async void Chatter_Like_FeedItem_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var feedItem = await postFeedItem(chatter);
+            var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.id;
-            
-            var liked = await chatter.LikeFeedItemAsync<Like>(feedId);
+
+            var liked = await _chatterClient.LikeFeedItemAsync<Like>(feedId);
 
             Assert.IsNotNull(liked);
         }
@@ -150,14 +144,13 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Share_FeedItem_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var feedItem = await postFeedItem(chatter);
+            var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.id;
 
-            var me = await chatter.MeAsync<UserDetail>();
+            var me = await _chatterClient.MeAsync<UserDetail>();
             var meId = me.id;
 
-            var sharedFeedItem = await chatter.ShareFeedItemAsync<FeedItem>(feedId, meId);
+            var sharedFeedItem = await _chatterClient.ShareFeedItemAsync<FeedItem>(feedId, meId);
 
             Assert.IsNotNull(sharedFeedItem);
         }
@@ -165,8 +158,7 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Get_My_News_Feed_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var myNewsFeeds = await chatter.GetMyNewsFeedAsync<FeedItemPage>();
+            var myNewsFeeds = await _chatterClient.GetMyNewsFeedAsync<FeedItemPage>();
 
             Assert.IsNotNull(myNewsFeeds);
         }
@@ -174,8 +166,7 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Get_My_News_Feed_WithQuery_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var myNewsFeeds = await chatter.GetMyNewsFeedAsync<FeedItemPage>("wade");
+            var myNewsFeeds = await _chatterClient.GetMyNewsFeedAsync<FeedItemPage>("wade");
 
             Assert.IsNotNull(myNewsFeeds);
         }
@@ -183,8 +174,7 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Get_Groups_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var groups = await chatter.GetGroupsAsync<GroupPage>();
+            var groups = await _chatterClient.GetGroupsAsync<GroupPage>();
 
             Assert.IsNotNull(groups);
         }
@@ -193,10 +183,9 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Get_Group_News_Feed_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var groups = await chatter.GetGroupsAsync<GroupPage>();
+            var groups = await _chatterClient.GetGroupsAsync<GroupPage>();
             var groupId = groups.groups[0].id;
-            var groupFeed = await chatter.GetGroupFeedAsync<FeedItemPage>(groupId);
+            var groupFeed = await _chatterClient.GetGroupFeedAsync<FeedItemPage>(groupId);
 
             Assert.IsNotNull(groupFeed);
         }
@@ -204,8 +193,7 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Get_Topics_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var topics = await chatter.GetTopicsAsync<TopicCollection>();
+            var topics = await _chatterClient.GetTopicsAsync<TopicCollection>();
 
             Assert.IsNotNull(topics);
         }
@@ -213,8 +201,7 @@ namespace Salesforce.Chatter.FunctionalTests
         [Test]
         public async void Chatter_Get_Users_IsNotNull()
         {
-            var chatter = await GetChatterClient();
-            var users = await chatter.GetUsersAsync<UserPage>();
+            var users = await _chatterClient.GetUsersAsync<UserPage>();
 
             Assert.IsNotNull(users);
         }
@@ -225,7 +212,7 @@ namespace Salesforce.Chatter.FunctionalTests
             var me = await chatter.MeAsync<UserDetail>();
             var id = me.id;
 
-            var messageSegment = new MessageSegmentInput()
+            var messageSegment = new MessageSegmentInput
             {
                 text = "Testing 1, 2, 3",
                 type = "Text"
