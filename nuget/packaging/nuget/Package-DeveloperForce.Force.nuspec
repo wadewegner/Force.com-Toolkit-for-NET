@@ -25,15 +25,13 @@
   <files>
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.dll" target="lib" />
     <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.pdb" target="lib" />
-    <file src="..\..\..\src\ForceToolkitForNET4\bin\Debug\Salesforce.Force.dll" target="lib\net40\" />
-    <file src="..\..\..\src\ForceToolkitForNET4\bin\Debug\Salesforce.Force.pdb" target="lib\net40\" />    
     <file src="..\..\tools\Install.ps1" target="tools" />
     <file src="..\..\..\src\ForceToolkitForNET\*.cs" target="src" />
     <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib" />
     <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib" />
-    <file src="..\..\..\src\CommonLibrariesForNET4\bin\Debug\Salesforce.Common.dll" target="lib\net40\" />
-    <file src="..\..\..\src\CommonLibrariesForNET4\bin\Debug\Salesforce.Common.pdb" target="lib\net40\" />
     <file src="..\..\..\src\CommonLibrariesForNET\*.cs" target="src" />
     <file src="..\..\..\src\CommonLibrariesForNET\Models\*.cs" target="src" />
+    <file src="..\..\..\src\CommonLibrariesForNET\Attributes\*.cs" target="src" />
+    <file src="..\..\..\src\CommonLibrariesForNET\Serializer\*.cs" target="src" />
   </files>
 </package>
