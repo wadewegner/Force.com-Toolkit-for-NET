@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Salesforce.Force;
-using WebApplication9.Models;
+using $rootnamespace$.Models;
 
-namespace WebApplication9.Controllers
+namespace $rootnamespace$.Controllers
 {
     public class AccountsController : Controller
     {

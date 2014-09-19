@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication9.Models.AccountViewModel>
+﻿@model IEnumerable<$rootnamespace$.Models.AccountViewModel>
 
 @{
     ViewBag.Title = "Index";
