@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication9.Models
+namespace $rootnamespace$.Models
 {
     public class AccountViewModel
     {
