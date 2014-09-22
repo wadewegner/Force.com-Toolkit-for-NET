@@ -16,6 +16,8 @@ namespace Salesforce.Force
         Task<DescribeGlobalResult<T>> GetObjectsAsync<T>();
         Task<T> BasicInformationAsync<T>(string objectName);
         Task<T> DescribeAsync<T>(string objectName);
+        Task<T> DescribeLayoutAsync<T>(string objectName);
+        Task<T> DescribeLayoutAsync<T>(string objectName, string recordTypeId);
         Task<T> RecentAsync<T>(int limit);
     }
 }
