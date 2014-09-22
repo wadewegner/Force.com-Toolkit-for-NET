@@ -133,6 +133,23 @@ namespace Salesforce.Force
 
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/", objectName));
         }
+        
+        public Task<T> DescribeLayoutAsync<T>(string objectName)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            //TODO: implement try/catch and throw auth exception if appropriate
+            
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/", objectName));
+        }
+        
+        public Task<T> DescribeLayoutAsync<T>(string objectName, string recordTypeId)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(recordTypeId)) throw new ArgumentNullException("recordTypeId");
+            //TODO: implement try/catch and throw auth exception if appropriate
+            
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/{1}", objectName, recordTypeId));
+        }
 
         public Task<T> RecentAsync<T>(int limit = 200)
         {
