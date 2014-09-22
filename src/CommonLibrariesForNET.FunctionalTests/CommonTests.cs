@@ -8,7 +8,6 @@ using Salesforce.Common.Models;
 
 namespace Salesforce.Common.FunctionalTests
 {
-    // http://github.com/
 	[TestFixture]
     public class CommonTests
     {

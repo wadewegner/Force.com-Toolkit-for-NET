@@ -318,6 +318,23 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNotNull(accounts);
         }
 
+        //DescribeLayoutAsync
+        [Test]
+        public async void Object_DescribeLayout_IsNotNull()
+        {
+            var accountsLayout = await _client.DescribeLayoutAsync<dynamic>("Account");
+
+            Assert.IsNotNull(accountsLayout);
+
+            string recordTypeId = accountsLayout.recordTypeMappings[0].recordTypeId;
+
+            Assert.IsNotNull(recordTypeId);
+
+            var accountsLayoutForRecordTypeId = await _client.DescribeLayoutAsync<dynamic>("Account", recordTypeId);
+
+            Assert.IsNotNull(accountsLayoutForRecordTypeId);
+        }
+
         [Test]
         public async void Recent_IsNotNull()
         {
