@@ -129,12 +129,6 @@ namespace Salesforce.Common
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
-            var r = await this.HttpPostAsync<T>(inputObject, new Uri(url));
-            return r;
-        }
-
-        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
-        {
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
                 new JsonSerializerSettings
@@ -145,8 +139,32 @@ namespace Salesforce.Common
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false); ;
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false); ;
+            var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var r = JsonConvert.DeserializeObject<T>(response);
+                return r;
+            }
+
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+        }
+
+        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
+        {
+            var json = JsonConvert.SerializeObject(inputObject,
+                Formatting.None,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                });
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
