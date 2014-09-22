@@ -90,6 +90,11 @@ namespace Salesforce.Common
             }
         }
 
+        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code)
+        {
+            return WebServerAsync(clientId, clientSecret, redirectUri, code, string.Empty, UserAgent, TokenRequestEndpointUrl);
+        }
+
         public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string state)
         {
             return WebServerAsync(clientId, clientSecret, redirectUri, code, state, UserAgent, TokenRequestEndpointUrl);
