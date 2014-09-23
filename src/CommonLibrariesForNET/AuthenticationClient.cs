@@ -92,20 +92,15 @@ namespace Salesforce.Common
 
         public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code)
         {
-            return WebServerAsync(clientId, clientSecret, redirectUri, code, string.Empty, UserAgent, TokenRequestEndpointUrl);
+            return WebServerAsync(clientId, clientSecret, redirectUri, code, UserAgent, TokenRequestEndpointUrl);
         }
 
-        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string state)
+        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent)
         {
-            return WebServerAsync(clientId, clientSecret, redirectUri, code, state, UserAgent, TokenRequestEndpointUrl);
+            return WebServerAsync(clientId, clientSecret, redirectUri, code, userAgent, TokenRequestEndpointUrl);
         }
 
-        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string state, string userAgent)
-        {
-            return WebServerAsync(clientId, clientSecret, redirectUri, code, state, userAgent, TokenRequestEndpointUrl);
-        }
-
-        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string state, string userAgent, string tokenRequestEndpointUrl)
+        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent, string tokenRequestEndpointUrl)
         {
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
             if (string.IsNullOrEmpty(clientSecret)) throw new ArgumentNullException("clientSecret");
@@ -123,7 +118,6 @@ namespace Salesforce.Common
                     new KeyValuePair<string, string>("client_secret", clientSecret),
                     new KeyValuePair<string, string>("redirect_uri", redirectUri),
                     new KeyValuePair<string, string>("code", code),
-                    new KeyValuePair<string, string>("state", state)
                 });
 
             var request = new HttpRequestMessage()
