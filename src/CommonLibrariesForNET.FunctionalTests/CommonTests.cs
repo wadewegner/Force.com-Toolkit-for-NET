@@ -33,14 +33,14 @@ namespace Salesforce.Common.FunctionalTests
         }
 
         [Test]
-        public async void Post_UserInfo()
+        public async void Get_UserInfo()
         {
             var objectName = new FormUrlEncodedContent(new[]
                 {
                     new KeyValuePair<string, string>("access_token", _auth.AccessToken)
                 });
 
-            var response = await _serviceHttpClient.HttpPostAsync<UserInfo>(objectName, new Uri(_auth.Id));
+            var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
 
             Assert.IsNotNull(response);
         }
