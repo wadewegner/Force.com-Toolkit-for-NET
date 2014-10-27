@@ -126,6 +126,27 @@ namespace Salesforce.Common
             }
         }
 
+        public async Task<T> HttpGetAsync<T>(Uri uri)
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = uri,
+                Method = HttpMethod.Get
+            };
+
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var r = JsonConvert.DeserializeObject<T>(response);
+                return r;
+            }
+
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+        }
+
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
@@ -161,7 +182,7 @@ namespace Salesforce.Common
                     NullValueHandling = NullValueHandling.Ignore,
                 });
 
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var content = new StringContent(inputObject.ToString(), Encoding.UTF8, "application/json");
 
             var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);

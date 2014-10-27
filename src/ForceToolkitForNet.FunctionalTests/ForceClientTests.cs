@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Force.FunctionalTests.Models;
 using WadeWegner.Salesforce.SOAPHelpers;
 
@@ -34,7 +35,7 @@ namespace Salesforce.Force.FunctionalTests
         [Test]
         public async void UserInfo_IsNotNull()
         {
-            var userInfo = await _client.UserInfo<dynamic>(_auth.AccessToken, _auth.Id);
+            var userInfo = await _client.UserInfo<UserInfo>(_auth.Id);
 
             Assert.IsNotNull(userInfo);
         }

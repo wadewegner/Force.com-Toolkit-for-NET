@@ -158,17 +158,12 @@ namespace Salesforce.Force
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
         }
 
-        public async Task<T> UserInfo<T>(string accessToken, string uri)
+        public async Task<T> UserInfo<T>(string uri)
         {
             if (string.IsNullOrEmpty(uri)) throw new ArgumentNullException("uri");
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            var content = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("access_token", accessToken)
-            });
-
-            var response = await _serviceHttpClient.HttpPostAsync<T>(content, new Uri(uri));
+            var response = await _serviceHttpClient.HttpGetAsync<T>(new Uri(uri));
             return response;
         }
 
