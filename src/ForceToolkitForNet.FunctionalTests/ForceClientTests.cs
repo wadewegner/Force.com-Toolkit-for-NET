@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -30,6 +31,18 @@ namespace Salesforce.Force.FunctionalTests
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password).Wait();
 
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
+        }
+
+        [Test]
+        public async void AsyncTaskCompletion_ExpandoObject()
+        {
+            dynamic account = new ExpandoObject();
+            account.Name = "ExpandoName" + DateTime.Now.Ticks;
+            account.Description = "ExpandoDescription" + DateTime.Now.Ticks;
+
+            var result = await _client.CreateAsync("Account", account);
+
+            Assert.IsNotNull(result);
         }
 
         [Test]
