@@ -3,7 +3,7 @@
   <metadata>
     <id>DeveloperForce.Chatter</id>
     <title>DeveloperForce.Chatter</title>
-    <version>$version$</version>
+    <version>0.4.7</version>
     <authors>developerforce,wadewegner</authors>
     <owners>developerforce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
@@ -22,15 +22,4 @@
       <dependency id="Newtonsoft.Json" version="6.0.5" />
     </dependencies>
   </metadata>
-  <files>
-    <file src="..\..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.dll" target="lib" />
-    <file src="..\..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.pdb" target="lib" />
-    <file src="..\..\tools\Install.ps1" target="tools" />
-    <file src="..\..\..\src\ChatterToolkitForNET\*.cs" target="src" />
-    <file src="..\..\..\src\ChatterToolkitForNET\Models\*.cs" target="src" />
-    <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib" />
-    <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib" />
-    <file src="..\..\..\src\CommonLibrariesForNET\*.cs" target="src" />
-    <file src="..\..\..\src\CommonLibrariesForNET\Models\*.cs" target="src" />
-  </files>
 </package>

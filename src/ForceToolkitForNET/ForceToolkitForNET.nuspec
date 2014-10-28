@@ -3,7 +3,7 @@
   <metadata>
     <id>DeveloperForce.Force</id>
     <title>DeveloperForce.Force</title>
-    <version>$version$</version>
+    <version>0.6.0</version>
     <authors>developerforce,wadewegner</authors>
     <owners>developerforce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</licenseUrl>
@@ -22,16 +22,4 @@
       <dependency id="Newtonsoft.Json" version="6.0.5" />
     </dependencies>
   </metadata>
-  <files>
-    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.dll" target="lib" />
-    <file src="..\..\..\src\ForceToolkitForNET\bin\Debug\Salesforce.Force.pdb" target="lib" />
-    <file src="..\..\tools\Install.ps1" target="tools" />
-    <file src="..\..\..\src\ForceToolkitForNET\*.cs" target="src" />
-    <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib" />
-    <file src="..\..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib" />
-    <file src="..\..\..\src\CommonLibrariesForNET\*.cs" target="src" />
-    <file src="..\..\..\src\CommonLibrariesForNET\Models\*.cs" target="src" />
-    <file src="..\..\..\src\CommonLibrariesForNET\Attributes\*.cs" target="src" />
-    <file src="..\..\..\src\CommonLibrariesForNET\Serializer\*.cs" target="src" />
-  </files>
 </package>
