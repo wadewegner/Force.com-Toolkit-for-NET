@@ -8,7 +8,7 @@
     <owners>developerforce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/developerforce/Force.com-Toolkit-for-NET/</projectUrl>
-    <iconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/nuget/packaging/avatar.png</iconUrl>
+    <iconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/scripts/assets/avatar.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The DeveloperForce.Force NuGet provides a .NET library for interacting with Salesforce's Force.com REST APIs.</description>
     <releaseNotes></releaseNotes>
