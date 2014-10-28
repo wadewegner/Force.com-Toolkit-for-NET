@@ -1,0 +1,3 @@
+"assets/NuGet.exe" install NUnit.Runners -Version 2.6.3 -o packages
+
+"packages/NUnit.Runners.2.6.3/tools/nunit-console.exe" -noxml -nodots -labels -stoponerror "..\src\ChatterToolkitForNET.FunctionalTests\bin\Debug\Salesforce.Chatter.FunctionalTests.dll" "..\src\CommonLibrariesForNET.FunctionalTests\bin\Debug\Salesforce.Common.FunctionalTests.dll" "..\src\CommonLibrariesForNET.UnitTests\bin\Debug\Salesforce.Common.UnitTests.dll" "..\src\ForceToolkitForNet.FunctionalTests\bin\Debug\Salesforce.Force.FunctionalTests.dll" "..\src\ForceToolkitForNet.UnitTests\bin\Debug\Salesforce.Force.UnitTests.dll"
