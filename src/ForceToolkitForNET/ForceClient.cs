@@ -30,7 +30,7 @@ namespace Salesforce.Force
 
             //TODO: implement try/catch and throw auth exception if appropriate
 
-            _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, UserAgent, httpClient);
+            _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
         public Task<QueryResult<T>> QueryAsync<T>(string query)
@@ -52,14 +52,8 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-            //TODO: implement try/catch and throw auth exception if appropriate
-
             var fields = "";
-#if RUNNING_ON_4
-            fields = string.Join(", ", typeof(T).GetProperties().Select(p => p.Name));
-#else
             fields = string.Join(", ", typeof(T).GetRuntimeProperties().Select(p => p.Name));
-#endif
 
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);

@@ -9,7 +9,6 @@ namespace Salesforce.Chatter
     public class ChatterClient : IChatterClient, IDisposable
     {
         private ServiceHttpClient _serviceHttpClient;
-        private const string UserAgent = "common-libraries-dotnet";
 
         public ChatterClient(string instanceUrl, string accessToken, string apiVersion) 
             : this (instanceUrl, accessToken, apiVersion, new HttpClient())
@@ -18,7 +17,7 @@ namespace Salesforce.Chatter
 
         public ChatterClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
         {
-            _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, UserAgent, httpClient);
+            _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
         
         public Task<T> FeedsAsync<T>()

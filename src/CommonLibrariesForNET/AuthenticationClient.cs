@@ -17,9 +17,9 @@ namespace Salesforce.Common
         public string Id { get; set; }
         public string ApiVersion { get; set; }
 
-        private const string UserAgent = "common-libraries-dotnet";
+        private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string TokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
         public AuthenticationClient()
             : this(new HttpClient())
@@ -36,21 +36,15 @@ namespace Salesforce.Common
 
         public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password)
         {
-            return UsernamePasswordAsync(clientId, clientSecret, username, password, UserAgent, TokenRequestEndpointUrl);
+            return UsernamePasswordAsync(clientId, clientSecret, username, password, TokenRequestEndpointUrl);
         }
 
-        public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string userAgent)
-        {
-            return UsernamePasswordAsync(clientId, clientSecret, username, password, userAgent, TokenRequestEndpointUrl);
-        }
-
-        public async Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string userAgent, string tokenRequestEndpointUrl)
+        public async Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl)
         {
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
             if (string.IsNullOrEmpty(clientSecret)) throw new ArgumentNullException("clientSecret");
             if (string.IsNullOrEmpty(username)) throw new ArgumentNullException("username");
             if (string.IsNullOrEmpty(password)) throw new ArgumentNullException("password");
-            if (string.IsNullOrEmpty(userAgent)) throw new ArgumentNullException("userAgent");
             if (string.IsNullOrEmpty(tokenRequestEndpointUrl)) throw new ArgumentNullException("tokenRequestEndpointUrl");
             //TODO: check to make sure tokenRequestEndpointUrl is a valid URI
 
@@ -70,7 +64,7 @@ namespace Salesforce.Common
 				Content = content
             };
 
-			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
+			request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -92,22 +86,16 @@ namespace Salesforce.Common
 
         public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code)
         {
-            return WebServerAsync(clientId, clientSecret, redirectUri, code, UserAgent, TokenRequestEndpointUrl);
+            return WebServerAsync(clientId, clientSecret, redirectUri, code, TokenRequestEndpointUrl);
         }
 
-        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent)
-        {
-            return WebServerAsync(clientId, clientSecret, redirectUri, code, userAgent, TokenRequestEndpointUrl);
-        }
-
-        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string userAgent, string tokenRequestEndpointUrl)
+        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string tokenRequestEndpointUrl)
         {
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
             if (string.IsNullOrEmpty(clientSecret)) throw new ArgumentNullException("clientSecret");
             if (string.IsNullOrEmpty(redirectUri)) throw new ArgumentNullException("redirectUri");
             //TODO: check to make sure redirectUri is a valid URI
             if (string.IsNullOrEmpty(code)) throw new ArgumentNullException("code");
-            if (string.IsNullOrEmpty(userAgent)) throw new ArgumentNullException("userAgent");
             if (string.IsNullOrEmpty(tokenRequestEndpointUrl)) throw new ArgumentNullException("tokenRequestEndpointUrl");
             //TODO: check to make sure tokenRequestEndpointUrl is a valid URI
 
@@ -127,7 +115,7 @@ namespace Salesforce.Common
                 Content = content
             };
 
-			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
+			request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -150,15 +138,10 @@ namespace Salesforce.Common
 
         public Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret = "")
         {
-            return TokenRefreshAsync(clientId, refreshToken, clientSecret, UserAgent, TokenRequestEndpointUrl);
+            return TokenRefreshAsync(clientId, refreshToken, clientSecret, TokenRequestEndpointUrl);
         }
 
-        public Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string userAgent)
-        {
-            return TokenRefreshAsync(clientId, refreshToken, clientSecret, userAgent, TokenRequestEndpointUrl);
-        }
-
-        public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string userAgent, string tokenRequestEndpointUrl)
+        public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string tokenRequestEndpointUrl)
         {
             var url = Common.FormatRefreshTokenUrl(
                 tokenRequestEndpointUrl,
@@ -172,7 +155,7 @@ namespace Salesforce.Common
                 RequestUri = new Uri(url)
             };
 
-			request.Headers.UserAgent.ParseAdd(string.Concat(userAgent, "/", ApiVersion));
+			request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);

@@ -17,16 +17,14 @@ namespace Salesforce.Chatter.FunctionalTests
         private static readonly string Username = ConfigurationManager.AppSettings["Username"];
         private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
 
-        private string _userAgent;
         private AuthenticationClient _auth;
         private ChatterClient _chatterClient;
 
         [TestFixtureSetUp]
         public void Init()
         {
-            _userAgent = "chatter-toolkit-dotnet";
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, _userAgent, TokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
 
             _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }

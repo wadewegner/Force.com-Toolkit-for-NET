@@ -16,23 +16,17 @@ namespace Salesforce.Common
 {
     public class ServiceHttpClient : IServiceHttpClient, IDisposable
     {
-        private static string _userAgent = "common-libraries-dotnet";
+        private static string _userAgent = "forcedotcom-toolkit-dotnet";
         private readonly string _instanceUrl;
         private readonly string _apiVersion;
         private readonly string _accessToken;
         private HttpClient _httpClient;
 
         public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
-            : this(instanceUrl, apiVersion, accessToken, _userAgent, httpClient)
-        {
-        }
-
-        public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, string userAgent, HttpClient httpClient)
         {
             _instanceUrl = instanceUrl;
             _apiVersion = apiVersion;
             _accessToken = accessToken;
-            _userAgent = userAgent;
             _httpClient = httpClient;
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(_userAgent, "/", _apiVersion));

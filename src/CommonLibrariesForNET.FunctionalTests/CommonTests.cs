@@ -18,18 +18,16 @@ namespace Salesforce.Common.FunctionalTests
         private static readonly string Username = ConfigurationManager.AppSettings["Username"];
         private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
 	    
-        private string _userAgent;
 	    private AuthenticationClient _auth;
 	    private ServiceHttpClient _serviceHttpClient;
 
 	    [TestFixtureSetUp]
         public void Init()
         {
-            _userAgent = "common-libraries-dotnet";
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, _userAgent, TokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
 
-            _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, _userAgent, new HttpClient());
+            _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
 
         [Test]
@@ -100,7 +98,7 @@ namespace Salesforce.Common.FunctionalTests
         {
             try
             {
-                await _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, "WRONGPASSWORD", _userAgent, TokenRequestEndpointUrl);
+                await _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, "WRONGPASSWORD", TokenRequestEndpointUrl);
             }
             catch (ForceAuthException ex)
             {

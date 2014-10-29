@@ -21,7 +21,6 @@ namespace Salesforce.Common.UnitTests
             const string consumerSecret = "CONSUMERSECRET";
             const string username = "USERNAME";
             const string password = "PASSWORD";
-            const string userAgent = "USERAGENT";
 
             var client = new HttpClient(new AuthenticationClientRouteHandler(r =>
             {
@@ -31,7 +30,7 @@ namespace Salesforce.Common.UnitTests
 
             using (var auth = new AuthenticationClient(client))
             {
-                await auth.UsernamePasswordAsync(consumerKey, consumerSecret, username, password, userAgent);
+                await auth.UsernamePasswordAsync(consumerKey, consumerSecret, username, password);
 
                 Assert.IsNotNull(auth.AccessToken);
                 Assert.IsNotNull(auth.ApiVersion);
@@ -50,7 +49,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -70,7 +69,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -90,7 +89,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -110,7 +109,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -130,7 +129,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v30/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "common-libraries-dotnet/v30");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v30");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
