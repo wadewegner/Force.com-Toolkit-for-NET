@@ -7,6 +7,8 @@ namespace Salesforce.Common.UnitTests
     [TestFixture]
     public class CommonTests
     {
+        private const string UserAgent = "forcedotcom-toolkit-dotnet";
+
         [Test]
         public void Auth_HasApiVersion()
         {
@@ -49,7 +51,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v32/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v32");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -69,7 +71,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v32/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v32");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -89,7 +91,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v32/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v32");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -109,7 +111,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v32/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v32");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
@@ -129,7 +131,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v32/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v32");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");

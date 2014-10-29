@@ -1,6 +1,4 @@
-﻿﻿//TODO: add license header
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -16,21 +14,19 @@ namespace Salesforce.Common
 {
     public class ServiceHttpClient : IServiceHttpClient, IDisposable
     {
-        private static string _userAgent = "forcedotcom-toolkit-dotnet";
+        private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private readonly string _instanceUrl;
         private readonly string _apiVersion;
-        private readonly string _accessToken;
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
         public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
         {
             _instanceUrl = instanceUrl;
             _apiVersion = apiVersion;
-            _accessToken = accessToken;
             _httpClient = httpClient;
 
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(_userAgent, "/", _apiVersion));
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(UserAgent, "/", _apiVersion));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -45,7 +41,7 @@ namespace Salesforce.Common
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
 
-            var request = new HttpRequestMessage()
+            var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(url),
                 Method = HttpMethod.Get
@@ -176,8 +172,7 @@ namespace Salesforce.Common
                     NullValueHandling = NullValueHandling.Ignore,
                 });
 
-            var content = new StringContent(inputObject.ToString(), Encoding.UTF8, "application/json");
-
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
             var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -195,7 +190,7 @@ namespace Salesforce.Common
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
 
-            var request = new HttpRequestMessage()
+            var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(url),
                 Method = new HttpMethod("PATCH")
@@ -233,7 +228,7 @@ namespace Salesforce.Common
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
 
-            var request = new HttpRequestMessage()
+            var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(url),
                 Method = HttpMethod.Delete

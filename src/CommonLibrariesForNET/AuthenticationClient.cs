@@ -1,6 +1,4 @@
-﻿//TODO: add license header
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -46,7 +44,7 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(username)) throw new ArgumentNullException("username");
             if (string.IsNullOrEmpty(password)) throw new ArgumentNullException("password");
             if (string.IsNullOrEmpty(tokenRequestEndpointUrl)) throw new ArgumentNullException("tokenRequestEndpointUrl");
-            //TODO: check to make sure tokenRequestEndpointUrl is a valid URI
+            if (!Uri.IsWellFormedUriString(tokenRequestEndpointUrl, UriKind.Absolute)) throw new FormatException("tokenRequestEndpointUrl");
 
             var content = new FormUrlEncodedContent(new[]
                 {
@@ -57,7 +55,7 @@ namespace Salesforce.Common
                     new KeyValuePair<string, string>("password", password)
                 });
 
-            var request = new HttpRequestMessage()
+            var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(tokenRequestEndpointUrl),
@@ -94,10 +92,10 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
             if (string.IsNullOrEmpty(clientSecret)) throw new ArgumentNullException("clientSecret");
             if (string.IsNullOrEmpty(redirectUri)) throw new ArgumentNullException("redirectUri");
-            //TODO: check to make sure redirectUri is a valid URI
+            if (!Uri.IsWellFormedUriString(redirectUri, UriKind.Absolute)) throw new FormatException("redirectUri");
             if (string.IsNullOrEmpty(code)) throw new ArgumentNullException("code");
             if (string.IsNullOrEmpty(tokenRequestEndpointUrl)) throw new ArgumentNullException("tokenRequestEndpointUrl");
-            //TODO: check to make sure tokenRequestEndpointUrl is a valid URI
+            if (!Uri.IsWellFormedUriString(tokenRequestEndpointUrl, UriKind.Absolute)) throw new FormatException("tokenRequestEndpointUrl");
 
             var content = new FormUrlEncodedContent(new[]
                 {
@@ -105,10 +103,10 @@ namespace Salesforce.Common
                     new KeyValuePair<string, string>("client_id", clientId),
                     new KeyValuePair<string, string>("client_secret", clientSecret),
                     new KeyValuePair<string, string>("redirect_uri", redirectUri),
-                    new KeyValuePair<string, string>("code", code),
+                    new KeyValuePair<string, string>("code", code)
                 });
 
-            var request = new HttpRequestMessage()
+            var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(tokenRequestEndpointUrl),
@@ -149,7 +147,7 @@ namespace Salesforce.Common
                 refreshToken,
                 clientSecret);
 
-            var request = new HttpRequestMessage()
+            var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(url)
@@ -177,7 +175,6 @@ namespace Salesforce.Common
 
         public void Dispose()
         {
-            //TODO: catch in case this has already been disposed or deallocated?
             _httpClient.Dispose();
         }
     }

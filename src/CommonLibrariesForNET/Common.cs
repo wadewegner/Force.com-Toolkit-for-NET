@@ -1,6 +1,4 @@
-﻿//TODO: add license header
-
-using System;
+﻿using System;
 using Salesforce.Common.Models;
 
 namespace Salesforce.Common
@@ -13,7 +11,6 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
 
-            // is query a nextRecordUrl request?
             if (resourceName.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase))
             {
                 return string.Format("{0}{1}", instanceUrl, resourceName);

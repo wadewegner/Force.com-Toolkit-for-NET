@@ -1,6 +1,4 @@
-﻿//TODO: add license header
-
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -10,7 +8,7 @@ namespace Salesforce.Force.UnitTests
 {
     internal class ServiceClientRouteHandler : DelegatingHandler
     {
-        Action<HttpRequestMessage> _testingAction;
+        readonly Action<HttpRequestMessage> _testingAction;
 
         public ServiceClientRouteHandler(Action<HttpRequestMessage> testingAction)
         {

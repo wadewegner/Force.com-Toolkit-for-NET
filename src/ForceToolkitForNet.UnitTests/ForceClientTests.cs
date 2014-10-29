@@ -9,10 +9,12 @@ namespace Salesforce.Force.UnitTests
     [TestFixture]
     public class ForceClientTests
     {
+        private const string UserAgent = "forcedotcom-toolkit-dotnet";
+
         [Test]
         public async void Requests_CheckHttpRequestMessage_UserAgent()
         {
-            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), "forcedotcom-toolkit-dotnet/v32")));
+            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32")));
             var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v32", httpClient);
 
            try

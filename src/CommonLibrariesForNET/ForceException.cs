@@ -1,6 +1,4 @@
-﻿//TODO: add license header
-
-using System;
+﻿using System;
 using Salesforce.Common.Models;
 
 namespace Salesforce.Common

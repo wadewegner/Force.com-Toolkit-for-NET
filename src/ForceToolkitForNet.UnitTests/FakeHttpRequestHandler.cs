@@ -1,8 +1,4 @@
-﻿//TODO: add license header
-
-using System;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +6,7 @@ namespace Salesforce.Force.UnitTests
 {
     public class FakeHttpRequestHandler : DelegatingHandler
     {
-        HttpResponseMessage _expectedResponse;
+        readonly HttpResponseMessage _expectedResponse;
 
         public FakeHttpRequestHandler(HttpResponseMessage expectedResponse)
         {
@@ -24,5 +20,4 @@ namespace Salesforce.Force.UnitTests
             return tsc.Task;
         }
     }
-    
 }

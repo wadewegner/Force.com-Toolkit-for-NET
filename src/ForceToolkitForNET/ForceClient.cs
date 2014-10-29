@@ -1,7 +1,4 @@
-﻿//TODO: add license header
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -13,8 +10,7 @@ namespace Salesforce.Force
 {
     public class ForceClient : IForceClient, IDisposable
     {
-        private ServiceHttpClient _serviceHttpClient;
-        private const string UserAgent = "forcedotcom-toolkit-dotnet";
+        private readonly ServiceHttpClient _serviceHttpClient;
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient())
@@ -27,8 +23,6 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
             if (httpClient == null) throw new ArgumentNullException("httpClient");
-
-            //TODO: implement try/catch and throw auth exception if appropriate
 
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
@@ -66,8 +60,6 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (record == null) throw new ArgumentNullException("record");
 
-            //TODO: implement try/catch and throw auth exception if appropriate
-
             var response = await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
             return response.id;
         }
@@ -77,8 +69,6 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
             if (record == null) throw new ArgumentNullException("record");
-
-            //TODO: implement try/catch and throw auth exception if appropriate
 
             return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
         }
@@ -90,8 +80,6 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(externalId)) throw new ArgumentNullException("externalId");
             if (record == null) throw new ArgumentNullException("record");
 
-            //TODO: implement try/catch and throw auth exception if appropriate
-
             return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId));
         }
 
@@ -100,22 +88,17 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-            //TODO: implement try/catch and throw auth exception if appropriate
-
             return _serviceHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId));
         }
 
         public Task<DescribeGlobalResult<T>> GetObjectsAsync<T>()
         {
-            //TODO: implement try/catch and throw auth exception if appropriate
-
             return _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
         }
 
         public Task<T> BasicInformationAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
-            //TODO: implement try/catch and throw auth exception if appropriate
 
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
         }
@@ -123,7 +106,6 @@ namespace Salesforce.Force
         public Task<T> DescribeAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
-            //TODO: implement try/catch and throw auth exception if appropriate
 
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/", objectName));
         }
@@ -131,7 +113,6 @@ namespace Salesforce.Force
         public Task<T> DescribeLayoutAsync<T>(string objectName)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
-            //TODO: implement try/catch and throw auth exception if appropriate
             
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/", objectName));
         }
@@ -140,24 +121,21 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordTypeId)) throw new ArgumentNullException("recordTypeId");
-            //TODO: implement try/catch and throw auth exception if appropriate
             
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/{1}", objectName, recordTypeId));
         }
 
         public Task<T> RecentAsync<T>(int limit = 200)
         {
-            //TODO: implement try/catch and throw auth exception if appropriate
-
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
         }
 
-        public async Task<T> UserInfo<T>(string uri)
+        public async Task<T> UserInfo<T>(string url)
         {
-            if (string.IsNullOrEmpty(uri)) throw new ArgumentNullException("uri");
-            //TODO: implement try/catch and throw auth exception if appropriate
+            if (string.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) throw new FormatException("url");
 
-            var response = await _serviceHttpClient.HttpGetAsync<T>(new Uri(uri));
+            var response = await _serviceHttpClient.HttpGetAsync<T>(new Uri(url));
             return response;
         }
 

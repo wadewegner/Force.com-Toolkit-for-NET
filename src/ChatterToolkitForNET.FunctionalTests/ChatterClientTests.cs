@@ -178,7 +178,6 @@ namespace Salesforce.Chatter.FunctionalTests
             Assert.IsNotNull(groups);
         }
         
-        //TODO: Create a test that creates a chatter group and adds to the feed so that it never fails
         [Test]
         public async void Chatter_Get_Group_News_Feed_IsNotNull()
         {

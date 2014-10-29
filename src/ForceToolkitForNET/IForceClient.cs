@@ -1,6 +1,4 @@
-﻿//TODO: add license header
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Salesforce.Common.Models;
 
 namespace Salesforce.Force

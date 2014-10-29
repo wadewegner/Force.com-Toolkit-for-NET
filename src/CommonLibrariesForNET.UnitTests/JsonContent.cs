@@ -1,5 +1,3 @@
-//TODO: add license header
-
 using System.IO;
 using System.Net;
 using System.Net.Http;

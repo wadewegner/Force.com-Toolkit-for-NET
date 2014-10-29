@@ -1,7 +1,4 @@
-﻿//TODO: add license header
-//TODO: refactor casing?
-
-namespace Salesforce.Common.Models
+﻿namespace Salesforce.Common.Models
 {
     public class AuthToken
     {
