@@ -23,8 +23,16 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\Salesforce.Chatter.dll" target="lib" />
-    <file src="..\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib" />
+    <file src="bin\Debug\Salesforce.Chatter.dll" target="lib" />
+    <file src="bin\Debug\Salesforce.Chatter.pdb" target="lib" />
+    <file src="..\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib" />
+    <file src="..\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib" />
+    <file src="..\ChatterToolkitForNET\*.cs" target="src" />
+    <file src="..\ChatterToolkitForNET\Models\*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\Models\*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\Attributes\*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\Serializer\*.cs" target="src" />
     <file src="tools\Install.ps1" target="tools" />
   </files>
 </package>

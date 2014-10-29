@@ -23,7 +23,15 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\Salesforce.Force.dll" target="lib" />
+    <file src="bin\Debug\Salesforce.Force.dll" target="lib" />
+    <file src="bin\Debug\Salesforce.Force.pdb" target="lib" />
+    <file src="..\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib" />
+    <file src="..\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib" />
+    <file src="*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\Models\*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\Attributes\*.cs" target="src" />
+    <file src="..\CommonLibrariesForNET\Serializer\*.cs" target="src" />
     <file src="tools\Install.ps1" target="tools" />
   </files>
 </package>
