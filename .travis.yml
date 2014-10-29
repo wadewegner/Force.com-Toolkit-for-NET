@@ -1,8 +1,6 @@
 language: objective-c
 
 env:
- global:
-  - EnableNuGetPackageRestore=true 
  matrix:
   - MONO_VERSION="3.4.0"
 
@@ -11,10 +9,10 @@ before_install:
   - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
  
 script:
-  - .ci/packagerestore.sh src/ForceToolkitForNET.sln
+  - scripts/packagerestore.sh src/ForceToolkitForNET.sln
   - xbuild src/ForceToolkitForNET.sln
-  - .ci/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
-  - .ci/nunit.sh src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
-  - .ci/nunit.sh src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
-  - .ci/nunit.sh src/ForceToolkitForNET.UnitTests/bin/Debug/Salesforce.Force.UnitTests.dll
-  - .ci/nunit.sh src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
+  - scripts/nunit.sh src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
+  - scripts/nunit.sh src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
+  - scripts/nunit.sh src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
+  - scripts/nunit.sh src/ForceToolkitForNET.UnitTests/bin/Debug/Salesforce.Force.UnitTests.dll
+  - scripts/nunit.sh src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
