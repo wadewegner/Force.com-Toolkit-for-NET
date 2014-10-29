@@ -31,7 +31,7 @@ namespace Salesforce.Common
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
             _httpClient = httpClient;
-            ApiVersion = "v30.0";
+            ApiVersion = "v32.0";
         }
 
         public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password)
