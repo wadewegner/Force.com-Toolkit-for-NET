@@ -23,8 +23,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\Salesforce.Chatter.dll" target="lib" />
-    <file src="..\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib" />
-    <file src="tools\Install.ps1" target="tools" />
+    <file src="..\..\src\ChatterToolkitForNET\bin\Release\Salesforce.Chatter.dll" target="lib" />
+    <file src="..\..\src\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib" />
+    <file src="..\..\src\ChatterToolkitForNET\tools\Install.ps1" target="tools" />
   </files>
 </package>
