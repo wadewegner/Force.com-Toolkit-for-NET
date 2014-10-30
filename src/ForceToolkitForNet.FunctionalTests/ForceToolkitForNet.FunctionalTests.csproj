@@ -84,6 +84,8 @@
     <Compile Include="ForceClientTests.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\DeletedRecord.cs" />
+    <Compile Include="Models\UpdatedRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

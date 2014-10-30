@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Dynamic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Common;
@@ -332,7 +333,50 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNotNull(accounts);
         }
 
-        //DescribeLayoutAsync
+        [Test]
+        public async void Object_GetDeleted_IsNotNull()
+        {
+            var account = new Account { Name = "New Account to Delete", Description = "New Account Description" };
+            var id = await _client.CreateAsync("Account", account);
+            
+            await _client.DeleteAsync("Account", id);
+            var dateTime = DateTime.Now;
+
+            await Task.Run(() => Thread.Sleep(5000));
+
+            var sdt = dateTime.Subtract(new TimeSpan(0, 0, 2, 0));
+            var edt = dateTime.Add(new TimeSpan(0, 0, 2, 0));
+            var deleted = await _client.GetDeleted<DeletedRecordRootObject>("Account", sdt, edt);
+
+            Assert.IsNotNull(deleted);
+            Assert.IsNotNull(deleted.deletedRecords);
+            Assert.IsTrue(deleted.deletedRecords.Count > 0);
+        }
+
+        [Test]
+        public async void Object_GetUpdated_IsNotNull()
+        {
+            const string originalName = "New Account";
+            const string newName = "New Account 2";
+
+            var account = new Account { Name = originalName, Description = "New Account Description" };
+            var id = await _client.CreateAsync("Account", account);
+
+            account.Name = newName;
+            var dateTime = DateTime.Now;
+
+            await _client.UpdateAsync("Account", id, account);
+
+            await Task.Run(() => Thread.Sleep(5000));
+
+            var sdt = dateTime.Subtract(new TimeSpan(0, 0, 2, 0));
+            var edt = dateTime.Add(new TimeSpan(0, 0, 2, 0));
+            var updated = await _client.GetUpdated<UpdatedRecordRootObject>("Account", sdt, edt);
+
+            Assert.IsNotNull(updated);
+            Assert.IsTrue(updated.ids.Count > 0);
+        }
+
         [Test]
         public async void Object_DescribeLayout_IsNotNull()
         {
