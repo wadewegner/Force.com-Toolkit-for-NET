@@ -41,6 +41,13 @@ namespace Salesforce.Force
             return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(nextRecordsUrl);
         }
 
+        public Task<QueryResult<T>> QueryAllAsync<T>(string query)
+        {
+            if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
+
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", query));
+        }
+
         public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");

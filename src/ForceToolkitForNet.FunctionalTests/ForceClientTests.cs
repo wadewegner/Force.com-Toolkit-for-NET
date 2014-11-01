@@ -125,6 +125,33 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
+        public async void QueryAll_Accounts_IsNotEmpty()
+        {
+            var accounts = await _client.QueryAllAsync<Account>("SELECT id, name, description FROM Account");
+
+            Assert.IsNotNull(accounts);
+        }
+
+        [Test]
+        public async void QueryAll_Accounts_Continuation()
+        {
+            var accounts = await _client.QueryAllAsync<Account>("SELECT count() FROM Account");
+
+            if (accounts.totalSize < 1000)
+            {
+                await CreateLotsOfAccounts(_client);
+            }
+
+            var contacts = await _client.QueryAllAsync<dynamic>("SELECT Id, Name, Description FROM Account");
+
+            var nextRecordsUrl = contacts.nextRecordsUrl;
+            var nextContacts = await _client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
+
+            Assert.IsNotNull(nextContacts);
+            Assert.AreNotEqual(contacts, nextContacts);
+        }
+
+        [Test]
         public async void Create_Contact_Typed_Annotations()
         {
             var contact = new Contact { Id = "Id", IsDeleted = false, AccountId = "AccountId", Name = "Name", FirstName = "FirstName", LastName = "LastName", Description = "Description" };
