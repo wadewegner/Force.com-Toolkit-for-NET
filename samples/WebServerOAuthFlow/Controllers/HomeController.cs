@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
+﻿using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
 using Salesforce.Common;
@@ -11,9 +8,9 @@ namespace WebServerOAuthFlow.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly string _authorizationEndpointUrl = ConfigurationSettings.AppSettings["AuthorizationEndpointUrl"];
-        private readonly string _consumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
-        private readonly string _callbackUrl = ConfigurationSettings.AppSettings["CallbackUrl"];
+        private readonly string _authorizationEndpointUrl = ConfigurationManager.AppSettings["AuthorizationEndpointUrl"];
+        private readonly string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private readonly string _callbackUrl = ConfigurationManager.AppSettings["CallbackUrl"];
 
         public HomeController()
         {
@@ -49,6 +46,5 @@ namespace WebServerOAuthFlow.Controllers
 
             return Redirect(url);
         }
-
     }
 }

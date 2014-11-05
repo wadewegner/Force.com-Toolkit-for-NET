@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{A3EE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleConsole", "..\samples\SimpleConsole\SimpleConsole.csproj", "{C2DDCCC0-F1A5-42ED-8C19-F1B2C5653E58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServerOAuthFlow", "..\samples\WebServerOAuthFlow\WebServerOAuthFlow.csproj", "{EEBB0482-7F04-4366-8AD6-BC017E1EDA1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{C2DDCCC0-F1A5-42ED-8C19-F1B2C5653E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2DDCCC0-F1A5-42ED-8C19-F1B2C5653E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2DDCCC0-F1A5-42ED-8C19-F1B2C5653E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEBB0482-7F04-4366-8AD6-BC017E1EDA1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEBB0482-7F04-4366-8AD6-BC017E1EDA1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEBB0482-7F04-4366-8AD6-BC017E1EDA1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEBB0482-7F04-4366-8AD6-BC017E1EDA1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +84,6 @@ Global
 		{A47AE957-E0FB-4407-B54E-44594594F616} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
 		{451DB133-5C2D-4401-954A-726DDBD46993} = {94DC7ACA-033E-47CC-955D-8D88B685CAE4}
 		{C2DDCCC0-F1A5-42ED-8C19-F1B2C5653E58} = {A3EEC97B-D690-4618-B6F8-574FF92E3030}
+		{EEBB0482-7F04-4366-8AD6-BC017E1EDA1D} = {A3EEC97B-D690-4618-B6F8-574FF92E3030}
 	EndGlobalSection
 EndGlobal

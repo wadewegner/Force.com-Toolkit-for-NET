@@ -11,21 +11,6 @@
                     <li><b>API Version:</b> @ViewBag.ApiVersion</li>
                     <li><b>Instance Url:</b> @ViewBag.InstanceUrl</li>
                 </ul>
-
-                <a href="#" id="accounts">Get Accounts</a>
-
-                <div id="accountHeader" class="row" style="display: none;">
-                    <div class="col-xs-4"><strong>Name</strong></div>
-                    <div class="col-xs-4"><strong>Description</strong></div>
-                </div>
-                <div data-bind="template: { name: 'accountTemplate', foreach: accounts}"></div>
-
-                <script id="accountTemplate" type="text/html">
-                    <div class="row">
-                        <div class="col-xs-4" data-bind="text:Name"></div>
-                        <div class="col-xs-4" data-bind="text:Description"></div>
-                    </div>
-                </script>
             }
             else
             {
@@ -34,28 +19,3 @@
         </div>
     </div>
 </div>
-
-@section scripts
-{
-    <script>
-        $(document).ready(function () {
-            $("#accountHeader").hide();
-            $("#accounts").click(function () {
-
-                var instanceUrl = encodeURIComponent('@ViewBag.InstanceUrl');
-                var query = encodeURIComponent("SELECT id, name, description FROM Account LIMIT 10");
-                var url = '/api/force?instanceUrl=' + instanceUrl + '&accessToken=@ViewBag.Token&apiVersion=@ViewBag.ApiVersion&query=' + query;
-
-                $.getJSON(url, function (data) {
-
-                    var viewModel = {
-                        accounts: ko.observableArray(JSON.parse(data).records)
-                    };
-
-                    ko.applyBindings(viewModel);
-                    $("#accountHeader").show();
-                });
-            });
-        });
-    </script>
-}
