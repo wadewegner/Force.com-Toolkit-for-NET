@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WindowsPhoneOAuth.Resources
+namespace WindowsPhoneOAuth8._0.Resources
 {
     using System;
 
@@ -45,7 +45,7 @@ namespace WindowsPhoneOAuth.Resources
             {
                 if (object.ReferenceEquals(resourceMan, null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WindowsPhoneOAuth.Resources.AppResources", typeof(AppResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WindowsPhoneOAuth8._0.Resources.AppResources", typeof(AppResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

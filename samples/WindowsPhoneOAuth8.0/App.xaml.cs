@@ -6,9 +6,9 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using WindowsPhoneOAuth.Resources;
+using WindowsPhoneOAuth8._0.Resources;
 
-namespace WindowsPhoneOAuth
+namespace WindowsPhoneOAuth8._0
 {
     public partial class App : Application
     {
@@ -117,6 +117,9 @@ namespace WindowsPhoneOAuth
             RootFrame = new PhoneApplicationFrame();
             RootFrame.Navigated += CompleteInitializePhoneApplication;
 
+            // Create our UriMapper association for "sfdc://success"
+            RootFrame.UriMapper = new AssociationUriMapper();
+
             // Handle navigation failures
             RootFrame.NavigationFailed += RootFrame_NavigationFailed;
 
@@ -126,8 +129,7 @@ namespace WindowsPhoneOAuth
             // Ensure we don't initialize again
             phoneApplicationInitialized = true;
 
-            // Create our UriMapper association for "sfdc://success"
-            RootFrame.UriMapper = new AssociationUriMapper();
+         
         }
 
         // Do not add any additional code to this method

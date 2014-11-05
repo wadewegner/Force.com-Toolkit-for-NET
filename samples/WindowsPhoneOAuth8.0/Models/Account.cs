@@ -1,4 +1,4 @@
-﻿namespace WindowsPhoneOAuth.Models
+﻿namespace WindowsPhoneOAuth8._0.Models
 {
     public class Account
     {

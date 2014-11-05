@@ -6,11 +6,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WindowsPhoneOAuth")]
+[assembly: AssemblyTitle("WindowsPhoneOAuth8._0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WindowsPhoneOAuth")]
+[assembly: AssemblyProduct("WindowsPhoneOAuth8._0")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6e04b1f2-64e8-42e8-a0b0-ae63bb200e92")]
+[assembly: Guid("f2c7c113-a1ea-46c4-a849-62ad99c0959a")]
 
 // Version information for an assembly consists of the following four values:
 //

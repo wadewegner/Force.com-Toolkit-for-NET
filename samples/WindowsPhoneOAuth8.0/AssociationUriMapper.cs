@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Navigation;
 
-namespace WindowsPhoneOAuth
+namespace WindowsPhoneOAuth8._0
 {
     class AssociationUriMapper : UriMapperBase
     {
