@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Salesforce.Common;
-using Salesforce.Common.Models;
 using Salesforce.Force;
 using System.Threading.Tasks;
 using System.Dynamic;
@@ -12,14 +11,12 @@ namespace SimpleConsole
 {
     class Program
     {
-#pragma warning disable 618
-        private static readonly string SecurityToken = ConfigurationSettings.AppSettings["SecurityToken"];
-        private static readonly string ConsumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
-        private static readonly string ConsumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
-        private static readonly string Username = ConfigurationSettings.AppSettings["Username"];
-        private static readonly string Password = ConfigurationSettings.AppSettings["Password"] + SecurityToken;
-        private static readonly string IsSandboxUser = ConfigurationSettings.AppSettings["IsSandboxUser"];
-#pragma warning restore 618
+        private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
+        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private static readonly string Username = ConfigurationManager.AppSettings["Username"];
+        private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
+        private static readonly string IsSandboxUser = ConfigurationManager.AppSettings["IsSandboxUser"];
 
         static void Main()
         {
@@ -54,19 +51,19 @@ namespace SimpleConsole
                 ? "https://test.salesforce.com/services/oauth2/token"
                 : "https://login.salesforce.com/services/oauth2/token";
 
-            await auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, ".net-api-client", url);
+            await auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, url);
             Console.WriteLine("Connected to Salesforce");
 
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             // retrieve all accounts
             Console.WriteLine("Get Accounts");
-            var qry = "SELECT ID, Name FROM Account";
+
+            const string qry = "SELECT ID, Name FROM Account";
             var accts = new List<Account>();
-            var totalSize = 0;
-            
-            QueryResult<Account> results = await client.QueryAsync<Account>(qry);
-            totalSize = results.totalSize;
+            var results = await client.QueryAsync<Account>(qry);
+            var totalSize = results.totalSize;
+
             Console.WriteLine("Queried " + totalSize + " records.");
 
             accts.AddRange(results.records);
@@ -78,7 +75,7 @@ namespace SimpleConsole
 
                 while (true)
                 {
-                    QueryResult<Account> continuationResults = await client.QueryContinuationAsync<Account>(nextRecordsUrl);
+                    var continuationResults = await client.QueryContinuationAsync<Account>(nextRecordsUrl);
                     totalSize = continuationResults.totalSize;
                     Console.WriteLine("Queried an additional " + totalSize + " records.");
 
@@ -107,7 +104,7 @@ namespace SimpleConsole
             // Shows that annonymous types can be used as well
             Console.WriteLine("Updating test record.");
             var success = await client.UpdateAsync(Account.SObjectTypeName, account.Id, new { Name = "Test Update" });
-            if (!success)
+            if (!string.IsNullOrEmpty(success.errors.ToString()))
             {
                 Console.WriteLine("Failed to update test record!");
                 return;
@@ -141,8 +138,8 @@ namespace SimpleConsole
 
             // Delete account
             Console.WriteLine("Deleting the record by ID.");
-            success = await client.DeleteAsync(Account.SObjectTypeName, account.Id);
-            if (!success)
+            var deleted = await client.DeleteAsync(Account.SObjectTypeName, account.Id);
+            if (!deleted)
             {
                 Console.WriteLine("Failed to delete the record by ID!");
                 return;
@@ -180,13 +177,12 @@ namespace SimpleConsole
                 return;
             }
 
-            Console.WriteLine("Press Enter to delete parent and child and continue");
-            Console.Read();
+            Console.WriteLine("Deleting parent and child");
 
             // Delete account (also deletes contact)
             Console.WriteLine("Deleting the Account by Id.");
-            success = await client.DeleteAsync(Account.SObjectTypeName, a.Id);
-            if (!success)
+            deleted = await client.DeleteAsync(Account.SObjectTypeName, a.Id);
+            if (!deleted)
             {
                 Console.WriteLine("Failed to delete the record by ID!");
                 return;
