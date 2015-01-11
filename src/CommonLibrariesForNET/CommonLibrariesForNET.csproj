@@ -38,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Attributes\SubEntityAttribute.cs" />
     <Compile Include="AuthenticationClient.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
