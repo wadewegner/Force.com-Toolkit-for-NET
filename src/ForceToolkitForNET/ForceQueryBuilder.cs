@@ -9,6 +9,9 @@ namespace Salesforce.Force
     {
         public static string DeriveQuery<T>(string objectName, string recordId)
         {
+            if (objectName == null) throw new ArgumentNullException("objectName");
+            if (recordId == null) throw new ArgumentNullException("recordId");
+
             var fieldNames = DeriveFieldsFromObject<T>();
             var fields = string.Join(", ", fieldNames);
 
@@ -17,25 +20,25 @@ namespace Salesforce.Force
 
         private static IEnumerable<string> DeriveFieldsFromObject<T>()
         {
-            return DeriveFieldsFromObject(typeof(T));
+            return DeriveFieldsFromObject(typeof(T), "");
         }
 
-        private static IEnumerable<string> DeriveFieldsFromObject(Type propertyType, string prefix = "")
+        private static IEnumerable<string> DeriveFieldsFromObject(Type objectType, string prefix)
         {
-            var allProperties = propertyType.GetRuntimeProperties();
-
-            var fieldNames = new List<string>();
-            foreach (var propertyInfo in allProperties)
+            foreach (var p in objectType.GetRuntimeProperties())
             {
-                if (propertyInfo.GetCustomAttribute<SubEntityAttribute>() != null)
+                if (p.GetCustomAttribute<SubEntityAttribute>() == null)
                 {
-                    fieldNames.AddRange(DeriveFieldsFromObject(propertyInfo.PropertyType, propertyInfo.PropertyType.Name + "."));
-                    continue;
+                    yield return prefix + p.Name;
                 }
-                fieldNames.Add(string.Format("{0}{1}", prefix, propertyInfo.Name));
+                else
+                {
+                    foreach (var s in DeriveFieldsFromObject(p.PropertyType, p.Name + "."))
+                    {
+                        yield return s;
+                    }
+                }
             }
-
-            return fieldNames;
         }
     }
 }
