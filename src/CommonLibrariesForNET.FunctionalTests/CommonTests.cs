@@ -126,5 +126,29 @@ namespace Salesforce.Common.FunctionalTests
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.id);
         }
+
+	    [Test]
+	    public async void BadTokenHandling()
+	    {
+            _auth = new AuthenticationClient();
+            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
+
+	        var badToken = "badtoken";
+            _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
+
+            const string query = "SELECT count() FROM Account";
+
+	        try
+	        {
+                await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+	        }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.That(ex.Message, Is.EqualTo("Session expired or invalid"));
+                Assert.IsNotNull(ex.Error);
+            }
+	    }
     }
 }
