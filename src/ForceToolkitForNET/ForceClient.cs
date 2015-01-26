@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Reflection;
 using Salesforce.Common;
 using Salesforce.Common.Models;
 
@@ -53,10 +52,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-            var fields = "";
-            fields = string.Join(", ", typeof(T).GetRuntimeProperties().Select(p => p.Name));
-
-            var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
+            var query = ForceQueryBuilder.DeriveQuery<T>(objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
 
             return results.records.FirstOrDefault();

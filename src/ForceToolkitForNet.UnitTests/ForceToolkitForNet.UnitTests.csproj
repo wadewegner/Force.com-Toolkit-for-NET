@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ForceQueryBuilderTests.cs" />
     <Compile Include="Models\ObjectDescribeMetadata.cs" />
     <Compile Include="Models\ObjectFieldMetadata.cs" />
     <Compile Include="ForceClientTests.cs" />
