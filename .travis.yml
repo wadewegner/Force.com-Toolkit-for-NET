@@ -3,14 +3,11 @@ language: csharp
 solution: src/ForceToolkitForNET.sln
 
 install:
-
   - nuget restore src/ForceToolkitForNET.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 
 script:
-
   - xbuild /p:Configuration=Debug src/ForceToolkitForNET.sln
-
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
