@@ -5,9 +5,9 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET", "ForceToolkitForNET\ForceToolkitForNET.csproj", "{1CC985BC-27F3-4F1D-8946-F4DDB084B58F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNet.UnitTests", "ForceToolkitForNet.UnitTests\ForceToolkitForNet.UnitTests.csproj", "{F71C23A5-9BC3-44AE-AE14-1A9F2F068645}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET.UnitTests", "ForceToolkitForNet.UnitTests\ForceToolkitForNET.UnitTests.csproj", "{F71C23A5-9BC3-44AE-AE14-1A9F2F068645}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNet.FunctionalTests", "ForceToolkitForNet.FunctionalTests\ForceToolkitForNet.FunctionalTests.csproj", "{44EBF85A-05FE-4C7D-945F-06553AD25586}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET.FunctionalTests", "ForceToolkitForNet.FunctionalTests\ForceToolkitForNET.FunctionalTests.csproj", "{44EBF85A-05FE-4C7D-945F-06553AD25586}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{94DC7ACA-033E-47CC-955D-8D88B685CAE4}"
 EndProject
