@@ -30,18 +30,18 @@ namespace Salesforce.Common.FunctionalTests
             _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
 
-        [Test]
-        public async void Get_UserInfo()
-        {
-            var objectName = new FormUrlEncodedContent(new[]
-                {
-                    new KeyValuePair<string, string>("access_token", _auth.AccessToken)
-                });
+        //[Test]
+        //public async void Get_UserInfo()
+        //{
+        //    var objectName = new FormUrlEncodedContent(new[]
+        //        {
+        //            new KeyValuePair<string, string>("access_token", _auth.AccessToken)
+        //        });
 
-            var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
+        //    var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
 
-            Assert.IsNotNull(response);
-        }
+        //    Assert.IsNotNull(response);
+        //}
 
         [Test]
         public async void Query_Describe()
@@ -134,13 +134,13 @@ namespace Salesforce.Common.FunctionalTests
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
 
 	        var badToken = "badtoken";
-            _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
+            var serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
 
             const string query = "SELECT count() FROM Account";
 
 	        try
 	        {
-                await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+                await serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 	        }
             catch (ForceException ex)
             {
