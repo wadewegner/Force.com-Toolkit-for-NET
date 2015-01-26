@@ -365,7 +365,7 @@ namespace Salesforce.Force.FunctionalTests
         {
             var account = new Account { Name = "New Account to Delete", Description = "New Account Description" };
             var id = await _client.CreateAsync("Account", account);
-            
+
             await _client.DeleteAsync("Account", id);
             var dateTime = DateTime.Now;
 
@@ -510,6 +510,29 @@ namespace Salesforce.Force.FunctionalTests
             var firstOrDefault = accountResult.records.FirstOrDefault();
 
             Assert.True(firstOrDefault != null && firstOrDefault.Name == newName);
+        }
+
+        [Test]
+        public async void UpdateExternalAsync_AccountSource()
+        {
+            dynamic a = new ExpandoObject();
+            a.AccountSource = "TestAccountSource";
+            a.Name = "TestAccountName";
+
+            const string objectName = "Account";
+            const string fieldName = "External_Id__c";
+
+            await CreateExternalIdField(objectName, fieldName);
+
+            var externalId = Convert.ToString(DateTime.Now.Ticks);
+
+            var success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
+            Assert.IsNotNull(success);
+
+            a.AccountSource = "TestAccountSource2";
+
+            success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
+            Assert.IsNotNull(success);
         }
 
         private static async Task CreateExternalIdField(string objectName, string fieldName)
