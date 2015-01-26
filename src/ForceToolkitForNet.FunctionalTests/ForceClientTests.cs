@@ -538,7 +538,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void QueryLeadWithEmail()
+        public async void QueryLeadWithUnescapedCharactersInEmail()
         {
             const string query = "SELECT id FROM Lead WHERE email = 'forcetoolkit+issue@gmail.com'";
             var result = await _client.QueryAsync<dynamic>(query);
