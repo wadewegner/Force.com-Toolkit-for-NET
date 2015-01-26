@@ -31,7 +31,7 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", query));
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", Uri.EscapeDataString(query)));
         }
 
         public Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl)
@@ -45,7 +45,7 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", query));
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
         }
 
         public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)

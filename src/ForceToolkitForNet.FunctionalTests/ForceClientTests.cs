@@ -537,6 +537,17 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsEmpty(success.id);
         }
 
+        [Test]
+        public async void QueryLeadWithEmail()
+        {
+            const string query = "SELECT id FROM Lead WHERE email = 'forcetoolkit+issue@gmail.com'";
+            var result = await _client.QueryAsync<dynamic>(query);
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.records);
+            Assert.That(result.totalSize, Is.Not.EqualTo(0));
+        }
+
         private static async Task CreateExternalIdField(string objectName, string fieldName)
         {
             var salesforceClient = new SalesforceClient();
