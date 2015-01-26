@@ -527,12 +527,14 @@ namespace Salesforce.Force.FunctionalTests
             var externalId = Convert.ToString(DateTime.Now.Ticks);
 
             var success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
+            Assert.IsNotNull(success.id);
             Assert.IsNotNull(success);
 
             a.AccountSource = "TestAccountSource2";
 
             success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
             Assert.IsNotNull(success);
+            Assert.IsEmpty(success.id);
         }
 
         private static async Task CreateExternalIdField(string objectName, string fieldName)
