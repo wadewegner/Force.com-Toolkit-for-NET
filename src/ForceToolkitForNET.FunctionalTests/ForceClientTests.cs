@@ -101,6 +101,17 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
+        public async void Query_ContactsWithAccountName_IsNotEmpty()
+        {
+            var queryResult = await _client.QueryAsync<Models.QueryTest.Contact>("SELECT AccountId, Account.Name, Email, Phone, Name, Title, MobilePhone FROM Contact");
+
+            Assert.IsNotNull(queryResult);
+            Assert.IsNotNull(queryResult.records);
+            Assert.IsNotNull(queryResult.records[0].Name);
+            Assert.IsNotNull(queryResult.records[0].Account.Name);
+        }
+
+        [Test]
         public async void Query_Accounts_BadObject()
         {
             try
