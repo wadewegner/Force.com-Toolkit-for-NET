@@ -1,4 +1,4 @@
-# Force.com Toolkits for .NET [![Build Status](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET.svg?branch=master)](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET) [![Build status](https://ci.appveyor.com/api/projects/status/43y1npcb2q0u7aca)](https://ci.appveyor.com/project/WadeWegner/force-com-toolkit-for-net)
+# Force.com Toolkit for .NET [![Build Status](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET.svg?branch=master)](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET) [![Build status](https://ci.appveyor.com/api/projects/status/43y1npcb2q0u7aca)](https://ci.appveyor.com/project/WadeWegner/force-com-toolkit-for-net)
 
 The Force.com Toolkits for .NET provide an easy way for .NET developers to interact with the Force.com & Chatter REST APIs using native libraries.
 
