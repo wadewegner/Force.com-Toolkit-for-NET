@@ -206,12 +206,14 @@ namespace Salesforce.Common
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+
 
             if (responseMessage.IsSuccessStatusCode)
             {
-                if (!string.IsNullOrEmpty(response))
-                {
+                if (responseMessage.StatusCode != System.Net.HttpStatusCode.NoContent) {
+                    var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
                     var r = JsonConvert.DeserializeObject<SuccessResponse>(response);
                     return r;
                 }
@@ -220,7 +222,9 @@ namespace Salesforce.Common
                 return success;
             }
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+            var error = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(error);
             throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
         }
 
