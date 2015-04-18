@@ -47,8 +47,17 @@ namespace Salesforce.Force
 
             return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
         }
+        
+        public async Task<T> ExecuteRestApi<T>(string apiName, string parameters)
+        {
+            if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
+            if (string.IsNullOrEmpty(parameters)) throw new ArgumentNullException("parameters");
 
-        public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
+            var response = await _serviceHttpClient.HttpGetRestApiAsync<T>(apiName, parameters);
+            return response;
+        }
+        
+		public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
