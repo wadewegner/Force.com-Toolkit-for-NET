@@ -19,7 +19,8 @@
         StringTooLong,
         EntityIsDeleted,
         MalFormedId,
-        InvalidQueryFilterOperator
+        InvalidQueryFilterOperator,
+        InvalidSessionId
     }
     
 }
