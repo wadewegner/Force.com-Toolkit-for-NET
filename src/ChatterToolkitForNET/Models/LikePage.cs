@@ -1,14 +1,23 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class LikePage
     {
-        public string currentPageUrl { get; set; }
-        public List<Like> likes { get; set; }
-        
-        public string nextPageUrl { get; set; }
-        public string previousPageUrl { get; set; }
-        public int total { get; set; }
+        [JsonProperty(PropertyName = "currentPageUrl")]
+        public string CurrentPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "likes")]
+        public List<Like> Likes { get; set; }
+
+        [JsonProperty(PropertyName = "nextPageUrl")]
+        public string NextPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "previousPageUrl")]
+        public string PreviousPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "total")]
+        public int Total { get; set; }
     }
 }

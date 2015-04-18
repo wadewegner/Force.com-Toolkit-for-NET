@@ -1,8 +1,13 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class ChatterInfluence
     {
-        public string percentile { get; set; }
-        public int rank { get; set; }
+        [JsonProperty(PropertyName = "percentile")]
+        public string Percentile { get; set; }
+
+        [JsonProperty(PropertyName = "rank")]
+        public int Rank { get; set; }
     }
 }

@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class FeedItemPreambleMessageBody
     {
-        public List<MessageSegment> messageSegments { get; set; }
-        public string text { get; set; }
+        [JsonProperty(PropertyName = "messageSegments")]
+        public List<MessageSegment> MessageSegments { get; set; }
+
+        [JsonProperty(PropertyName = "text")]
+        public string Text { get; set; }
     }
 }

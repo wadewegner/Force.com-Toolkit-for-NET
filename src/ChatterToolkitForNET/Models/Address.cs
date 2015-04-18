@@ -1,12 +1,25 @@
-﻿namespace Salesforce.Chatter.Models
+﻿using Newtonsoft.Json;
+
+namespace Salesforce.Chatter.Models
 {
     public class Address
     {
-        public string city { get; set; }
-        public string country { get; set; }
-        public string formattedAddress { get; set; }
-        public string state { get; set; }
-        public string street { get; set; }
-        public string zip { get; set; }
+        [JsonProperty(PropertyName = "city")]
+        public string City { get; set; }
+
+        [JsonProperty(PropertyName = "country")]
+        public string Country { get; set; }
+
+        [JsonProperty(PropertyName = "formattedAddress")]
+        public string FormattedAddress { get; set; }
+
+        [JsonProperty(PropertyName = "state")]
+        public string State { get; set; }
+
+        [JsonProperty(PropertyName = "street")]
+        public string Street { get; set; }
+
+        [JsonProperty(PropertyName = "zip")]
+        public string Zip { get; set; }
     }
 }

@@ -68,7 +68,7 @@ namespace Salesforce.Force
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
 
-            return results.records.FirstOrDefault();
+            return results.Records.FirstOrDefault();
         }
 
         public async Task<string> CreateAsync(string objectName, object record)
@@ -77,7 +77,7 @@ namespace Salesforce.Force
             if (record == null) throw new ArgumentNullException("record");
 
             var response = await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
-            return response.id;
+            return response.Id;
         }
 
         public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)

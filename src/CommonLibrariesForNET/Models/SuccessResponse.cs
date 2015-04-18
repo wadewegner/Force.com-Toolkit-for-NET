@@ -1,10 +1,17 @@
-﻿namespace Salesforce.Common.Models
+﻿using Newtonsoft.Json;
+
+namespace Salesforce.Common.Models
 {
     public class SuccessResponse
     {
-        public string id;
-        public string success;
-        public object errors;
+        [JsonProperty(PropertyName = "id")]
+        public string Id;
+
+        [JsonProperty(PropertyName = "success")]
+        public string Success;
+
+        [JsonProperty(PropertyName = "errors")]
+        public object Errors;
     }
 }
 

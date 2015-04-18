@@ -1,9 +1,16 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class FollowingCounts
     {
-        public int people { get; set; }
-        public int records { get; set; }
-        public int total { get; set; }
+        [JsonProperty(PropertyName = "people")]
+        public int People { get; set; }
+
+        [JsonProperty(PropertyName = "records")]
+        public int Records { get; set; }
+
+        [JsonProperty(PropertyName = "total")]
+        public int Total { get; set; }
     }
 }

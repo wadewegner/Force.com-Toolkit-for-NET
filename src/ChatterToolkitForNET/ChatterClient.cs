@@ -47,7 +47,7 @@ namespace Salesforce.Chatter
 
         public Task<T> ShareFeedItemAsync<T>(string feedId, string userId)
         {
-            var sharedFeedItem = new SharedFeedItemInput {originalFeedItemId = feedId};
+            var sharedFeedItem = new SharedFeedItemInput {OriginalFeedItemId = feedId};
 
             return _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/feed-items", userId));
         }

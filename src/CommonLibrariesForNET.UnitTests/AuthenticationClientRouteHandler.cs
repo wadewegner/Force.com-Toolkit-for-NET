@@ -24,11 +24,11 @@ namespace Salesforce.Common.UnitTests
             {
                 Content = new JsonContent(new AuthToken
                 {
-                    access_token = "access_token",
-                    id = "id",
-                    instance_url = "instance_url",
-                    issued_at = "issued_at",
-                    signature = "signature"
+                    AccessToken = "AccessToken",
+                    Id = "Id",
+                    InstanceUrl = "InstanceUrl",
+                    IssuedAt = "IssuedAt",
+                    Signature = "Signature"
                 })
             };
 

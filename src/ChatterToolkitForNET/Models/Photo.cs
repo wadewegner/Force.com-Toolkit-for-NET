@@ -1,12 +1,25 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class Photo
     {
-        public string fullEmailPhotoUrl { get; set; }
-        public string largePhotoUrl { get; set; }
-        public string photoVersionId { get; set; }
-        public string smallPhotoUrl { get; set; }
-        public string standardEmailPhotoUrl { get; set; }
-        public string url { get; set; }
+        [JsonProperty(PropertyName = "fullEmailPhotoUrl")]
+        public string FullEmailPhotoUrl { get; set; }
+
+        [JsonProperty(PropertyName = "largePhotoUrl")]
+        public string LargePhotoUrl { get; set; }
+
+        [JsonProperty(PropertyName = "photoVersionId")]
+        public string PhotoVersionId { get; set; }
+
+        [JsonProperty(PropertyName = "smallPhotoUrl")]
+        public string SmallPhotoUrl { get; set; }
+
+        [JsonProperty(PropertyName = "standardEmailPhotoUrl")]
+        public string StandardEmailPhotoUrl { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
     }
 }

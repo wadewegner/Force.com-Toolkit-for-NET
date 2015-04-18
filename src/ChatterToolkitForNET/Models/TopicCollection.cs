@@ -1,11 +1,17 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class TopicCollection
     {
-        public string currentPageUrl { get; set; }
-        public string nextPageUrl { get; set; }
-        public List<Topic> topics { get; set; }
+        [JsonProperty(PropertyName = "currentPageUrl")]
+        public string CurrentPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "nextPageUrl")]
+        public string NextPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "topics")]
+        public List<Topic> Topics { get; set; }
     }
 }

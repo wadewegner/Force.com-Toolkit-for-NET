@@ -1,12 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class GroupInformation
     {
-        public string text { get; set; }
-        public string title { get; set; }
+        [JsonProperty(PropertyName = "text")]
+        public string Text { get; set; }
+
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
     }
 }

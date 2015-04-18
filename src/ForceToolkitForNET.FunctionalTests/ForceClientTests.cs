@@ -59,14 +59,14 @@ namespace Salesforce.Force.FunctionalTests
         {
             var accounts = await _client.QueryAsync<Account>("SELECT count() FROM Account");
 
-            if (accounts.totalSize < 1000)
+            if (accounts.TotalSize < 1000)
             {
                 await CreateLotsOfAccounts(_client);
             }
 
             var contacts = await _client.QueryAsync<dynamic>("SELECT Id, Name, Description FROM Account");
 
-            var nextRecordsUrl = contacts.nextRecordsUrl;
+            var nextRecordsUrl = contacts.NextRecordsUrl;
             var nextContacts = await _client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
 
             Assert.IsNotNull(nextContacts);
@@ -95,7 +95,7 @@ namespace Salesforce.Force.FunctionalTests
         [Test]
         public async void Query_Accounts_IsNotEmpty()
         {
-            var accounts = await _client.QueryAsync<Account>("SELECT id, name, description FROM Account");
+            var accounts = await _client.QueryAsync<Account>("SELECT Id, name, description FROM Account");
 
             Assert.IsNotNull(accounts);
         }
@@ -106,9 +106,9 @@ namespace Salesforce.Force.FunctionalTests
             var queryResult = await _client.QueryAsync<Models.QueryTest.Contact>("SELECT AccountId, Account.Name, Email, Phone, Name, Title, MobilePhone FROM Contact");
 
             Assert.IsNotNull(queryResult);
-            Assert.IsNotNull(queryResult.records);
-            Assert.IsNotNull(queryResult.records[0].Name);
-            Assert.IsNotNull(queryResult.records[0].Account.Name);
+            Assert.IsNotNull(queryResult.Records);
+            Assert.IsNotNull(queryResult.Records[0].Name);
+            Assert.IsNotNull(queryResult.Records[0].Account.Name);
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace Salesforce.Force.FunctionalTests
         {
             try
             {
-                await _client.QueryAsync<Account>("SELECT id, name, description FROM BadObject");
+                await _client.QueryAsync<Account>("SELECT Id, name, description FROM BadObject");
             }
             catch (ForceException ex)
             {
@@ -138,7 +138,7 @@ namespace Salesforce.Force.FunctionalTests
         [Test]
         public async void QueryAll_Accounts_IsNotEmpty()
         {
-            var accounts = await _client.QueryAllAsync<Account>("SELECT id, name, description FROM Account");
+            var accounts = await _client.QueryAllAsync<Account>("SELECT Id, name, description FROM Account");
 
             Assert.IsNotNull(accounts);
         }
@@ -148,14 +148,14 @@ namespace Salesforce.Force.FunctionalTests
         {
             var accounts = await _client.QueryAllAsync<Account>("SELECT count() FROM Account");
 
-            if (accounts.totalSize < 1000)
+            if (accounts.TotalSize < 1000)
             {
                 await CreateLotsOfAccounts(_client);
             }
 
             var contacts = await _client.QueryAllAsync<dynamic>("SELECT Id, Name, Description FROM Account");
 
-            var nextRecordsUrl = contacts.nextRecordsUrl;
+            var nextRecordsUrl = contacts.NextRecordsUrl;
             var nextContacts = await _client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
 
             Assert.IsNotNull(nextContacts);
@@ -387,8 +387,8 @@ namespace Salesforce.Force.FunctionalTests
             var deleted = await _client.GetDeleted<DeletedRecordRootObject>("Account", sdt, edt);
 
             Assert.IsNotNull(deleted);
-            Assert.IsNotNull(deleted.deletedRecords);
-            Assert.IsTrue(deleted.deletedRecords.Count > 0);
+            Assert.IsNotNull(deleted.DeletedRecords);
+            Assert.IsTrue(deleted.DeletedRecords.Count > 0);
         }
 
         [Test]
@@ -412,7 +412,7 @@ namespace Salesforce.Force.FunctionalTests
             var updated = await _client.GetUpdated<UpdatedRecordRootObject>("Account", sdt, edt);
 
             Assert.IsNotNull(updated);
-            Assert.IsTrue(updated.ids.Count > 0);
+            Assert.IsTrue(updated.Ids.Count > 0);
         }
 
         [Test]
@@ -451,7 +451,7 @@ namespace Salesforce.Force.FunctionalTests
             var success = await _client.UpsertExternalAsync(objectName, fieldName, "123", account);
 
             Assert.IsNotNull(success);
-            Assert.IsEmpty(success.id);
+            Assert.IsEmpty(success.Id);
         }
 
         [Test]
@@ -466,8 +466,8 @@ namespace Salesforce.Force.FunctionalTests
             var success = await _client.UpsertExternalAsync(objectName, fieldName, "123" + DateTime.Now.Ticks, account);
 
             Assert.IsNotNull(success);
-            Assert.IsNotNull(success.id);
-            Assert.IsNotNullOrEmpty(success.id);
+            Assert.IsNotNull(success.Id);
+            Assert.IsNotNullOrEmpty(success.Id);
         }
 
         [Test]
@@ -518,7 +518,7 @@ namespace Salesforce.Force.FunctionalTests
             await _client.UpsertExternalAsync("Account", fieldName, "4", account);
 
             var accountResult = await _client.QueryAsync<Account>(string.Format("SELECT Name FROM Account WHERE {0} = '4'", fieldName));
-            var firstOrDefault = accountResult.records.FirstOrDefault();
+            var firstOrDefault = accountResult.Records.FirstOrDefault();
 
             Assert.True(firstOrDefault != null && firstOrDefault.Name == newName);
         }
@@ -538,25 +538,25 @@ namespace Salesforce.Force.FunctionalTests
             var externalId = Convert.ToString(DateTime.Now.Ticks);
 
             var success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
-            Assert.IsNotNull(success.id);
+            Assert.IsNotNull(success.Id);
             Assert.IsNotNull(success);
 
             a.AccountSource = "TestAccountSource2";
 
             success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
             Assert.IsNotNull(success);
-            Assert.IsEmpty(success.id);
+            Assert.IsEmpty(success.Id);
         }
 
         [Test]
         public async void QueryLeadWithUnescapedCharactersInEmail()
         {
-            const string query = "SELECT id FROM Lead WHERE email = 'forcetoolkit+issue@gmail.com'";
+            const string query = "SELECT Id FROM Lead WHERE email = 'forcetoolkit+issue@gmail.com'";
             var result = await _client.QueryAsync<dynamic>(query);
 
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.records);
-            Assert.That(result.totalSize, Is.Not.EqualTo(0));
+            Assert.IsNotNull(result.Records);
+            Assert.That(result.TotalSize, Is.Not.EqualTo(0));
         }
 
         private static async Task CreateExternalIdField(string objectName, string fieldName)

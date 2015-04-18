@@ -1,11 +1,20 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class Like
     {
-        public string id { get; set; }
-        public Reference likedItem { get; set; }
-        public string url { get; set; }
-        public UserSummary user { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "likedItem")]
+        public Reference LikedItem { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
+
+        [JsonProperty(PropertyName = "user")]
+        public UserSummary User { get; set; }
 
     }
 }

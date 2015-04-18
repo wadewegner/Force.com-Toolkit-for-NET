@@ -1,12 +1,20 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class CommentPage
     {
-        public List<Comment> comments { get; set; }
-        public string currentPageUrl { get; set; }
-        public string nextPageUrl { get; set; }
-        public int total { get; set; }
+        [JsonProperty(PropertyName = "comments")]
+        public List<Comment> Comments { get; set; }
+
+        [JsonProperty(PropertyName = "currentPageUrl")]
+        public string CurrentPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "nextPageUrl")]
+        public string NextPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "total")]
+        public int Total { get; set; }
     }
 }

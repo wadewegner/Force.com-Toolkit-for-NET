@@ -1,12 +1,20 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Common.Models
 {
     public class QueryResult<T>
     {
-        public string nextRecordsUrl { get; set; }
-        public int totalSize { get; set; }
-        public string done { get; set; }
-        public List<T> records { get; set; }
+        [JsonProperty(PropertyName = "nextRecordsUrl")]
+        public string NextRecordsUrl { get; set; }
+
+        [JsonProperty(PropertyName = "totalSize")]
+        public int TotalSize { get; set; }
+
+        [JsonProperty(PropertyName = "done")]
+        public string Done { get; set; }
+
+        [JsonProperty(PropertyName = "records")]
+        public List<T> Records { get; set; }
     }
 }

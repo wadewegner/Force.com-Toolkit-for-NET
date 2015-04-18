@@ -71,19 +71,19 @@ namespace Salesforce.Chatter.FunctionalTests
         public async void Chatter_Add_Comment()
         {
             var feedItem = await postFeedItem(_chatterClient);
-            var feedId = feedItem.id;
+            var feedId = feedItem.Id;
 
             var messageSegment = new MessageSegmentInput
             {
-                text = "Comment testing 1, 2, 3",
-                type = "Text"
+                Text = "Comment testing 1, 2, 3",
+                Type = "Text"
             };
 
-            var body = new MessageBodyInput { messageSegments = new List<MessageSegmentInput> { messageSegment } };
+            var body = new MessageBodyInput { MessageSegments = new List<MessageSegmentInput> { messageSegment } };
             var commentInput = new FeedItemInput
             {
-                attachment = null,
-                body = body
+                Attachment = null,
+                Body = body
             };
 
             var comment = await _chatterClient.PostFeedItemCommentAsync<Comment>(commentInput, feedId);
@@ -94,26 +94,26 @@ namespace Salesforce.Chatter.FunctionalTests
         public async void Chatter_Add_Comment_With_Mention_IsNotNull()
         {
             var feedItem = await postFeedItem(_chatterClient);
-            var feedId = feedItem.id;
+            var feedId = feedItem.Id;
 
             var me = await _chatterClient.MeAsync<UserDetail>();
             var meId = me.id;
 
             var messageSegment1 = new MessageSegmentInput
             {
-                id = meId,
-                type = "Mention",
+                Id = meId,
+                Type = "Mention",
             };
 
             var messageSegment2 = new MessageSegmentInput
             {
-                text = "Comment testing 1, 2, 3",
-                type = "Text",
+                Text = "Comment testing 1, 2, 3",
+                Type = "Text",
             };
 
             var body = new MessageBodyInput
             {
-                messageSegments = new List<MessageSegmentInput>
+                MessageSegments = new List<MessageSegmentInput>
                 {
                     messageSegment1, 
                     messageSegment2
@@ -121,8 +121,8 @@ namespace Salesforce.Chatter.FunctionalTests
             };
             var commentInput = new FeedItemInput
             {
-                attachment = null,
-                body = body
+                Attachment = null,
+                Body = body
             };
 
             var comment = await _chatterClient.PostFeedItemCommentAsync<Comment>(commentInput, feedId);
@@ -133,7 +133,7 @@ namespace Salesforce.Chatter.FunctionalTests
         public async void Chatter_Like_FeedItem_IsNotNull()
         {
             var feedItem = await postFeedItem(_chatterClient);
-            var feedId = feedItem.id;
+            var feedId = feedItem.Id;
 
             var liked = await _chatterClient.LikeFeedItemAsync<Like>(feedId);
 
@@ -144,7 +144,7 @@ namespace Salesforce.Chatter.FunctionalTests
         public async void Chatter_Share_FeedItem_IsNotNull()
         {
             var feedItem = await postFeedItem(_chatterClient);
-            var feedId = feedItem.id;
+            var feedId = feedItem.Id;
 
             var me = await _chatterClient.MeAsync<UserDetail>();
             var meId = me.id;
@@ -182,7 +182,7 @@ namespace Salesforce.Chatter.FunctionalTests
         public async void Chatter_Get_Group_News_Feed_IsNotNull()
         {
             var groups = await _chatterClient.GetGroupsAsync<GroupPage>();
-            var groupId = groups.groups[0].id;
+            var groupId = groups.Groups[0].Id;
             var groupFeed = await _chatterClient.GetGroupFeedAsync<FeedItemPage>(groupId);
 
             Assert.IsNotNull(groupFeed);
@@ -212,15 +212,15 @@ namespace Salesforce.Chatter.FunctionalTests
 
             var messageSegment = new MessageSegmentInput
             {
-                text = "Testing 1, 2, 3",
-                type = "Text"
+                Text = "Testing 1, 2, 3",
+                Type = "Text"
             };
 
-            var body = new MessageBodyInput { messageSegments = new List<MessageSegmentInput> { messageSegment } };
+            var body = new MessageBodyInput { MessageSegments = new List<MessageSegmentInput> { messageSegment } };
             var feedItemInput = new FeedItemInput()
             {
-                attachment = null,
-                body = body
+                Attachment = null,
+                Body = body
             };
 
             var feedItem = await chatter.PostFeedItemAsync<FeedItem>(feedItemInput, id);

@@ -1,12 +1,25 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class MessageSegment
     {
-        public Motif motif { get; set; }
-        public object record { get; set; }
-        public Reference reference { get; set; }
-        public string text { get; set; }
-        public string type { get; set; }
-        public string url { get; set; }
+        [JsonProperty(PropertyName = "motif")]
+        public Motif Motif { get; set; }
+
+        [JsonProperty(PropertyName = "record")]
+        public object Record { get; set; }
+
+        [JsonProperty(PropertyName = "reference")]
+        public Reference Reference { get; set; }
+
+        [JsonProperty(PropertyName = "text")]
+        public string Text { get; set; }
+
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
     }
 }

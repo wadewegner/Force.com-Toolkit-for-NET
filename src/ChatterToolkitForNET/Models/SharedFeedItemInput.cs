@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
@@ -11,6 +8,7 @@ namespace Salesforce.Chatter.Models
     /// </summary>
     public class SharedFeedItemInput
     {
-        public string originalFeedItemId { get; set; }
+        [JsonProperty(PropertyName = "originalFeedItemId")]
+        public string OriginalFeedItemId { get; set; }
     }
 }

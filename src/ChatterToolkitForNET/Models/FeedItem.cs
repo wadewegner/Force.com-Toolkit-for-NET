@@ -1,39 +1,88 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class FeedItem
     {
-        public Actor actor { get; set; }// The entity that created the item. This can be a RecordSummary, a UserSummary, or an UnauthenticatedUser (i.e. Chatter customer).
-        public object attachment { get; set; }
-        public FeedBody body { get; set; }
-        public bool canShare { get; set; }
-        public ClientInfo clientInfo { get; set; }
-        public CommentPage comments { get; set; }
-        public string createdDate { get; set; }
-        public bool @event { get; set; }
-        public string id { get; set; }
-        public bool isBookmarkedByCurrentUser { get; set; }
-        public bool isDeleteRestricted { get; set; }
-        public bool isLikedByCurrentUser { get; set; }
-        public LikePage likes { get; set; }
-        public LikeMessageBody likesMessage { get; set; }
-        public Reference myLike { get; set; }
-        public string modifiedDate { get; set; }
-        public ModerationFlags moderationFlags { get; set; }
-        public Reference originalFeedItem { get; set; }
+        [JsonProperty(PropertyName = "actor")]
+        public Actor Actor { get; set; }
 
-        // The Original Feed Item Actor can be:
-        //     RecordSummary
-        //     FeedItemPreambleMessageBodyary
-        //     UnauthenticatedUser
-        //     or null
-        public UserSummary originalFeedItemActor { get; set; }
-        public UserSummary parent { get; set; }
-        public string photoUrl { get; set; }
-        public FeedItemPreambleMessageBody preamble { get; set; }
-        public string relativeCreatedDate { get; set; }
-        public FeedItemTopics topics { get; set; }
-        public string type { get; set; }
-        public string url { get; set; }
-        public string visibility { get; set; }
+        [JsonProperty(PropertyName = "attachment")]
+        public object Attachment { get; set; }
+
+        [JsonProperty(PropertyName = "body")]
+        public FeedBody Body { get; set; }
+
+        [JsonProperty(PropertyName = "canShare")]
+        public bool CanShare { get; set; }
+        
+        [JsonProperty(PropertyName = "clientInfo")]
+        public ClientInfo ClientInfo { get; set; }
+
+        [JsonProperty(PropertyName = "comments")]
+        public CommentPage Comments { get; set; }
+
+        [JsonProperty(PropertyName = "createdDate")]
+        public string CreatedDate { get; set; }
+
+        [JsonProperty(PropertyName = "event")]
+        public bool Event { get; set; }
+        
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "isBookmarkedByCurrentUser")]
+        public bool IsBookmarkedByCurrentUser { get; set; }
+
+        [JsonProperty(PropertyName = "isDeleteRestricted")]
+        public bool IsDeleteRestricted { get; set; }
+
+        [JsonProperty(PropertyName = "isLikedByCurrentUser")]
+        public bool IsLikedByCurrentUser { get; set; }
+
+        [JsonProperty(PropertyName = "likes")]
+        public LikePage Likes { get; set; }
+
+        [JsonProperty(PropertyName = "likesMessage")]
+        public LikeMessageBody LikesMessage { get; set; }
+
+        [JsonProperty(PropertyName = "myLike")]
+        public Reference MyLike { get; set; }
+
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public string ModifiedDate { get; set; }
+
+        [JsonProperty(PropertyName = "moderationFlags")]
+        public ModerationFlags ModerationFlags { get; set; }
+
+        [JsonProperty(PropertyName = "originalFeedItem")]
+        public Reference OriginalFeedItem { get; set; }
+
+        [JsonProperty(PropertyName = "originalFeedItemActor")]
+        public UserSummary OriginalFeedItemActor { get; set; }
+
+        [JsonProperty(PropertyName = "parent")]
+        public UserSummary Parent { get; set; }
+
+        [JsonProperty(PropertyName = "photoUrl")]
+        public string PhotoUrl { get; set; }
+
+        [JsonProperty(PropertyName = "preamble")]
+        public FeedItemPreambleMessageBody Preamble { get; set; }
+
+        [JsonProperty(PropertyName = "relativeCreatedDate")]
+        public string RelativeCreatedDate { get; set; }
+
+        [JsonProperty(PropertyName = "topics")]
+        public FeedItemTopics Topics { get; set; }
+
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
+
+        [JsonProperty(PropertyName = "visibility")]
+        public string Visibility { get; set; }
     }
 }

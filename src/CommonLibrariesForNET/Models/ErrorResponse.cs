@@ -1,8 +1,13 @@
-﻿namespace Salesforce.Common.Models
+﻿using Newtonsoft.Json;
+
+namespace Salesforce.Common.Models
 {
     public class ErrorResponse
     {
-        public string message;
-        public string errorCode;
+        [JsonProperty(PropertyName = "message")]
+        public string Message;
+
+        [JsonProperty(PropertyName = "errorCode")]
+        public string ErrorCode;
     }
 }

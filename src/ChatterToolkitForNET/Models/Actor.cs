@@ -1,26 +1,49 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
-
-
     public class Actor
     {
-        public string companyName { get; set; }
-        public string firstName { get; set; }
-        public string id { get; set; }
-        public bool isActive { get; set; }
-        public bool isInThisCommunity { get; set; }
-        public string lastName { get; set; }
-        public Motif motif { get; set; }
-        public Reference mySubscription { get; set; }
-        public string name { get; set; }
-        public Photo photo { get; set; }
-        public string title { get; set; }
-        public string type { get; set; }
-        public string url { get; set; }
-        public string userType { get; set; }
+        [JsonProperty(PropertyName = "companyName")]
+        public string CompanyName { get; set; }
+
+        [JsonProperty(PropertyName = "firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "isActive")]
+        public bool IsActive { get; set; }
+
+        [JsonProperty(PropertyName = "isInThisCommunity")]
+        public bool IsInThisCommunity { get; set; }
+
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName { get; set; }
+
+        [JsonProperty(PropertyName = "motif")]
+        public Motif Motif { get; set; }
+
+        [JsonProperty(PropertyName = "mySubscription")]
+        public Reference MySubscription { get; set; }
+
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "photo")]
+        public Photo Photo { get; set; }
+
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
+
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
+
+        [JsonProperty(PropertyName = "userType")]
+        public string UserType { get; set; }
     }
 }

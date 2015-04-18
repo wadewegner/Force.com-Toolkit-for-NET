@@ -1,11 +1,22 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class MessageSegmentInput
     {
-        public string id { get; set; } // Mention
-        public string tag { get; set; } // Hash Tag
-        public string text { get; set; } // Text
-        public string type { get; set; }
-        public string url { get; set; } // Link
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "tag")]
+        public string Tag { get; set; }
+
+        [JsonProperty(PropertyName = "text")]
+        public string Text { get; set; }
+
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
     }
 }

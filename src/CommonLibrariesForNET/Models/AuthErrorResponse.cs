@@ -1,8 +1,13 @@
-﻿namespace Salesforce.Common.Models
+﻿using Newtonsoft.Json;
+
+namespace Salesforce.Common.Models
 {
     public class AuthErrorResponse
     {
-        public string error_description;
-        public string error;
+        [JsonProperty(PropertyName = "error_description")]
+        public string ErrorDescription;
+
+        [JsonProperty(PropertyName = "error")]
+        public string Error;
     }
 }

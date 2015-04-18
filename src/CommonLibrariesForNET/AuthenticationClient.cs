@@ -71,14 +71,14 @@ namespace Salesforce.Common
             {
                 var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
 
-                AccessToken = authToken.access_token;
-                InstanceUrl = authToken.instance_url;
-                Id = authToken.id;
+                AccessToken = authToken.AccessToken;
+                InstanceUrl = authToken.InstanceUrl;
+                Id = authToken.Id;
             }
             else
             {
                 var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                throw new ForceAuthException(errorResponse.error, errorResponse.error_description);
+                throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription);
             }
         }
 
@@ -122,15 +122,15 @@ namespace Salesforce.Common
             {
                 var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
 
-                AccessToken = authToken.access_token;
-                InstanceUrl = authToken.instance_url;
-                Id = authToken.id;
-                RefreshToken = authToken.refresh_token;
+                AccessToken = authToken.AccessToken;
+                InstanceUrl = authToken.InstanceUrl;
+                Id = authToken.Id;
+                RefreshToken = authToken.RefreshToken;
             }
             else
             {
                 var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                throw new ForceAuthException(errorResponse.error, errorResponse.error_description);
+                throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription);
             }
         }
 
@@ -162,14 +162,14 @@ namespace Salesforce.Common
             {
                 var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
 
-                AccessToken = authToken.access_token;
-                InstanceUrl = authToken.instance_url;
-                Id = authToken.id;
+                AccessToken = authToken.AccessToken;
+                InstanceUrl = authToken.InstanceUrl;
+                Id = authToken.Id;
             }
             else
             {
                 var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                throw new ForceException(errorResponse.error, errorResponse.error_description);
+                throw new ForceException(errorResponse.Error, errorResponse.ErrorDescription);
             }
         }
 

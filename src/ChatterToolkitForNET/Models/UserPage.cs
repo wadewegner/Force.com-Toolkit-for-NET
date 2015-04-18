@@ -1,12 +1,20 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class UserPage
     {
-        public string currentPageUrl { get; set; }
-        public string nextPageUrl { get; set; }
-        public string previousPageUrl { get; set; }
-        public List<UserDetail> users { get; set; }
+        [JsonProperty(PropertyName = "currentPageUrl")]
+        public string CurrentPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "nextPageUrl")]
+        public string NextPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "previousPageUrl")]
+        public string PreviousPageUrl { get; set; }
+
+        [JsonProperty(PropertyName = "users")]
+        public List<UserDetail> Users { get; set; }
     }
 }

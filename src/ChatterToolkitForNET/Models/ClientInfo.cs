@@ -1,8 +1,13 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class ClientInfo
     {
-        public string applicationName { get; set; }
-        public string applicationUrl { get; set; }
+        [JsonProperty(PropertyName = "applicationName")]
+        public string ApplicationName { get; set; }
+
+        [JsonProperty(PropertyName = "applicationUrl")]
+        public string ApplicationUrl { get; set; }
     }
 }

@@ -1,18 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
-    // me
-
     public class ChatterActivity
     {
-        public int commentCount { get; set; }
-        public int commentReceivedCount { get; set; }
-        public int likeReceivedCount { get; set; }
-        public int postCount { get; set; }
+        [JsonProperty(PropertyName = "commentCount")]
+        public int CommentCount { get; set; }
+
+        [JsonProperty(PropertyName = "commentReceivedCount")]
+        public int CommentReceivedCount { get; set; }
+
+        [JsonProperty(PropertyName = "likeReceivedCount")]
+        public int LikeReceivedCount { get; set; }
+
+        [JsonProperty(PropertyName = "postCount")]
+        public int PostCount { get; set; }
     }
 
 }

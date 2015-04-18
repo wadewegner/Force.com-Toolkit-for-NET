@@ -1,8 +1,13 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class ModerationFlags
     {
-        public int flagCount { get; set; }
-        public bool flaggedByMe { get; set; }
+        [JsonProperty(PropertyName = "flagCount")]
+        public int FlagCount { get; set; }
+
+        [JsonProperty(PropertyName = "flaggedByMe")]
+        public bool FlaggedByMe { get; set; }
     }
 }

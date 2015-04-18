@@ -35,7 +35,7 @@ namespace Salesforce.Common.FunctionalTests
         //{
         //    var objectName = new FormUrlEncodedContent(new[]
         //        {
-        //            new KeyValuePair<string, string>("access_token", _auth.AccessToken)
+        //            new KeyValuePair<string, string>("AccessToken", _auth.AccessToken)
         //        });
 
         //    var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
@@ -57,18 +57,18 @@ namespace Salesforce.Common.FunctionalTests
         {
             var response = await _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
 
-            Assert.IsTrue(response.maxBatchSize > 0);
-            Assert.IsTrue(response.sobjects.Count > 0);
+            Assert.IsTrue(response.MaxBatchSize > 0);
+            Assert.IsTrue(response.SObjects.Count > 0);
         }
 
         [Test]
         public async void Query_Select_Account()
         {
-            const string query = "SELECT id FROM Account";
+            const string query = "SELECT Id FROM Account";
             var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
-            Assert.IsTrue(response.totalSize > 0);
-            Assert.IsTrue(response.records.Count > 0);
+            Assert.IsTrue(response.TotalSize > 0);
+            Assert.IsTrue(response.Records.Count > 0);
         }
 
         [Test]
@@ -77,8 +77,8 @@ namespace Salesforce.Common.FunctionalTests
             const string query = "SELECT count() FROM Account";
             var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
-            Assert.IsTrue(response.totalSize > 0);
-            Assert.IsTrue(response.records.Count == 0);
+            Assert.IsTrue(response.TotalSize > 0);
+            Assert.IsTrue(response.Records.Count == 0);
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace Salesforce.Common.FunctionalTests
             var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
 
             Assert.IsNotNull(response);
-            Assert.IsNotNull(response.id);
+            Assert.IsNotNull(response.Id);
         }
 
 	    [Test]

@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class FeedItemTopics
     {
-        public List<object> topics { get; set; }
-        public bool canAssignTopics { get; set; }
+        [JsonProperty(PropertyName = "topics")]
+        public List<object> Topics { get; set; }
+
+        [JsonProperty(PropertyName = "canAssignTopics")]
+        public bool CanAssignTopics { get; set; }
     }
 }

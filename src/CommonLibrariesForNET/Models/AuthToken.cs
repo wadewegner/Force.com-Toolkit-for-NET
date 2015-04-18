@@ -1,12 +1,25 @@
-﻿namespace Salesforce.Common.Models
+﻿using Newtonsoft.Json;
+
+namespace Salesforce.Common.Models
 {
     public class AuthToken
     {
-        public string id;
-        public string issued_at;
-        public string instance_url;
-        public string signature;
-        public string access_token;
-        public string refresh_token;
+        [JsonProperty(PropertyName = "id")]
+        public string Id;
+
+        [JsonProperty(PropertyName = "issued_at")]
+        public string IssuedAt;
+
+        [JsonProperty(PropertyName = "instance_url")]
+        public string InstanceUrl;
+
+        [JsonProperty(PropertyName = "signature")]
+        public string Signature;
+
+        [JsonProperty(PropertyName = "access_token")]
+        public string AccessToken;
+
+        [JsonProperty(PropertyName = "refresh_token")]
+        public string RefreshToken;
     }
 }

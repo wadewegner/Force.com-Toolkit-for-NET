@@ -70,7 +70,7 @@ namespace Salesforce.Common
             }
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
 		/// <summary>
@@ -126,7 +126,7 @@ namespace Salesforce.Common
             catch (ForceException)
             {
                 var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-                throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
             }
         }
 
@@ -148,7 +148,7 @@ namespace Salesforce.Common
             }
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
@@ -174,7 +174,7 @@ namespace Salesforce.Common
             }
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
@@ -197,7 +197,7 @@ namespace Salesforce.Common
             }
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
@@ -229,13 +229,13 @@ namespace Salesforce.Common
                     return r;
                 }
 
-                var success = new SuccessResponse { id = "", errors = "", success = "true" };
+                var success = new SuccessResponse { Id = "", Errors = "", Success = "true" };
                 return success;
             }
 
             var error = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(error);
-            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
@@ -258,7 +258,7 @@ namespace Salesforce.Common
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].errorCode, errorResponse[0].message);
+            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
     }
 }

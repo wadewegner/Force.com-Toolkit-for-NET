@@ -1,8 +1,13 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class FeedItemInput
     {
-        public Attachment attachment { get; set; }
-        public MessageBodyInput body { get; set; }
+        [JsonProperty(PropertyName = "attachment")]
+        public Attachment Attachment { get; set; }
+
+        [JsonProperty(PropertyName = "body")]
+        public MessageBodyInput Body { get; set; }
     }
 }

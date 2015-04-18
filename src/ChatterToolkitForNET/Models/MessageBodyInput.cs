@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class MessageBodyInput
     {
-       public List<MessageSegmentInput> messageSegments { get; set; }
+        [JsonProperty(PropertyName = "messageSegments")]
+        public List<MessageSegmentInput> MessageSegments { get; set; }
     }
 }

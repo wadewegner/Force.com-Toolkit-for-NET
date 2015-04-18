@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Force.FunctionalTests.Models
 {
     public class DeletedRecord
     {
-        public string id { get; set; }
-        public string deletedDate { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "deletedDate")]
+        public string DeletedDate { get; set; }
     }
 
     public class DeletedRecordRootObject
     {
-        public List<DeletedRecord> deletedRecords { get; set; }
-        public string earliestDateAvailable { get; set; }
-        public string latestDateCovered { get; set; }
+        [JsonProperty(PropertyName = "deletedRecords")]
+        public List<DeletedRecord> DeletedRecords { get; set; }
+
+        [JsonProperty(PropertyName = "earliestDateAvailable")]
+        public string EarliestDateAvailable { get; set; }
+
+        [JsonProperty(PropertyName = "latestDateCovered")]
+        public string LatestDateCovered { get; set; }
     }
 }

@@ -37,9 +37,9 @@ namespace Salesforce.Common.UnitTests
                 Assert.IsNotNull(auth.AccessToken);
                 Assert.IsNotNull(auth.ApiVersion);
                 Assert.IsNotNull(auth.InstanceUrl);
-                Assert.AreEqual(auth.AccessToken, "access_token");
+                Assert.AreEqual(auth.AccessToken, "AccessToken");
                 Assert.AreEqual(auth.ApiVersion, "v32.0");
-                Assert.AreEqual(auth.InstanceUrl, "instance_url");
+                Assert.AreEqual(auth.InstanceUrl, "InstanceUrl");
             }
         }
 

@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Salesforce.Chatter.Models
 {
     public class Topic
     {
-        public string createdDate { get; set; }
-        public string description { get; set; }
-        public string id { get; set; }
-        public string name { get; set; }
-        public int? talkingAbout { get; set; }
-        public string url { get; set; }
+        [JsonProperty(PropertyName = "createdDate")]
+        public string CreatedDate { get; set; }
+
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "talkingAbout")]
+        public int? TalkingAbout { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
     }
 }

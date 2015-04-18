@@ -1,8 +1,13 @@
+using Newtonsoft.Json;
+
 namespace Salesforce.Chatter.Models
 {
     public class PhoneNumber
     {
-        public string phoneNumber { get; set; }
-        public string type { get; set; }
+        [JsonProperty(PropertyName = "phoneNumber")]
+        public string Number { get; set; }
+
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
     }
 }

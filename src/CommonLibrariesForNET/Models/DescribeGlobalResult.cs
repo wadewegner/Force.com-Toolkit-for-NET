@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Salesforce.Common.Models
 {
     public class DescribeGlobalResult<T>
     {
-        public string encoding { get; set; }
-        public int maxBatchSize { get; set; }
-        public List<T> sobjects { get; set; }
+        [JsonProperty(PropertyName = "encoding")]
+        public string Encoding { get; set; }
+
+        [JsonProperty(PropertyName = "maxBatchSize")]
+        public int MaxBatchSize { get; set; }
+
+        [JsonProperty(PropertyName = "sobjects")]
+        public List<T> SObjects { get; set; }
     }
 }
