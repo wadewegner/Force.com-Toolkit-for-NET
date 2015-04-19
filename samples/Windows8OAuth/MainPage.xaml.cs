@@ -129,7 +129,7 @@ namespace Windows8OAuth
             var client = new ForceClient(_token.InstanceUrl, _token.AccessToken, "v29.0");
             var accounts = await client.QueryAsync<Account>("SELECT id, name, description FROM Account");
 
-            return accounts.records;
+            return accounts.Records;
         }
 
         public async Task<T> RetryMethod<T>(Func<Task<T>> method, int numRetries, int retryTimeout, Func<Task> onInvalidTokenAction)

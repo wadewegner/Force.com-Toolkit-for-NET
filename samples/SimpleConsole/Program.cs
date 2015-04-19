@@ -62,12 +62,12 @@ namespace SimpleConsole
             const string qry = "SELECT ID, Name FROM Account";
             var accts = new List<Account>();
             var results = await client.QueryAsync<Account>(qry);
-            var totalSize = results.totalSize;
+            var totalSize = results.TotalSize;
 
             Console.WriteLine("Queried " + totalSize + " records.");
 
-            accts.AddRange(results.records);
-            var nextRecordsUrl = results.nextRecordsUrl;
+            accts.AddRange(results.Records);
+            var nextRecordsUrl = results.NextRecordsUrl;
 
             if (!string.IsNullOrEmpty(nextRecordsUrl))
             {
@@ -76,14 +76,14 @@ namespace SimpleConsole
                 while (true)
                 {
                     var continuationResults = await client.QueryContinuationAsync<Account>(nextRecordsUrl);
-                    totalSize = continuationResults.totalSize;
+                    totalSize = continuationResults.TotalSize;
                     Console.WriteLine("Queried an additional " + totalSize + " records.");
 
-                    accts.AddRange(continuationResults.records);
-                    if (string.IsNullOrEmpty(continuationResults.nextRecordsUrl)) break;
+                    accts.AddRange(continuationResults.Records);
+                    if (string.IsNullOrEmpty(continuationResults.NextRecordsUrl)) break;
 
                     //pass nextRecordsUrl back to client.QueryAsync to request next set of records
-                    nextRecordsUrl = continuationResults.nextRecordsUrl;
+                    nextRecordsUrl = continuationResults.NextRecordsUrl;
                 }
             }
             Console.WriteLine("Retrieved accounts = " + accts.Count() + ", expected size = " + totalSize);
@@ -104,7 +104,7 @@ namespace SimpleConsole
             // Shows that annonymous types can be used as well
             Console.WriteLine("Updating test record.");
             var success = await client.UpdateAsync(Account.SObjectTypeName, account.Id, new { Name = "Test Update" });
-            if (!string.IsNullOrEmpty(success.errors.ToString()))
+            if (!string.IsNullOrEmpty(success.Errors.ToString()))
             {
                 Console.WriteLine("Failed to update test record!");
                 return;
@@ -127,7 +127,7 @@ namespace SimpleConsole
             // Query for record by name
             Console.WriteLine("Querying the record by name.");
             var accounts = await client.QueryAsync<Account>("SELECT ID, Name FROM Account WHERE Name = '" + account.Name + "'");
-            account = accounts.records.FirstOrDefault();
+            account = accounts.Records.FirstOrDefault();
             if (account == null)
             {
                 Console.WriteLine("Failed to retrieve account by query!");
@@ -149,7 +149,7 @@ namespace SimpleConsole
             // Selecting multiple accounts into a dynamic
             Console.WriteLine("Querying multiple records.");
             var dynamicAccounts = await client.QueryAsync<dynamic>("SELECT ID, Name FROM Account LIMIT 10");
-            foreach (dynamic acct in dynamicAccounts.records)
+            foreach (dynamic acct in dynamicAccounts.Records)
             {
                 Console.WriteLine("Account - " + acct.Name);
             }
