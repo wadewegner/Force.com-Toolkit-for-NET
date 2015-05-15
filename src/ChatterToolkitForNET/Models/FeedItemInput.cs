@@ -9,5 +9,15 @@ namespace Salesforce.Chatter.Models
 
         [JsonProperty(PropertyName = "body")]
         public MessageBodyInput Body { get; set; }
+
+        [JsonProperty(PropertyName = "feedElementType")]
+        readonly public string FeedItem = "FeedItem";
+
+        [JsonProperty(PropertyName = "subjectId")]
+        public string ObjectID { get; set; }
+
+        [JsonProperty(PropertyName = "capabilities")]
+        public Capabilities Capabilities { get; set; }
+
     }
 }

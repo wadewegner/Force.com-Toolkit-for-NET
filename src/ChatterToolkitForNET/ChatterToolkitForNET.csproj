@@ -39,6 +39,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChatterClient.cs" />
+    <Compile Include="Models\Capabilities.cs" />
+    <Compile Include="Models\Content.cs" />
     <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="IChatterClient.cs" />
     <Compile Include="Models\Address.cs" />

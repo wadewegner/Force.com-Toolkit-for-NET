@@ -10,8 +10,8 @@ namespace Salesforce.Chatter
     {
         private ServiceHttpClient _serviceHttpClient;
 
-        public ChatterClient(string instanceUrl, string accessToken, string apiVersion) 
-            : this (instanceUrl, accessToken, apiVersion, new HttpClient())
+        public ChatterClient(string instanceUrl, string accessToken, string apiVersion)
+            : this(instanceUrl, accessToken, apiVersion, new HttpClient())
         {
         }
 
@@ -19,7 +19,7 @@ namespace Salesforce.Chatter
         {
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
-        
+
         public Task<T> FeedsAsync<T>()
         {
             return _serviceHttpClient.HttpGetAsync<T>("chatter/feeds");
@@ -35,6 +35,17 @@ namespace Salesforce.Chatter
             return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/feed-items", userId));
         }
 
+        public Task<T> PostFeedItemToObjectAsync<T>(FeedItemInput envelope)
+        {
+            return _serviceHttpClient.HttpPostAsync<T>(envelope, "chatter/feed-elements/");
+        }
+
+        public Task<T> PostFeedItemWithAttachmentAsync<T>(FeedItemInput envelope, byte[] fileContents, string fileName)
+        {
+            return _serviceHttpClient.HttpBinaryDataPostAsync<T>("chatter/feed-elements/", envelope, fileContents, "feedElementFileUpload", fileName);
+        }
+
+
         public Task<T> PostFeedItemCommentAsync<T>(FeedItemInput envelope, string feedId)
         {
             return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/feed-items/{0}/comments", feedId));
@@ -47,7 +58,7 @@ namespace Salesforce.Chatter
 
         public Task<T> ShareFeedItemAsync<T>(string feedId, string userId)
         {
-            var sharedFeedItem = new SharedFeedItemInput {OriginalFeedItemId = feedId};
+            var sharedFeedItem = new SharedFeedItemInput { OriginalFeedItemId = feedId };
 
             return _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/feed-items", userId));
         }
@@ -57,7 +68,7 @@ namespace Salesforce.Chatter
             var url = "chatter/feeds/news/me/feed-items";
 
             if (!string.IsNullOrEmpty(query))
-                url += string.Format("?q={0}",query);
+                url += string.Format("?q={0}", query);
 
             return _serviceHttpClient.HttpGetAsync<T>(url);
         }
