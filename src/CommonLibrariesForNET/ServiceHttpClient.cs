@@ -307,7 +307,6 @@ namespace Salesforce.Common
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
 
-
         }
     }
 }
