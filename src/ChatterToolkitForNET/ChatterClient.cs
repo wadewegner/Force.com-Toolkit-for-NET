@@ -80,7 +80,7 @@ namespace Salesforce.Chatter
 
         public Task<T> GetGroupFeedAsync<T>(string groupId)
         {
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("chatter/feeds/record/{0}/feed-items", groupId));
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("chatter/feeds/record/{0}/feed-elements", groupId));
         }
 
         public Task<T> GetUsersAsync<T>()
