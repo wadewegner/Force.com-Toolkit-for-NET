@@ -35,12 +35,12 @@ namespace Salesforce.Chatter
             return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/feed-items", userId));
         }
 
-        public Task<T> PostFeedItemToObjectAsync<T>(FeedItemInput envelope)
+        public Task<T> PostFeedItemToObjectAsync<T>(ObjectFeedItemInput envelope)
         {
             return _serviceHttpClient.HttpPostAsync<T>(envelope, "chatter/feed-elements/");
         }
 
-        public Task<T> PostFeedItemWithAttachmentAsync<T>(FeedItemInput envelope, byte[] fileContents, string fileName)
+        public Task<T> PostFeedItemWithAttachmentAsync<T>(ObjectFeedItemInput envelope, byte[] fileContents, string fileName)
         {
             return _serviceHttpClient.HttpBinaryDataPostAsync<T>("chatter/feed-elements/", envelope, fileContents, "feedElementFileUpload", fileName);
         }
