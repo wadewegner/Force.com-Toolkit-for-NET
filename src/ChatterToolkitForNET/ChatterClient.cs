@@ -32,7 +32,7 @@ namespace Salesforce.Chatter
 
         public Task<T> PostFeedItemAsync<T>(FeedItemInput feedItemInput, string userId)
         {
-            return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/feed-items", userId));
+            return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/feed-elements", userId));
         }
 
         public Task<T> PostFeedItemToObjectAsync<T>(ObjectFeedItemInput envelope)
@@ -48,24 +48,24 @@ namespace Salesforce.Chatter
 
         public Task<T> PostFeedItemCommentAsync<T>(FeedItemInput envelope, string feedId)
         {
-            return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/feed-items/{0}/comments", feedId));
+            return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/feed-elements/{0}/comments", feedId));
         }
 
         public Task<T> LikeFeedItemAsync<T>(string feedId)
         {
-            return _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/feed-items/{0}/likes", feedId));
+            return _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/feed-elements/{0}/likes", feedId));
         }
 
         public Task<T> ShareFeedItemAsync<T>(string feedId, string userId)
         {
             var sharedFeedItem = new SharedFeedItemInput { OriginalFeedItemId = feedId };
 
-            return _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/feed-items", userId));
+            return _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/feed-elements", userId));
         }
 
         public Task<T> GetMyNewsFeedAsync<T>(string query = "")
         {
-            var url = "chatter/feeds/news/me/feed-items";
+            var url = "chatter/feeds/news/me/feed-elements";
 
             if (!string.IsNullOrEmpty(query))
                 url += string.Format("?q={0}", query);
