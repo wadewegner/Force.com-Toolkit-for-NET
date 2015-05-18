@@ -26,7 +26,7 @@ namespace Salesforce.Chatter.FunctionalTests
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
 
-            const string apiVersion = "v30.0";
+            const string apiVersion = "v32.0";
             _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, apiVersion);
         }
 
