@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatterToolkitForNET.Functi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatterToolkitForNET", "ChatterToolkitForNET\ChatterToolkitForNET.csproj", "{011B1F31-45AA-4CD1-BB97-F4A508408365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolkitTest", "..\..\..\Visual Studio 2015\Projects\ToolkitTest\ToolkitTest\ToolkitTest.csproj", "{615850AD-66B6-433E-B97D-AE739FBE4E32}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
