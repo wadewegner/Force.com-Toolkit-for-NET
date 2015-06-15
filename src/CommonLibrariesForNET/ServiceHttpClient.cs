@@ -37,6 +37,8 @@ namespace Salesforce.Common
             _httpClient.Dispose();
         }
 
+        // With standard GET and ApexRest GET we can factor out the message send and response processing
+        // using this function.
         public async Task<T> HttpGetAsync<T>(HttpRequestMessage request)
         {
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
@@ -158,27 +160,6 @@ namespace Salesforce.Common
                 throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
             }
         }
-
-        /*public async Task<T> HttpGetAsync<T>(Uri uri)
-        {
-            var request = new HttpRequestMessage
-            {
-                RequestUri = uri,
-                Method = HttpMethod.Get
-            };
-
-            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var r = JsonConvert.DeserializeObject<T>(response);
-                return r;
-            }
-
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
-        }*/
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {

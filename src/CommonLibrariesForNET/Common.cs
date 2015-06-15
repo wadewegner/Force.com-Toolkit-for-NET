@@ -31,6 +31,8 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(customAPI)) throw new ArgumentNullException("customAPI");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
 
+            // Some urls may not require params, so, handle the case where there are none by creating the formatted
+            // url and then check to see if params need to be added.
             string formattedUrl = string.Format("{0}/services/apexrest/{1}", instanceUrl, customAPI);
             if (string.IsNullOrEmpty(parameters))
             {
