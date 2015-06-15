@@ -11,10 +11,12 @@ namespace Salesforce.Force
     public class ForceClient : IForceClient, IDisposable
     {
         private readonly ServiceHttpClient _serviceHttpClient;
+        public Uri Id;
 
-        public ForceClient(string instanceUrl, string accessToken, string apiVersion)
+        public ForceClient(string instanceUrl, string accessToken, string apiVersion, string id)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient())
         {
+            Id = new Uri(id);
         }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
@@ -23,7 +25,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
             if (httpClient == null) throw new ArgumentNullException("httpClient");
-
+           
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
@@ -51,12 +53,19 @@ namespace Salesforce.Force
         public async Task<T> ExecuteRestApi<T>(string apiName, string parameters)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
-            if (string.IsNullOrEmpty(parameters)) throw new ArgumentNullException("parameters");
 
             var response = await _serviceHttpClient.HttpGetRestApiAsync<T>(apiName, parameters);
             return response;
         }
-        
+
+        public async Task<T> ExecutePostRestApi<T>(string apiName, object parameters)
+        {
+            if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
+
+            var response = await _serviceHttpClient.HttpPostRestApiAsync<T>(apiName, parameters);
+            return response;
+        }
+
 		public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
@@ -164,7 +173,10 @@ namespace Salesforce.Force
 
         public async Task<T> UserInfo<T>(string url)
         {
-            if (string.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
+            if (string.IsNullOrEmpty(url))
+            {
+                url = Id.OriginalString;
+            }
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) throw new FormatException("url");
 
             var response = await _serviceHttpClient.HttpGetAsync<T>(new Uri(url));

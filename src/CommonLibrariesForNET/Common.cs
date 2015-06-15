@@ -29,10 +29,14 @@ namespace Salesforce.Common
         public static string FormatCustomUrl(string customAPI, string parameters, string instanceUrl)
         {
             if (string.IsNullOrEmpty(customAPI)) throw new ArgumentNullException("customAPI");
-            if (string.IsNullOrEmpty(parameters)) throw new ArgumentNullException("parameters");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
 
-            return string.Format("{0}/services/apexrest/{1}{2}", instanceUrl, customAPI, parameters);
+            string formattedUrl = string.Format("{0}/services/apexrest/{1}", instanceUrl, customAPI);
+            if (string.IsNullOrEmpty(parameters))
+            {
+                formattedUrl = string.Format("{0}{1}", formattedUrl, parameters);
+            }
+            return formattedUrl;
         }
         
 		public static string FormatAuthUrl(

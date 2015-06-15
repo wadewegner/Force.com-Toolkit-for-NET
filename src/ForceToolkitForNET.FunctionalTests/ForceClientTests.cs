@@ -31,7 +31,7 @@ namespace Salesforce.Force.FunctionalTests
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password).Wait();
 
-            _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
+            _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion, _auth.Id);
         }
 
         [Test]

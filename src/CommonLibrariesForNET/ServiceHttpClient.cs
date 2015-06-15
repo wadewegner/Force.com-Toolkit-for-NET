@@ -37,16 +37,8 @@ namespace Salesforce.Common
             _httpClient.Dispose();
         }
 
-        public async Task<T> HttpGetAsync<T>(string urlSuffix)
+        public async Task<T> HttpGetAsync<T>(HttpRequestMessage request)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
-
-            var request = new HttpRequestMessage
-            {
-                RequestUri = new Uri(url),
-                Method = HttpMethod.Get
-            };
-
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -72,9 +64,33 @@ namespace Salesforce.Common
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
+        
+        public async Task<T> HttpGetAsync<T>(Uri url)
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = url,
+                Method = HttpMethod.Get
+            };
+
+            return await HttpGetAsync<T>(request);
+        }
+
+        public async Task<T> HttpGetAsync<T>(string urlSuffix)
+        {
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+
+            return await HttpGetAsync<T>(request);
+        }
 
 		/// <summary>
-        /// Call a custom REST API
+        /// GET from a custom REST API
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="apiName">The name of the custom REST API</param>
@@ -82,9 +98,22 @@ namespace Salesforce.Common
         /// <returns></returns>
         public async Task<T> HttpGetRestApiAsync<T>(string apiName, string parameters)
         {
-            var url = Common.FormatCustomUrl(apiName, parameters, _instanceUrl);
+            var url = new Uri(Common.FormatCustomUrl(apiName, parameters, _instanceUrl));
 
             return await HttpGetAsync<T>(url);
+        }
+        /// <summary>
+        /// POST to a custom REST API
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="apiName">The name of the custom REST API</param>
+        /// <param name="parameters">JSON formatted string</param>
+        /// <returns></returns>
+        public async Task<T> HttpPostRestApiAsync<T>(string apiName, object parameters)
+        {
+            var url = new Uri(Common.FormatCustomUrl(apiName, "", _instanceUrl));
+
+            return await HttpPostAsync<T>(parameters, url);
         }
         
 		public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
@@ -130,7 +159,7 @@ namespace Salesforce.Common
             }
         }
 
-        public async Task<T> HttpGetAsync<T>(Uri uri)
+        /*public async Task<T> HttpGetAsync<T>(Uri uri)
         {
             var request = new HttpRequestMessage
             {
@@ -149,7 +178,7 @@ namespace Salesforce.Common
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
-        }
+        }*/
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
@@ -185,7 +214,10 @@ namespace Salesforce.Common
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                 });
+            return await HttpPostAsync<T>(json, uri);
+        }
 
+        public async Task<T> HttpPostAsync<T>(string json, Uri uri) {
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
