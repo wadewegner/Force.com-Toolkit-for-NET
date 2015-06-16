@@ -68,7 +68,6 @@ namespace Salesforce.Force
         public async Task<T> ApexRestPost<T>(string apiName, object inputObject)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
-
             var response = await _serviceHttpClient.HttpPostApexRestAsync<T>(apiName, inputObject);
             return response;
         }
