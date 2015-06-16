@@ -65,7 +65,7 @@ namespace Salesforce.Common.FunctionalTests
         public async void Query_Select_Account()
         {
             const string query = "SELECT Id FROM Account";
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>("query", string.Format("?q={0}", query));
 
             Assert.IsTrue(response.TotalSize > 0);
             Assert.IsTrue(response.Records.Count > 0);
@@ -75,7 +75,7 @@ namespace Salesforce.Common.FunctionalTests
         public async void Query_Select_Count()
         {
             const string query = "SELECT count() FROM Account";
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>("query", string.Format("?q={0}", query));
 
             Assert.IsTrue(response.TotalSize > 0);
             Assert.IsTrue(response.Records.Count == 0);
@@ -140,7 +140,7 @@ namespace Salesforce.Common.FunctionalTests
 
 	        try
 	        {
-                await serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+                await serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>("query", string.Format("?q={0}", query));
 	        }
             catch (ForceException ex)
             {

@@ -1,0 +1,25 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" processModel="Default" domainUsage="Default" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="ForceToolkitForNET\bin\Debug\Salesforce.Force.dll" />
+    <assembly path="ForceToolkitForNET.UnitTests\bin\Debug\Salesforce.Force.UnitTests.dll" />
+    <assembly path="ForceToolkitForNET.FunctionalTests\bin\Debug\Salesforce.Force.FunctionalTests.dll" />
+    <assembly path="CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" />
+    <assembly path="CommonLibrariesForNET.FunctionalTests\bin\Debug\Salesforce.Common.FunctionalTests.dll" />
+    <assembly path="CommonLibrariesForNET.UnitTests\bin\Debug\Salesforce.Common.UnitTests.dll" />
+    <assembly path="ChatterToolkitForNET.FunctionalTests\bin\Debug\Salesforce.Chatter.FunctionalTests.dll" />
+    <assembly path="ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.dll" />
+    <assembly path="..\..\..\Visual Studio 2015\Projects\ToolkitTest\ToolkitTest\bin\Debug\ToolkitTest.exe" />
+  </Config>
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="ForceToolkitForNET\bin\Release\Salesforce.Force.dll" />
+    <assembly path="ForceToolkitForNET.UnitTests\bin\Release\Salesforce.Force.UnitTests.dll" />
+    <assembly path="ForceToolkitForNET.FunctionalTests\bin\Release\Salesforce.Force.FunctionalTests.dll" />
+    <assembly path="CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" />
+    <assembly path="CommonLibrariesForNET.FunctionalTests\bin\Release\Salesforce.Common.FunctionalTests.dll" />
+    <assembly path="CommonLibrariesForNET.UnitTests\bin\Release\Salesforce.Common.UnitTests.dll" />
+    <assembly path="ChatterToolkitForNET.FunctionalTests\bin\Release\Salesforce.Chatter.FunctionalTests.dll" />
+    <assembly path="ChatterToolkitForNET\bin\Release\Salesforce.Chatter.dll" />
+    <assembly path="..\..\..\Visual Studio 2015\Projects\ToolkitTest\ToolkitTest\bin\Release\ToolkitTest.exe" />
+  </Config>
+</NUnitProject>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
+  <TopNode>[0-1000]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\ForceToolkitForNET.sln</TopNode>
+  <SelectedNode>[0-1001]Salesforce.Common.FunctionalTests.CommonTests</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\ForceToolkitForNET.sln" Expanded="true" />
+    <Node UniqueName="[0-1012]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\CommonLibrariesForNET.FunctionalTests\bin\Debug\Salesforce.Common.FunctionalTests.dll" Expanded="true" />
+    <Node UniqueName="[0-1013]Salesforce" Expanded="true" />
+    <Node UniqueName="[0-1014]Salesforce.Common" Expanded="true" />
+    <Node UniqueName="[0-1015]Salesforce.Common.FunctionalTests" Expanded="true" />
+    <Node UniqueName="[0-1001]Salesforce.Common.FunctionalTests.CommonTests" Expanded="true" />
+  </Nodes>
+</VisualState>

@@ -78,9 +78,9 @@ namespace Salesforce.Common
             return await HttpGetAsync<T>(request);
         }
 
-        public async Task<T> HttpGetAsync<T>(string urlSuffix)
+        public async Task<T> HttpGetAsync<T>(string urlSuffix, string parameters=null)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion, parameters);
 
             var request = new HttpRequestMessage
             {
@@ -98,7 +98,7 @@ namespace Salesforce.Common
         /// <param name="apiName">The name of the custom REST API</param>
         /// <param name="parameters">Pre-formatted parameters like this: ?name1=value1&name2=value2&soon=soforth</param>
         /// <returns></returns>
-        public async Task<T> HttpGetRestApiAsync<T>(string apiName, string parameters)
+        public async Task<T> HttpGetApexRestAsync<T>(string apiName, string parameters)
         {
             var url = new Uri(Common.FormatCustomUrl(apiName, parameters, _instanceUrl));
 
@@ -111,56 +111,13 @@ namespace Salesforce.Common
         /// <param name="apiName">The name of the custom REST API</param>
         /// <param name="parameters">JSON formatted string</param>
         /// <returns></returns>
-        public async Task<T> HttpPostRestApiAsync<T>(string apiName, object parameters)
+        public async Task<T> HttpPostApexRestAsync<T>(string apiName, object parameters)
         {
             var url = new Uri(Common.FormatCustomUrl(apiName, "", _instanceUrl));
 
             return await HttpPostAsync<T>(parameters, url);
         }
         
-		public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
-        {
-            string next = null;
-            string response = null;
-            var records = new List<T>();
-
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
-
-            try
-            {
-                do
-                {
-                    if (next != null)
-                        url = Common.FormatUrl(string.Format("query/{0}", next.Split('/').Last()), _instanceUrl, _apiVersion);
-
-                    var request = new HttpRequestMessage
-                    {
-                        RequestUri = new Uri(url),
-                        Method = HttpMethod.Get
-                    };
-
-                    var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
-                    response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    if (responseMessage.IsSuccessStatusCode)
-                    {
-                        var jObject = JObject.Parse(response);
-                        var jToken = jObject.GetValue(nodeName);
-
-                        next = (jObject.GetValue("nextRecordsUrl") != null) ? jObject.GetValue("nextRecordsUrl").ToString() : null;
-                        records.AddRange(JsonConvert.DeserializeObject<IList<T>>(jToken.ToString()));
-                    }
-                } while (!string.IsNullOrEmpty(next));
-
-                return (IList<T>)records;
-            }
-            catch (ForceException)
-            {
-                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
-            }
-        }
-
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);

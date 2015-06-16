@@ -33,7 +33,7 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", Uri.EscapeDataString(query)));
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>("query", string.Format("?q={0}", Uri.EscapeDataString(query)));
         }
 
         public Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl)
@@ -47,22 +47,29 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>("queryAll", string.Format("?q={0}", Uri.EscapeDataString(query)));
         }
         
-        public async Task<T> ExecuteRestApi<T>(string apiName, string parameters)
+        public async Task<T> ApexRestGet<T>(string apiName, string parameters)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
 
-            var response = await _serviceHttpClient.HttpGetRestApiAsync<T>(apiName, parameters);
+            var response = await _serviceHttpClient.HttpGetApexRestAsync<T>(apiName, parameters);
             return response;
         }
 
-        public async Task<T> ExecutePostRestApi<T>(string apiName, object parameters)
+        public async Task<T> RestApiGet<T>(string urlSuffix, string parameters)
+        {
+            if (string.IsNullOrEmpty(urlSuffix)) throw new ArgumentNullException("urlSuffix");
+
+            var response = await _serviceHttpClient.HttpGetApexRestAsync<T>(urlSuffix, parameters);
+            return response;
+        }
+        public async Task<T> ApexRestPost<T>(string apiName, object inputObject)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
 
-            var response = await _serviceHttpClient.HttpPostRestApiAsync<T>(apiName, parameters);
+            var response = await _serviceHttpClient.HttpPostApexRestAsync<T>(apiName, inputObject);
             return response;
         }
 
@@ -140,7 +147,7 @@ namespace Salesforce.Force
             var sdt = Uri.EscapeDataString(startDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
             var edt = Uri.EscapeDataString(endDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
 
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/deleted/?start={1}&end={2}", objectName, sdt, edt));
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/deleted/", objectName), string.Format("?start={0}&end={1}", sdt, edt));
         }
 
         public Task<T> GetUpdated<T>(string objectName, DateTime startDateTime, DateTime endDateTime)
@@ -148,7 +155,7 @@ namespace Salesforce.Force
             var sdt = Uri.EscapeDataString(startDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
             var edt = Uri.EscapeDataString(endDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
 
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/updated/?start={1}&end={2}", objectName, sdt, edt));
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/updated/", objectName), string.Format("?start={0}&end={1}", sdt, edt));
         }
         
         public Task<T> DescribeLayoutAsync<T>(string objectName)
@@ -168,7 +175,7 @@ namespace Salesforce.Force
 
         public Task<T> RecentAsync<T>(int limit = 200)
         {
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
+            return _serviceHttpClient.HttpGetAsync<T>("recent", string.Format("?limit={0}", limit));
         }
 
         public async Task<T> UserInfo<T>(string url)
