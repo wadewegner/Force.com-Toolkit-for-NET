@@ -182,10 +182,17 @@ namespace Salesforce.Chatter.FunctionalTests
         public async void Chatter_Get_Group_News_Feed_IsNotNull()
         {
             var groups = await _chatterClient.GetGroupsAsync<GroupPage>();
-            var groupId = groups.Groups[0].Id;
-            var groupFeed = await _chatterClient.GetGroupFeedAsync<FeedItemPage>(groupId);
+            if (groups.Groups.Count > 0)
+            {
+                var groupId = groups.Groups[0].Id;
+                var groupFeed = await _chatterClient.GetGroupFeedAsync<FeedItemPage>(groupId);
 
-            Assert.IsNotNull(groupFeed);
+                Assert.IsNotNull(groupFeed);
+            }
+            else
+            {
+                Assert.AreEqual(0, groups.Groups.Count);
+            }
         }
 
         [Test]
