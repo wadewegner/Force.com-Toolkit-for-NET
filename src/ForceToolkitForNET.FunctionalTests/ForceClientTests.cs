@@ -32,6 +32,38 @@ namespace Salesforce.Force.FunctionalTests
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password).Wait();
 
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion, _auth.Id);
+
+        }
+        [Test]
+        public async void RestApi_Post()
+        {
+            var account = new { Name = "New Account", Description = "New Account Description" };
+            var result = await _client.RestApiPost<Account>("/services/data/v33.0/sobjects/Account", account);
+
+            Assert.IsNotNull(result.Id);
+        }
+        [Test]
+        public async void RestApi_Get()
+        {
+            var result = await _client.RestApiGet<dynamic>("/services/data/v33.0/limits", string.Empty);
+            Assert.AreEqual(1, 1);
+        }
+
+        [Test]
+        public async void ApexRest_Post()
+        {
+            var data = new { value = "Dave" };
+            var results = await _client.ApexRestPost<dynamic>("Dooden", data);
+
+            Assert.AreEqual("Dave", results);
+        }
+
+        [Test]
+        public async void ApexRest_Get()
+        {
+            var result = await _client.ApexRestGet<Account>("Dooden", string.Empty);
+            
+            Assert.IsNotNullOrEmpty(result.Id);
         }
 
         [Test]
