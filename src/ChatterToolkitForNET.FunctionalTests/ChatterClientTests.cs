@@ -19,7 +19,7 @@ namespace Salesforce.Chatter.FunctionalTests
 
         private AuthenticationClient _auth;
         private ChatterClient _chatterClient;
-
+        // Test Setup
         [TestFixtureSetUp]
         public void Init()
         {
