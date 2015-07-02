@@ -62,7 +62,9 @@ namespace Salesforce.Common
 				Content = content
             };
 
-			request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
+	    request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
+	    request.Content = new StringContent("");
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencode");
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
