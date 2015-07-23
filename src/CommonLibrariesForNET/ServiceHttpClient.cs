@@ -186,6 +186,7 @@ namespace Salesforce.Common
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CreateableContractResolver(),
                     DateFormatString = DateFormat
                 });
 
