@@ -159,7 +159,8 @@ namespace Salesforce.Common
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new CreateableContractResolver()
+                    ContractResolver = new CreateableContractResolver(),
+                    DateFormatString = "yyyy-MM-ddThh:mm:ssZzzz"
                 });
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -184,6 +185,8 @@ namespace Salesforce.Common
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CreateableContractResolver(),
+                    DateFormatString = "yyyy-MM-ddThh:mm:ssZzzz"
                 });
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -214,7 +217,8 @@ namespace Salesforce.Common
                 Formatting.None,
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new UpdateableContractResolver()
+                    ContractResolver = new UpdateableContractResolver(),
+                    DateFormatString = "yyyy-MM-ddThh:mm:ssZzzz"
                 });
 
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
