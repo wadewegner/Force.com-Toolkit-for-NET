@@ -26,13 +26,13 @@ namespace Salesforce.Common
         /// <param name="parameters">Pre-formatted parameters like this: ?name1=value1&name2=value2&soon=soforth</param>
         /// <param name="instanceUrl">Instance url returned from auth</param>
         /// <returns>String: The formatted Url</returns>
-        public static string FormatCustomUrl(string customAPI, string parameters, string instanceUrl)
+        public static Uri FormatCustomUrl(string customAPI, string parameters, string instanceUrl)
         {
             if (string.IsNullOrEmpty(customAPI)) throw new ArgumentNullException("customAPI");
             if (string.IsNullOrEmpty(parameters)) throw new ArgumentNullException("parameters");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
 
-            return string.Format("{0}/services/apexrest/{1}{2}", instanceUrl, customAPI, parameters);
+            return new Uri(string.Format("{0}/services/apexrest/{1}{2}", instanceUrl, customAPI, parameters));
         }
         
 		public static string FormatAuthUrl(
