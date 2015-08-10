@@ -86,7 +86,14 @@ namespace Salesforce.Common
 
             return await HttpGetAsync<T>(url);
         }
-        
+
+        public async Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject)
+        {
+            var url = Common.FormatCustomUrl(apiName, _instanceUrl);
+
+            return await HttpPostAsync<T>(inputObject, url);
+        }
+
 		public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
         {
             string next = null;

@@ -34,6 +34,14 @@ namespace Salesforce.Common
 
             return new Uri(string.Format("{0}/services/apexrest/{1}{2}", instanceUrl, customAPI, parameters));
         }
+
+        public static Uri FormatCustomUrl(string customAPI, string instanceUrl)
+        {
+            if (string.IsNullOrEmpty(customAPI)) throw new ArgumentNullException("customAPI");
+            if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
+
+            return new Uri(string.Format("{0}/services/apexrest/{1}", instanceUrl, customAPI));
+        }
         
 		public static string FormatAuthUrl(
             string loginUrl,
