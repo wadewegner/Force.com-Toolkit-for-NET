@@ -2,7 +2,7 @@
 
 namespace Salesforce.Common
 {
-    public interface ISoapServiceHttpClient
+    public interface IBulkServiceHttpClient
     {
         Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix);
     }

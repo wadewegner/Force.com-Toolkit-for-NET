@@ -16,6 +16,12 @@ namespace Salesforce.Common
                 return string.Format("{0}{1}", instanceUrl, resourceName);
             }
 
+            if (resourceName.StartsWith("/services/async", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var partOne = string.Format(resourceName, apiVersion);
+                return string.Format("{0}{1}", instanceUrl, partOne);
+            }
+
             return string.Format("{0}/services/data/{1}/{2}", instanceUrl, apiVersion, resourceName);
         }
 

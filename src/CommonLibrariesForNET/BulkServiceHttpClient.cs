@@ -6,26 +6,35 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
-using Salesforce.Common.Models;
+using Salesforce.Common.Models.Xml;
 
 namespace Salesforce.Common
 {
-    public class SoapServiceHttpClient : ISoapServiceHttpClient, IDisposable
+    public class BulkServiceHttpClient : IBulkServiceHttpClient, IDisposable
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private readonly string _instanceUrl;
         private readonly string _apiVersion;
         private readonly HttpClient _httpClient;
 
-        public SoapServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
+        public BulkServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
         {
+            if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
+            if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
+            if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
+            if (httpClient == null) throw new ArgumentNullException("httpClient");
+
+            if (apiVersion.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+            {
+                apiVersion = apiVersion.Substring(1);
+            }
+
             _instanceUrl = instanceUrl;
             _apiVersion = apiVersion;
             _httpClient = httpClient;
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(UserAgent, "/", _apiVersion));
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            _httpClient.DefaultRequestHeaders.Add("X-SFDC-Session", accessToken);
 
         }
 
@@ -45,8 +54,8 @@ namespace Salesforce.Common
                 return DeserializeXmlString<T>(response);
             }
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            var errorResponse = DeserializeXmlString<ErrorResponse>(response);
+            throw new ForceException(errorResponse.ErrorCode, errorResponse.Message);
         }
 
         private static string SerializeXmlObject(object inputObject)

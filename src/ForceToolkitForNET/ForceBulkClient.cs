@@ -2,13 +2,13 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Common;
-using Salesforce.Common.Models;
+using Salesforce.Common.Models.Xml;
 
 namespace Salesforce.Force
 {
     public class ForceBulkClient : IForceBulkClient, IDisposable
     {
-        private readonly SoapServiceHttpClient _soapServiceHttpClient;
+        private readonly BulkServiceHttpClient _bulkServiceHttpClient;
 
         public ForceBulkClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient())
@@ -22,7 +22,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
-            _soapServiceHttpClient = new SoapServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
+            _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
         public async Task<JobInfoResult> CreateJobAsync(string objectName, OperationType operationType)
@@ -44,7 +44,7 @@ namespace Salesforce.Force
                 Operation = opTypeString
             };
 
-            return await _soapServiceHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "");
+            return await _bulkServiceHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
         }
 
         public enum OperationType
@@ -54,7 +54,7 @@ namespace Salesforce.Force
 
         public void Dispose()
         {
-            _soapServiceHttpClient.Dispose();
+            _bulkServiceHttpClient.Dispose();
         }
     }
 }
