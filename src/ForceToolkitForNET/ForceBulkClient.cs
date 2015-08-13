@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 
 namespace Salesforce.Force
 {
@@ -23,6 +25,32 @@ namespace Salesforce.Force
             _soapServiceHttpClient = new SoapServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, OperationType operationType)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+
+            string opTypeString = null;
+            switch (operationType)
+            {
+                case OperationType.Insert:
+                    opTypeString = "insert";
+                    break;
+            }
+
+            var jobInfo = new JobInfo
+            {
+                ContentType = "CSV",
+                Object = objectName,
+                Operation = opTypeString
+            };
+
+            return await _soapServiceHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "");
+        }
+
+        public enum OperationType
+        {
+            Insert
+        }
 
         public void Dispose()
         {

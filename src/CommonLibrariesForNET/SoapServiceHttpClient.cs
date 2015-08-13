@@ -1,6 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Salesforce.Common.Models;
 
 namespace Salesforce.Common
@@ -23,9 +29,48 @@ namespace Salesforce.Common
 
         }
 
-        public T HttpPostAsync<T>(object postBody)
+        public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             SetXmlHeader();
+
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var postBody = SerializeXmlObject(inputObject);
+            var content = new StringContent(postBody, Encoding.UTF8, "application/xml");
+
+            var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return DeserializeXmlString<T>(response);
+            }
+
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+        }
+
+        private static string SerializeXmlObject(object inputObject)
+        {
+            var xmlSerializer = new XmlSerializer(inputObject.GetType());
+            var stringWriter = new StringWriter();
+            string result;
+            using (var writer = XmlWriter.Create(stringWriter))
+            {
+                xmlSerializer.Serialize(writer, inputObject);
+                result = stringWriter.ToString();
+            }
+            return result;
+        }
+
+        private static T DeserializeXmlString<T>(string inputString)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            T result;
+            using (TextReader reader = new StringReader(inputString))
+            {
+                result = (T) serializer.Deserialize(reader);
+            }
+            return result;
         }
 
         private void SetXmlHeader()
