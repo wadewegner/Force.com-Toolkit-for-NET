@@ -6,16 +6,16 @@ using Salesforce.Common.Models.Xml;
 
 namespace Salesforce.Force
 {
-    public class ForceBulkClient : IForceBulkClient, IDisposable
+    public class BulkForceClient : IBulkForceClient, IDisposable
     {
         private readonly BulkServiceHttpClient _bulkServiceHttpClient;
 
-        public ForceBulkClient(string instanceUrl, string accessToken, string apiVersion)
+        public BulkForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient())
         {
         }
 
-        public ForceBulkClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
+        public BulkForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
         {
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
