@@ -24,16 +24,17 @@ namespace Salesforce.Common
             if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
-            if (apiVersion.StartsWith("v", StringComparison.OrdinalIgnoreCase))
-            {
-                apiVersion = apiVersion.Substring(1);
-            }
-
             _instanceUrl = instanceUrl;
             _apiVersion = apiVersion;
             _httpClient = httpClient;
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(UserAgent, "/", _apiVersion));
+
+            if (_apiVersion.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+            {
+                _apiVersion = _apiVersion.Substring(1);
+            }
+
             _httpClient.DefaultRequestHeaders.Add("X-SFDC-Session", accessToken);
 
         }

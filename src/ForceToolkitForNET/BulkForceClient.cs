@@ -25,14 +25,14 @@ namespace Salesforce.Force
             _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
-        public async Task<JobInfoResult> CreateJobAsync(string objectName, OperationType operationType)
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkOperationType operationType)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
 
             string opTypeString = null;
             switch (operationType)
             {
-                case OperationType.Insert:
+                case BulkOperationType.Insert:
                     opTypeString = "insert";
                     break;
             }
@@ -45,11 +45,6 @@ namespace Salesforce.Force
             };
 
             return await _bulkServiceHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
-        }
-
-        public enum OperationType
-        {
-            Insert
         }
 
         public void Dispose()

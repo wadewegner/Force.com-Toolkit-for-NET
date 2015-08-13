@@ -5,6 +5,6 @@ namespace Salesforce.Force
 {
     public interface IBulkForceClient
     {
-        Task<JobInfoResult> CreateJobAsync(string objectName, BulkForceClient.OperationType operationType);
+        Task<JobInfoResult> CreateJobAsync(string objectName, BulkOperationType operationType);
     }
 }
