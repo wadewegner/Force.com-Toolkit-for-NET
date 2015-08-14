@@ -6,7 +6,7 @@ namespace Salesforce.Force
 {
     public interface IBulkForceClient
     {
-        Task<JobInfoResult> CreateJobAsync(string objectName, BulkOperationType operationType);
+        Task<JobInfoResult> CreateJobAsync(string objectName, Bulk.OperationType operationType, Bulk.ConcurrencyMode concurrencyMode);
         Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, List<T> recordsList);
         Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, List<T> recordList);
         Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, string csvData);

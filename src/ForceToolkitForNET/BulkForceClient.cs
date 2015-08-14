@@ -27,23 +27,16 @@ namespace Salesforce.Force
             _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
-        public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkOperationType operationType)
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, Bulk.OperationType operationType, Bulk.ConcurrencyMode concurrencyMode)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
-
-            string opTypeString = null;
-            switch (operationType)
-            {
-                case BulkOperationType.Insert:
-                    opTypeString = "insert";
-                    break;
-            }
 
             var jobInfo = new JobInfo
             {
                 ContentType = "CSV",
                 Object = objectName,
-                Operation = opTypeString
+                Operation = operationType.Value(),
+                ConcurrencyMode = concurrencyMode.Value()
             };
 
             return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");

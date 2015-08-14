@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkForceClient.cs" />
-    <Compile Include="BulkOperationType.cs" />
+    <Compile Include="Bulk.cs" />
     <Compile Include="IBulkForceClient.cs" />
     <Compile Include="IForceClient.cs" />
     <Compile Include="ForceClient.cs" />
