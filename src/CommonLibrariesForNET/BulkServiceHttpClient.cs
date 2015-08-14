@@ -39,13 +39,33 @@ namespace Salesforce.Common
 
         }
 
-        public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
+        public async Task<T> HttpPostXmlAsync<T>(object inputObject, string urlSuffix)
         {
             SetXmlHeader();
 
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
             var postBody = SerializeXmlObject(inputObject);
             var content = new StringContent(postBody, Encoding.UTF8, "application/xml");
+
+            var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return DeserializeXmlString<T>(response);
+            }
+
+            var errorResponse = DeserializeXmlString<ErrorResponse>(response);
+            throw new ForceException(errorResponse.ErrorCode, errorResponse.Message);
+        }
+
+        public async Task<T> HttpPostCsvAsync<T>(string inputCsv, string urlSuffix)
+        {
+            SetXmlHeader();
+
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+
+            var content = new StringContent(inputCsv, Encoding.UTF8, "application/xml");
 
             var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);

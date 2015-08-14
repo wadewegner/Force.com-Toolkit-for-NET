@@ -4,6 +4,6 @@ namespace Salesforce.Common
 {
     public interface IBulkServiceHttpClient
     {
-        Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix);
+        Task<T> HttpPostXmlAsync<T>(object inputObject, string urlSuffix);
     }
 }

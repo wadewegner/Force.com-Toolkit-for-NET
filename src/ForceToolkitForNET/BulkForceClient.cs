@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Common;
 using Salesforce.Common.Models.Xml;
+using Salesforce.Common.Serializer;
 
 namespace Salesforce.Force
 {
@@ -44,7 +46,18 @@ namespace Salesforce.Force
                 Operation = opTypeString
             };
 
-            return await _bulkServiceHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
+            return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
+        }
+
+        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, List<T> recordsList)
+        {
+            return await CreateJobBatchAsync(jobInfo.Id, recordsList);
+        }
+
+        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, List<T> recordList)
+        {
+            var recordListCsv = CsvSerializer.SerializeList(recordList);
+            return await _bulkServiceHttpClient.HttpPostCsvAsync<BatchInfoResult>(recordListCsv, string.Format("/services/async/{{0}}/job/{0}/batch", jobId));
         }
 
         public void Dispose()
