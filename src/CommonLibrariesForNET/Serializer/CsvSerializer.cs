@@ -77,7 +77,7 @@ namespace Salesforce.Common.Serializer
         private static object getPropertyValueByName(string name, object objectInstance)
         {
             var propertyInfo = objectInstance.GetType().GetRuntimeProperty(name);
-            propertyInfo.GetValue(objectInstance);
+            return propertyInfo.GetValue(objectInstance);
         }
 
         private static bool IsObjectTypeOptIn(Type t)
@@ -98,7 +98,7 @@ namespace Salesforce.Common.Serializer
             var name = propertyInfo.Name;
             string csvName = null;
 
-            var attributes = propertyInfo.GetCustomAttributes(typeof(CsvName), false);
+            var attributes = propertyInfo.GetCustomAttributes(typeof(CsvName), false).ToList();
             if (attributes.Count() == 1)
             {
                 var csvAttribute = (CsvName)attributes[0];

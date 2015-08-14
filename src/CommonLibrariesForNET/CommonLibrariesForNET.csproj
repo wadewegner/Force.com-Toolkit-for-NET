@@ -42,6 +42,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
     <Compile Include="IBulkServiceHttpClient.cs" />
+    <Compile Include="Models\Xml\BatchInfoResult.cs" />
     <Compile Include="Models\Xml\ErrorResponse.cs" />
     <Compile Include="Models\Xml\JobInfo.cs" />
     <Compile Include="Models\DescribeGlobalResult.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ResponseTypes.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />
+    <Compile Include="Serializer\CsvSerializer.cs" />
     <Compile Include="Serializer\UpdateableContractResolver.cs" />
     <Compile Include="ServiceHttpClient.cs" />
     <Compile Include="Attributes\UpdateableAttribute.cs" />
