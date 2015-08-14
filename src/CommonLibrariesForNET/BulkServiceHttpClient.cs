@@ -35,14 +35,15 @@ namespace Salesforce.Common
                 _apiVersion = _apiVersion.Substring(1);
             }
 
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+
             _httpClient.DefaultRequestHeaders.Add("X-SFDC-Session", accessToken);
 
         }
 
         public async Task<T> HttpPostXmlAsync<T>(object inputObject, string urlSuffix)
         {
-            SetXmlHeader();
-
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
             var postBody = SerializeXmlObject(inputObject);
             var content = new StringContent(postBody, Encoding.UTF8, "application/xml");
@@ -61,11 +62,9 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostCsvAsync<T>(string inputCsv, string urlSuffix)
         {
-            SetXmlHeader();
-
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
 
-            var content = new StringContent(inputCsv, Encoding.UTF8, "application/xml");
+            var content = new StringContent(inputCsv, Encoding.UTF8, "text/csv");
 
             var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -101,12 +100,6 @@ namespace Salesforce.Common
                 result = (T) serializer.Deserialize(reader);
             }
             return result;
-        }
-
-        private void SetXmlHeader()
-        {
-            _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
         }
 
         public void Dispose()
