@@ -60,6 +60,21 @@ namespace Salesforce.Common
             throw new ForceException(errorResponse.ErrorCode, errorResponse.Message);
         }
 
+        public async Task<T> HttpGetXmlAsync<T>(string urlSuffix)
+        {
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var responseMessage = await _httpClient.GetAsync(new Uri(url)).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return DeserializeXmlString<T>(response);
+            }
+
+            var errorResponse = DeserializeXmlString<ErrorResponse>(response);
+            throw new ForceException(errorResponse.ErrorCode, errorResponse.Message);
+        }
+
         public async Task<T> HttpPostCsvAsync<T>(string inputCsv, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);

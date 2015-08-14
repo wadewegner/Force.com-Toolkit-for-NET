@@ -6,5 +6,6 @@ namespace Salesforce.Common
     {
         Task<T> HttpPostXmlAsync<T>(object inputObject, string urlSuffix);
         Task<T> HttpPostCsvAsync<T>(string inputCsv, string urlSuffix);
+        Task<T> HttpGetXmlAsync<T>(string urlSuffix);
     }
 }

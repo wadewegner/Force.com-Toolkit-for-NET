@@ -13,5 +13,9 @@ namespace Salesforce.Force
         Task<BatchInfoResult> CreateJobBatchAsync(string jobId, string csvData);
         Task<JobInfoResult> CloseJobAsync(JobInfoResult jobInfo);
         Task<JobInfoResult> CloseJobAsync(string jobId);
+        Task<JobInfoResult> PollJobAsync(JobInfoResult jobInfo);
+        Task<JobInfoResult> PollJobAsync(string jobId);
+        Task<BatchInfoResult> PollBatchAsync(BatchInfoResult batchInfo);
+        Task<BatchInfoResult> PollBatchAsync(string batchId, string jobId);
     }
 }

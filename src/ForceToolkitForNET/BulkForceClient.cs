@@ -67,6 +67,9 @@ namespace Salesforce.Force
 
         public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, string csvData)
         {
+            if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
+            if (string.IsNullOrEmpty(csvData)) throw new ArgumentNullException("csvData");
+
             return await _bulkServiceHttpClient.HttpPostCsvAsync<BatchInfoResult>(csvData, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
                 .ConfigureAwait(false);
         }
@@ -78,8 +81,37 @@ namespace Salesforce.Force
 
         public async Task<JobInfoResult> CloseJobAsync(string jobId)
         {
+            if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
+
             var state = new JobInfoState {State = "Closed"};
             return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(state, string.Format("/services/async/{{0}}/job/{0}", jobId))
+                .ConfigureAwait(false);
+        }
+
+        public async Task<JobInfoResult> PollJobAsync(JobInfoResult jobInfo)
+        {
+            return await PollJobAsync(jobInfo.Id);
+        }
+
+        public async Task<JobInfoResult> PollJobAsync(string jobId)
+        {
+            if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
+
+            return await _bulkServiceHttpClient.HttpGetXmlAsync<JobInfoResult>(string.Format("/services/async/{{0}}/job/{0}", jobId))
+                .ConfigureAwait(false);
+        }
+
+        public async Task<BatchInfoResult> PollBatchAsync(BatchInfoResult batchInfo)
+        {
+            return await PollBatchAsync(batchInfo.Id, batchInfo.JobId);
+        }
+
+        public async Task<BatchInfoResult> PollBatchAsync(string batchId, string jobId)
+        {
+            if (string.IsNullOrEmpty(batchId)) throw new ArgumentNullException("batchId");
+            if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
+
+            return await _bulkServiceHttpClient.HttpGetXmlAsync<BatchInfoResult>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}", jobId, batchId))
                 .ConfigureAwait(false);
         }
 
