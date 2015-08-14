@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace Salesforce.Common.Models.Xml
 {
-    public sealed class SObject : Dictionary<string,string>, IXmlSerializable
+    public sealed class SObject : Dictionary<string,object>, IXmlSerializable
     {
 
         public XmlSchema GetSchema()
@@ -22,7 +22,16 @@ namespace Salesforce.Common.Models.Xml
         {
             foreach (var entry in this)
             {
-                writer.WriteRaw(string.Format("<{0}>{1}</{0}>", entry.Key, entry.Value));
+                if (entry.Value.GetType() != typeof (SObject))
+                {
+                    writer.WriteRaw(string.Format("<{0}>{1}</{0}>", entry.Key, entry.Value));
+                }
+                else
+                {
+                    writer.WriteRaw(string.Format("<{0}>", entry.Key));
+                    ((SObject) entry.Value).WriteXml(writer);
+                    writer.WriteRaw(string.Format("</{0}>", entry.Key));
+                }
             }
         }
 
