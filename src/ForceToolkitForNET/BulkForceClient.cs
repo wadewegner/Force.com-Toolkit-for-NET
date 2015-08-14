@@ -60,9 +60,26 @@ namespace Salesforce.Force
             return await CreateJobBatchAsync(jobId, recordListCsv).ConfigureAwait(false);
         }
 
+        public async Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, string csvData)
+        {
+            return await CreateJobBatchAsync(jobInfo.Id, csvData).ConfigureAwait(false);
+        }
+
         public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, string csvData)
         {
             return await _bulkServiceHttpClient.HttpPostCsvAsync<BatchInfoResult>(csvData, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
+                .ConfigureAwait(false);
+        }
+
+        public async Task<JobInfoResult> CloseJobAsync(JobInfoResult jobInfo)
+        {
+            return await CloseJobAsync(jobInfo.Id);
+        }
+
+        public async Task<JobInfoResult> CloseJobAsync(string jobId)
+        {
+            var state = new JobInfoState {State = "Closed"};
+            return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(state, string.Format("/services/async/{{0}}/job/{0}", jobId))
                 .ConfigureAwait(false);
         }
 
