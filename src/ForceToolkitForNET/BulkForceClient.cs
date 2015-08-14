@@ -51,13 +51,19 @@ namespace Salesforce.Force
 
         public async Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, List<T> recordsList)
         {
-            return await CreateJobBatchAsync(jobInfo.Id, recordsList);
+            return await CreateJobBatchAsync(jobInfo.Id, recordsList).ConfigureAwait(false);
         }
 
         public async Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, List<T> recordList)
         {
-            var recordListCsv = CsvSerializer.SerializeList(recordList);
-            return await _bulkServiceHttpClient.HttpPostCsvAsync<BatchInfoResult>(recordListCsv, string.Format("/services/async/{{0}}/job/{0}/batch", jobId));
+            var recordListCsv = await CsvSerializer.SerializeList(recordList);
+            return await CreateJobBatchAsync(jobId, recordListCsv).ConfigureAwait(false);
+        }
+
+        public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, string csvData)
+        {
+            return await _bulkServiceHttpClient.HttpPostCsvAsync<BatchInfoResult>(csvData, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
+                .ConfigureAwait(false);
         }
 
         public void Dispose()

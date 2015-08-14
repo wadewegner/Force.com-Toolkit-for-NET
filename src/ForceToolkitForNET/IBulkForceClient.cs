@@ -9,5 +9,6 @@ namespace Salesforce.Force
         Task<JobInfoResult> CreateJobAsync(string objectName, BulkOperationType operationType);
         Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, List<T> recordsList);
         Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, List<T> recordList);
+        Task<BatchInfoResult> CreateJobBatchAsync(string jobId, string csvData);
     }
 }

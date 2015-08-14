@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Salesforce.Common.Serializer
 {
     public static class CsvSerializer
     {
-        public static string SerializeList<T>(List<T> objectList)
+        public static async Task<string> SerializeList<T>(List<T> objectList)
+        {
+            // this may take time so do it async in a new thread
+            return await Task.Run(() => DoSerializeWork(objectList)).ConfigureAwait(false);
+        }
+
+        private static string DoSerializeWork<T>(List<T> objectList)
         {
             if (objectList == null || objectList.Count == 0) throw new ArgumentNullException("objectList");
             var type = objectList[0].GetType();
