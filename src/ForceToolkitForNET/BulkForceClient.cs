@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Common;
 using Salesforce.Common.Models.Xml;
-using Salesforce.Common.Serializer;
 
 namespace Salesforce.Force
 {
@@ -27,43 +25,30 @@ namespace Salesforce.Force
             _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
-        public async Task<JobInfoResult> CreateJobAsync(string objectName, Bulk.OperationType operationType, Bulk.ConcurrencyMode concurrencyMode)
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, Bulk.OperationType operationType)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
 
             var jobInfo = new JobInfo
             {
-                ContentType = "CSV",
+                ContentType = "XML",
                 Object = objectName,
-                Operation = operationType.Value(),
-                ConcurrencyMode = concurrencyMode.Value()
+                Operation = operationType.Value()
             };
 
             return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, List<T> recordsList)
+        public async Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, object recordsList)
         {
             return await CreateJobBatchAsync(jobInfo.Id, recordsList).ConfigureAwait(false);
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, List<T> recordList)
-        {
-            var recordListCsv = await CsvSerializer.SerializeList(recordList);
-            return await CreateJobBatchAsync(jobId, recordListCsv).ConfigureAwait(false);
-        }
-
-        public async Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, string csvData)
-        {
-            return await CreateJobBatchAsync(jobInfo.Id, csvData).ConfigureAwait(false);
-        }
-
-        public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, string csvData)
+        public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, object recordsObject)
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
-            if (string.IsNullOrEmpty(csvData)) throw new ArgumentNullException("csvData");
 
-            return await _bulkServiceHttpClient.HttpPostCsvAsync<BatchInfoResult>(csvData, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
+            return await _bulkServiceHttpClient.HttpPostXmlAsync<BatchInfoResult>(recordsObject, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
                 .ConfigureAwait(false);
         }
 

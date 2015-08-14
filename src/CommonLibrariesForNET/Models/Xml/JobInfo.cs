@@ -16,8 +16,5 @@ namespace Salesforce.Common.Models.Xml
         [XmlElement(ElementName = "contentType")]
         public string ContentType { get; set; }
 
-        [XmlElement(ElementName = "concurrencyMode")]
-        public string ConcurrencyMode { get; set; }
-
     }
 }

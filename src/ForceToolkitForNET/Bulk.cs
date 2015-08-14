@@ -9,6 +9,7 @@
             public static readonly OperationType Update = new OperationType("update");
             public static readonly OperationType Upsert = new OperationType("upsert");
             public static readonly OperationType Delete = new OperationType("delete");
+            public static readonly OperationType HardDelete = new OperationType("hardDelete");
 
             private readonly string _value;
 

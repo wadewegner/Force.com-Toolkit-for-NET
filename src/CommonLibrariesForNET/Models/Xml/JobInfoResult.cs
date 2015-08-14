@@ -23,6 +23,9 @@ namespace Salesforce.Common.Models.Xml
         [XmlElement(ElementName = "state")]
         public string State { get; set; }
 
+        [XmlElement(ElementName = "concurrencyMode")]
+        public string ConcurrencyMode { get; set; }
+
         [XmlElement(ElementName = "numberBatchesQueued")]
         public int NumberBatchesQueued { get; set; }
 

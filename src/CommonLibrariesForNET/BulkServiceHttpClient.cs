@@ -75,24 +75,6 @@ namespace Salesforce.Common
             throw new ForceException(errorResponse.ErrorCode, errorResponse.Message);
         }
 
-        public async Task<T> HttpPostCsvAsync<T>(string inputCsv, string urlSuffix)
-        {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
-
-            var content = new StringContent(inputCsv, Encoding.UTF8, "text/csv");
-
-            var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return DeserializeXmlString<T>(response);
-            }
-
-            var errorResponse = DeserializeXmlString<ErrorResponse>(response);
-            throw new ForceException(errorResponse.ErrorCode, errorResponse.Message);
-        }
-
         private static string SerializeXmlObject(object inputObject)
         {
             var xmlSerializer = new XmlSerializer(inputObject.GetType());
