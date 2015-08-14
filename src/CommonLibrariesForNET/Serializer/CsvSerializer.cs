@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Salesforce.Common.Serializer
 {
-    public class CsvSerializer
+    public static class CsvSerializer
     {
         public static string SerializeList<T>(List<T> objectList)
         {
@@ -14,7 +15,7 @@ namespace Salesforce.Common.Serializer
             var nameToCsvNameDictionary = GetCsvNameDictionaryForObjectProperties(type);
             var optIn = IsObjectTypeOptIn(type);
 
-            var res = "";
+            var returnString = new StringBuilder();
 
             var workingDictionary = nameToCsvNameDictionary;
             if (optIn)
@@ -28,14 +29,14 @@ namespace Salesforce.Common.Serializer
             {
                 var key = keyOrderList[i];
 
-                res += workingDictionary[key] ?? key;
+                returnString.Append(workingDictionary[key] ?? key);
                 if (i == keyOrderList.Count() - 1)
                 {
-                    res += "\n";
+                    returnString.Append("\n");
                 }
                 else
                 {
-                    res += ",";
+                    returnString.Append(",");
                 }
             }
 
@@ -44,25 +45,25 @@ namespace Salesforce.Common.Serializer
                 for (var i = 0; i < keyOrderList.Count(); i++)
                 {
                     var key = keyOrderList[i];
-                    res += getPropertyValueByName(key, obj);
+                    returnString.Append(GetPropertyValueByName(key, obj));
                     if (i == keyOrderList.Count() - 1)
                     {
-                        res += "\n";
+                        returnString.Append("\n");
                     }
                     else
                     {
-                        res += ",";
+                        returnString.Append(",");
                     }
                 }
             }
 
-            return res;
+            return returnString.ToString();
         }
 
         [AttributeUsage(AttributeTargets.Property)]
         public sealed class CsvName : Attribute
         {
-            public string Name { get; private set; }
+            internal string Name { get; private set; }
             public CsvName(string csvName)
             {
                 Name = csvName;
@@ -74,7 +75,7 @@ namespace Salesforce.Common.Serializer
         {
         }
 
-        private static object getPropertyValueByName(string name, object objectInstance)
+        private static object GetPropertyValueByName(string name, object objectInstance)
         {
             var propertyInfo = objectInstance.GetType().GetRuntimeProperty(name);
             return propertyInfo.GetValue(objectInstance);
