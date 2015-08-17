@@ -103,7 +103,7 @@ namespace Salesforce.Force.FunctionalTests
         [Test]
         public async void Query_ContactsWithAccountName_IsNotEmpty()
         {
-            var queryResult = await _client.QueryAsync<Models.QueryTest.Contact>("SELECT AccountId, Account.Name, Email, Phone, Name, Title, MobilePhone FROM Contact");
+            var queryResult = await _client.QueryAsync<Models.QueryTest.Contact>("SELECT AccountId, Account.Name, Email, Phone, Name, Title, MobilePhone FROM Contact Where Account.Name != null");
 
             Assert.IsNotNull(queryResult);
             Assert.IsNotNull(queryResult.Records);
