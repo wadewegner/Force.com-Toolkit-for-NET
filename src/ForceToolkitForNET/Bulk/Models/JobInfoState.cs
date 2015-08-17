@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Salesforce.Common.Models.Xml
+namespace Salesforce.Force.Bulk.Models
 {
     [XmlRoot(Namespace = "http://www.force.com/2009/06/asyncapi/dataload",
      ElementName = "jobInfo",

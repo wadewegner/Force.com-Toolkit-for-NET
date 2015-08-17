@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Salesforce.Common.Models.Xml;
+using Salesforce.Force.Bulk.Models;
 
-namespace Salesforce.Force
+namespace Salesforce.Force.Bulk
 {
     public interface IBulkForceClient
     {
         Task<JobInfoResult> CreateJobAsync(string objectName, Bulk.OperationType operationType);
-        Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, object recordsObject);
-        Task<BatchInfoResult> CreateJobBatchAsync(string jobId, object recordsObject);
+        Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, ISObjectList recordsObject);
+        Task<BatchInfoResult> CreateJobBatchAsync(string jobId, ISObjectList recordsObject);
         Task<JobInfoResult> CloseJobAsync(JobInfoResult jobInfo);
         Task<JobInfoResult> CloseJobAsync(string jobId);
         Task<JobInfoResult> PollJobAsync(JobInfoResult jobInfo);

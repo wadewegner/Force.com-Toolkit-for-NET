@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Salesforce.Common.Models.Xml
+namespace Salesforce.Force.Bulk.Models
 {
     public sealed class SObject : Dictionary<string,object>, IXmlSerializable
     {

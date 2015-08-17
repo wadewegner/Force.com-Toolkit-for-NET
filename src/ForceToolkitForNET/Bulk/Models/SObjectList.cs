@@ -3,11 +3,11 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Salesforce.Common.Models.Xml
+namespace Salesforce.Force.Bulk.Models
 {
     [XmlRoot(ElementName="sObjects",
              Namespace = "http://www.force.com/2009/06/asyncapi/dataload")]
-    public sealed class SObjectList : List<SObject>, IXmlSerializable
+    public sealed class SObjectList : List<SObject>, IXmlSerializable, ISObjectList
     {
         public XmlSchema GetSchema()
         {

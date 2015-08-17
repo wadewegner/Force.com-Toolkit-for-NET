@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Salesforce.Common.Models.Xml
+namespace Salesforce.Force.Bulk.Models
 {
     [XmlType(TypeName = "result")]
     public class BatchResult

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using Salesforce.Common.Models.Xml;
+using Salesforce.Common.Models;
 
 namespace Salesforce.Common
 {

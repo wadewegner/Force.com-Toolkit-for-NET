@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Common;
-using Salesforce.Common.Models.Xml;
+using Salesforce.Force.Bulk.Models;
 
-namespace Salesforce.Force
+namespace Salesforce.Force.Bulk
 {
     public class BulkForceClient : IBulkForceClient, IDisposable
     {
@@ -25,6 +27,45 @@ namespace Salesforce.Force
             _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
+        public async Task<List<BatchInfoResult>> RunJob(string objectName, Bulk.OperationType operationType,
+            IEnumerable<ISObjectList> recordsLists)
+        {
+            var jobInfoResult = await CreateJobAsync(objectName, operationType);
+            var batchResults = new List<BatchInfoResult>();
+            foreach (var recordList in recordsLists)
+            {
+                batchResults.Add(await CreateJobBatchAsync(jobInfoResult, recordList));
+            }
+            await CloseJobAsync(jobInfoResult);
+            return batchResults;
+        }
+
+        public async Task<List<BatchResultList>> RunJobAndPoll(string objectName, Bulk.OperationType operationType,
+            IEnumerable<ISObjectList> recordsLists)
+        {
+            const float pollingStart = 1000;
+            const float pollingIncrease = 1.6f;
+
+            var batchInfoResults = await RunJob(objectName, operationType, recordsLists);
+
+            var batchResults = new List<BatchResultList>();
+            var currentPoll = (int) pollingStart;
+            while (batchInfoResults.Count > 0)
+            {
+                foreach (var batchInfoResult in batchInfoResults.Where(batchInfoResult => batchInfoResult.State == Bulk.BatchState.Completed.Value() ||
+                                                                                          batchInfoResult.State == Bulk.BatchState.Failed.Value() ||
+                                                                                          batchInfoResult.State == Bulk.BatchState.NotProcessed.Value()))
+                {
+                    await Task.Delay(currentPoll);
+                    batchResults.Add(await GetBatchResult(batchInfoResult));
+                    batchInfoResults.Remove(batchInfoResult);
+                    currentPoll = (int) (currentPoll * pollingIncrease);
+                }
+            }
+
+            return batchResults;
+        }
+
         public async Task<JobInfoResult> CreateJobAsync(string objectName, Bulk.OperationType operationType)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
@@ -39,12 +80,12 @@ namespace Salesforce.Force
             return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, object recordsList)
+        public async Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, ISObjectList recordsList)
         {
             return await CreateJobBatchAsync(jobInfo.Id, recordsList).ConfigureAwait(false);
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, object recordsObject)
+        public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, ISObjectList recordsObject)
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 

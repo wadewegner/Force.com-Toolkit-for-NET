@@ -1,4 +1,4 @@
-﻿namespace Salesforce.Force
+﻿namespace Salesforce.Force.Bulk
 {
     public static class Bulk
     {
