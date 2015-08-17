@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Common;
@@ -52,15 +51,25 @@ namespace Salesforce.Force.Bulk
             var currentPoll = (int) pollingStart;
             while (batchInfoResults.Count > 0)
             {
-                foreach (var batchInfoResult in batchInfoResults.Where(batchInfoResult => batchInfoResult.State == Bulk.BatchState.Completed.Value() ||
-                                                                                          batchInfoResult.State == Bulk.BatchState.Failed.Value() ||
-                                                                                          batchInfoResult.State == Bulk.BatchState.NotProcessed.Value()))
+                var removeList = new List<BatchInfoResult>();
+                foreach (var batchInfoResult in batchInfoResults)
                 {
-                    await Task.Delay(currentPoll);
-                    batchResults.Add(await GetBatchResult(batchInfoResult));
-                    batchInfoResults.Remove(batchInfoResult);
-                    currentPoll = (int) (currentPoll * pollingIncrease);
+                    var batchInfoResultNew = await PollBatchAsync(batchInfoResult);
+                    if (batchInfoResultNew.State == Bulk.BatchState.Completed.Value() ||
+                        batchInfoResultNew.State == Bulk.BatchState.Failed.Value() ||
+                        batchInfoResultNew.State == Bulk.BatchState.NotProcessed.Value())
+                    {
+                        batchResults.Add(await GetBatchResult(batchInfoResultNew));
+                        removeList.Add(batchInfoResult);
+                    }
                 }
+                foreach (var removeItem in removeList)
+                {
+                    batchInfoResults.Remove(removeItem);
+                }
+
+                await Task.Delay(currentPoll);
+                currentPoll = (int)(currentPoll * pollingIncrease);
             }
 
             return batchResults;

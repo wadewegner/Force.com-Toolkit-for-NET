@@ -26,5 +26,21 @@ namespace Salesforce.Force.Bulk.Models
          [XmlElement(ElementName = "numberRecordsProcessed")]
          public int NumberRecordsProcessed { get; set; }
 
+         protected bool Equals(BatchInfoResult other)
+         {
+             return string.Equals(Id, other.Id);
+         }
+
+         public override bool Equals(object obj)
+         {
+             if (ReferenceEquals(null, obj)) return false;
+             if (ReferenceEquals(this, obj)) return true;
+             return obj.GetType() == GetType() && Equals((BatchInfoResult) obj);
+         }
+
+         public override int GetHashCode()
+         {
+             return (Id != null ? Id.GetHashCode() : 0);
+         }
     }
 }
