@@ -227,7 +227,9 @@ namespace Salesforce.Chatter.FunctionalTests
             var feedItemInput = new FeedItemInput()
             {
                 Attachment = null,
-                Body = body
+                Body = body,
+                SubjectId = id,
+                FeedElementType = "FeedItem"
             };
 
             var feedItem = await chatter.PostFeedItemAsync<FeedItem>(feedItemInput, id);

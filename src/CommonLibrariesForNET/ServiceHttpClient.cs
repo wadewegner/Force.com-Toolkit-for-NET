@@ -16,7 +16,7 @@ namespace Salesforce.Common
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private readonly string _instanceUrl;
-        private readonly string _apiVersion;
+        public string _apiVersion; // needs to be readable for api version based logic
         private readonly HttpClient _httpClient;
 
         public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
