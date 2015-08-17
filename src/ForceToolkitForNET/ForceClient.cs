@@ -62,13 +62,21 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(urlSuffix)) throw new ArgumentNullException("urlSuffix");
 
-            var response = await _serviceHttpClient.HttpGetApexRestAsync<T>(urlSuffix, parameters);
+            var response = await _serviceHttpClient.HttpGetAsync<T>(urlSuffix, parameters);
             return response;
         }
+
+        public async Task<T> RestApiPost<T>(string urlSuffix, object parameters)
+        {
+            if (string.IsNullOrEmpty(urlSuffix)) throw new ArgumentNullException("urlSuffix");
+
+            var response = await _serviceHttpClient.HttpPostAsync<T>(parameters, urlSuffix);
+            return response;
+        }
+
         public async Task<T> ApexRestPost<T>(string apiName, object inputObject)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
-
             var response = await _serviceHttpClient.HttpPostApexRestAsync<T>(apiName, inputObject);
             return response;
         }

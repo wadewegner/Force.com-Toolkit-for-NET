@@ -98,7 +98,7 @@ namespace Salesforce.Common
 
             var url =
             string.Format(
-                "{0}?grant_type=RefreshToken&client_id={1}{2}&RefreshToken={3}",
+                "{0}?grant_type=refresh_token&client_id={1}{2}&refresh_token={3}",
                 tokenRefreshUrl,
                 clientId,
                 clientSecretQuerystring,
