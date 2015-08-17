@@ -1,5 +1,6 @@
 language: csharp
 sudo: false
+
 solution: src/ForceToolkitForNET.sln
 
 install:
