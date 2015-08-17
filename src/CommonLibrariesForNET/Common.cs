@@ -5,7 +5,7 @@ namespace Salesforce.Common
 {
     public static class Common
     {
-        public static string FormatUrl(string resourceName, string instanceUrl, string apiVersion)
+        public static string FormatUrl(string resourceName, string instanceUrl, string apiVersion, string parameters=null)
         {
             if (string.IsNullOrEmpty(resourceName)) throw new ArgumentNullException("resourceName");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
@@ -13,10 +13,20 @@ namespace Salesforce.Common
 
             if (resourceName.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase))
             {
-                return string.Format("{0}{1}", instanceUrl, resourceName);
+                string formattedUrl = string.Format("{0}{1}", instanceUrl, resourceName);
+                if (parameters != null)
+                {
+                    string.Format("{0}{1}", formattedUrl, parameters);
+                }
+                return formattedUrl;
             }
-
-            return string.Format("{0}/services/data/{1}/{2}", instanceUrl, apiVersion, resourceName);
+            
+            string formatted_Url = string.Format("{0}/services/data/{1}/{2}", instanceUrl, apiVersion, resourceName);
+            if (parameters != null)
+            {
+                formatted_Url = string.Format("{0}{1}", formatted_Url, parameters);
+            }
+            return formatted_Url;
         }
 
 		/// <summary>
@@ -29,10 +39,16 @@ namespace Salesforce.Common
         public static string FormatCustomUrl(string customAPI, string parameters, string instanceUrl)
         {
             if (string.IsNullOrEmpty(customAPI)) throw new ArgumentNullException("customAPI");
-            if (string.IsNullOrEmpty(parameters)) throw new ArgumentNullException("parameters");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
 
-            return string.Format("{0}/services/apexrest/{1}{2}", instanceUrl, customAPI, parameters);
+            // Some urls may not require params, so, handle the case where there are none by creating the formatted
+            // url and then check to see if params need to be added.
+            string formattedUrl = string.Format("{0}/services/apexrest/{1}", instanceUrl, customAPI);
+            if (string.IsNullOrEmpty(parameters))
+            {
+                formattedUrl = string.Format("{0}{1}", formattedUrl, parameters);
+            }
+            return formattedUrl;
         }
         
 		public static string FormatAuthUrl(

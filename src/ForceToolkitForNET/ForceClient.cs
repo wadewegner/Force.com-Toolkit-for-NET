@@ -11,10 +11,12 @@ namespace Salesforce.Force
     public class ForceClient : IForceClient, IDisposable
     {
         private readonly ServiceHttpClient _serviceHttpClient;
+        public Uri Id;
 
-        public ForceClient(string instanceUrl, string accessToken, string apiVersion)
+        public ForceClient(string instanceUrl, string accessToken, string apiVersion, string id)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient())
         {
+            Id = new Uri(id);
         }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
@@ -23,7 +25,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
             if (httpClient == null) throw new ArgumentNullException("httpClient");
-
+           
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
@@ -31,7 +33,7 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", Uri.EscapeDataString(query)));
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>("query", string.Format("?q={0}", Uri.EscapeDataString(query)));
         }
 
         public Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl)
@@ -45,18 +47,40 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
+            return _serviceHttpClient.HttpGetAsync<QueryResult<T>>("queryAll", string.Format("?q={0}", Uri.EscapeDataString(query)));
         }
         
-        public async Task<T> ExecuteRestApi<T>(string apiName, string parameters)
+        public async Task<T> ApexRestGet<T>(string apiName, string parameters)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
-            if (string.IsNullOrEmpty(parameters)) throw new ArgumentNullException("parameters");
 
-            var response = await _serviceHttpClient.HttpGetRestApiAsync<T>(apiName, parameters);
+            var response = await _serviceHttpClient.HttpGetApexRestAsync<T>(apiName, parameters);
             return response;
         }
-        
+
+        public async Task<T> RestApiGet<T>(string urlSuffix, string parameters)
+        {
+            if (string.IsNullOrEmpty(urlSuffix)) throw new ArgumentNullException("urlSuffix");
+
+            var response = await _serviceHttpClient.HttpGetAsync<T>(urlSuffix, parameters);
+            return response;
+        }
+
+        public async Task<T> RestApiPost<T>(string urlSuffix, object parameters)
+        {
+            if (string.IsNullOrEmpty(urlSuffix)) throw new ArgumentNullException("urlSuffix");
+
+            var response = await _serviceHttpClient.HttpPostAsync<T>(parameters, urlSuffix);
+            return response;
+        }
+
+        public async Task<T> ApexRestPost<T>(string apiName, object inputObject)
+        {
+            if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
+            var response = await _serviceHttpClient.HttpPostApexRestAsync<T>(apiName, inputObject);
+            return response;
+        }
+
 		public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
@@ -131,7 +155,7 @@ namespace Salesforce.Force
             var sdt = Uri.EscapeDataString(startDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
             var edt = Uri.EscapeDataString(endDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
 
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/deleted/?start={1}&end={2}", objectName, sdt, edt));
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/deleted/", objectName), string.Format("?start={0}&end={1}", sdt, edt));
         }
 
         public Task<T> GetUpdated<T>(string objectName, DateTime startDateTime, DateTime endDateTime)
@@ -139,7 +163,7 @@ namespace Salesforce.Force
             var sdt = Uri.EscapeDataString(startDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
             var edt = Uri.EscapeDataString(endDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
 
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/updated/?start={1}&end={2}", objectName, sdt, edt));
+            return _serviceHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/updated/", objectName), string.Format("?start={0}&end={1}", sdt, edt));
         }
         
         public Task<T> DescribeLayoutAsync<T>(string objectName)
@@ -159,12 +183,15 @@ namespace Salesforce.Force
 
         public Task<T> RecentAsync<T>(int limit = 200)
         {
-            return _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
+            return _serviceHttpClient.HttpGetAsync<T>("recent", string.Format("?limit={0}", limit));
         }
 
         public async Task<T> UserInfo<T>(string url)
         {
-            if (string.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
+            if (string.IsNullOrEmpty(url))
+            {
+                url = Id.OriginalString;
+            }
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) throw new FormatException("url");
 
             var response = await _serviceHttpClient.HttpGetAsync<T>(new Uri(url));

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
+  <TopNode>[0-1000]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\ForceToolkitForNET.sln</TopNode>
+  <SelectedNode>[0-1052]Salesforce.Common.FunctionalTests.CommonTests</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\ForceToolkitForNET.sln" Expanded="true" />
+    <Node UniqueName="[0-1006]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\ForceToolkitForNET.UnitTests\bin\Debug\Salesforce.Force.UnitTests.dll" Expanded="true" />
+    <Node UniqueName="[0-1007]Salesforce" Expanded="true" />
+    <Node UniqueName="[0-1008]Salesforce.Force" Expanded="true" />
+    <Node UniqueName="[0-1009]Salesforce.Force.UnitTests" Expanded="true" />
+    <Node UniqueName="[0-1047]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\ForceToolkitForNET.FunctionalTests\bin\Debug\Salesforce.Force.FunctionalTests.dll" Expanded="true" />
+    <Node UniqueName="[0-1048]Salesforce" Expanded="true" />
+    <Node UniqueName="[0-1049]Salesforce.Force" Expanded="true" />
+    <Node UniqueName="[0-1050]Salesforce.Force.FunctionalTests" Expanded="true" />
+    <Node UniqueName="[0-1063]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\CommonLibrariesForNET.FunctionalTests\bin\Debug\Salesforce.Common.FunctionalTests.dll" Expanded="true" />
+    <Node UniqueName="[0-1064]Salesforce" Expanded="true" />
+    <Node UniqueName="[0-1065]Salesforce.Common" Expanded="true" />
+    <Node UniqueName="[0-1066]Salesforce.Common.FunctionalTests" Expanded="true" />
+    <Node UniqueName="[0-1052]Salesforce.Common.FunctionalTests.CommonTests" Expanded="true" />
+    <Node UniqueName="[0-1076]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\CommonLibrariesForNET.UnitTests\bin\Debug\Salesforce.Common.UnitTests.dll" Expanded="true" />
+    <Node UniqueName="[0-1077]Salesforce" Expanded="true" />
+    <Node UniqueName="[0-1078]Salesforce.Common" Expanded="true" />
+    <Node UniqueName="[0-1079]Salesforce.Common.UnitTests" Expanded="true" />
+    <Node UniqueName="[0-1096]C:\Users\Salesforce\Documents\GitHub\Force.com-Toolkit-for-NET\src\ChatterToolkitForNET.FunctionalTests\bin\Debug\Salesforce.Chatter.FunctionalTests.dll" Expanded="true" />
+    <Node UniqueName="[0-1097]Salesforce" Expanded="true" />
+    <Node UniqueName="[0-1098]Salesforce.Chatter" Expanded="true" />
+    <Node UniqueName="[0-1099]Salesforce.Chatter.FunctionalTests" Expanded="true" />
+  </Nodes>
+</VisualState>

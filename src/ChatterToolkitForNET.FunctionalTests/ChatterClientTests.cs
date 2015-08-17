@@ -191,7 +191,11 @@ namespace Salesforce.Chatter.FunctionalTests
             }
             else
             {
+<<<<<<< HEAD
+                Assert.AreEqual(groups.Groups.Count, 0);
+=======
                 Assert.AreEqual(0, groups.Groups.Count);
+>>>>>>> developerforce/master
             }
         }
 
