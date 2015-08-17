@@ -44,6 +44,7 @@
     <Compile Include="IBulkServiceHttpClient.cs" />
     <Compile Include="Models\Xml\BatchInfoResult.cs" />
     <Compile Include="Models\Xml\BatchResult.cs" />
+    <Compile Include="Models\Xml\BatchResultList.cs" />
     <Compile Include="Models\Xml\ErrorResponse.cs" />
     <Compile Include="Models\Xml\SObjectListGeneric.cs" />
     <Compile Include="Models\Xml\JobInfo.cs" />

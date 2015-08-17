@@ -93,17 +93,17 @@ namespace Salesforce.Force
                 .ConfigureAwait(false);
         }
 
-        public async Task<BatchResult> GetBatchResult(BatchInfoResult batchInfo)
+        public async Task<BatchResultList> GetBatchResult(BatchInfoResult batchInfo)
         {
             return await GetBatchResult(batchInfo.Id, batchInfo.JobId);
         }
 
-        public async Task<BatchResult> GetBatchResult(string batchId, string jobId)
+        public async Task<BatchResultList> GetBatchResult(string batchId, string jobId)
         {
             if (string.IsNullOrEmpty(batchId)) throw new ArgumentNullException("batchId");
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
-            return await _bulkServiceHttpClient.HttpGetXmlAsync<BatchResult>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}/result", jobId, batchId))
+            return await _bulkServiceHttpClient.HttpGetXmlAsync<BatchResultList>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}/result", jobId, batchId))
                .ConfigureAwait(false);
         }
 
