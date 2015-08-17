@@ -13,5 +13,8 @@ namespace Salesforce.Common.Models.Xml
 
         [XmlElement(ElementName = "created")]
         public bool Created { get; set; }
+
+        [XmlElement(ElementName = "errors")]
+        public BatchResultErrors Errors { get; set; }
     }
 }
