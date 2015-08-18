@@ -26,8 +26,8 @@ namespace Salesforce.Force.Bulk
             _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
-        public async Task<List<BatchInfoResult>> RunJob(string objectName, Bulk.OperationType operationType,
-            IEnumerable<ISObjectList> recordsLists)
+        public async Task<List<BatchInfoResult>> RunJob<T>(string objectName, Bulk.OperationType operationType,
+            IEnumerable<ISObjectList<T>> recordsLists)
         {
             var jobInfoResult = await CreateJobAsync(objectName, operationType);
             var batchResults = new List<BatchInfoResult>();
@@ -39,8 +39,8 @@ namespace Salesforce.Force.Bulk
             return batchResults;
         }
 
-        public async Task<List<BatchResultList>> RunJobAndPoll(string objectName, Bulk.OperationType operationType,
-            IEnumerable<ISObjectList> recordsLists)
+        public async Task<List<BatchResultList>> RunJobAndPoll<T>(string objectName, Bulk.OperationType operationType,
+            IEnumerable<ISObjectList<T>> recordsLists)
         {
             const float pollingStart = 1000;
             const float pollingIncrease = 1.6f;
@@ -89,12 +89,12 @@ namespace Salesforce.Force.Bulk
             return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync(JobInfoResult jobInfo, ISObjectList recordsList)
+        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, ISObjectList<T> recordsList)
         {
             return await CreateJobBatchAsync(jobInfo.Id, recordsList).ConfigureAwait(false);
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync(string jobId, ISObjectList recordsObject)
+        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, ISObjectList<T> recordsObject)
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 

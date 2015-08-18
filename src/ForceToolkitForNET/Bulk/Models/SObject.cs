@@ -20,6 +20,7 @@ namespace Salesforce.Force.Bulk.Models
 
         public void WriteXml(XmlWriter writer)
         {
+            writer.WriteRaw("<sObject>");
             foreach (var entry in this)
             {
                 if (entry.Value.GetType() != typeof (SObject))
@@ -33,6 +34,7 @@ namespace Salesforce.Force.Bulk.Models
                     writer.WriteRaw(string.Format("</{0}>", entry.Key));
                 }
             }
+            writer.WriteRaw("</sObject>");
         }
 
     }

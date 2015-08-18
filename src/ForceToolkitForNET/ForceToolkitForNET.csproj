@@ -57,7 +57,6 @@
     <Compile Include="Bulk\Models\JobInfoState.cs" />
     <Compile Include="Bulk\Models\SObject.cs" />
     <Compile Include="Bulk\Models\SObjectList.cs" />
-    <Compile Include="Bulk\Models\SObjectListGeneric.cs" />
     <Compile Include="IForceClient.cs" />
     <Compile Include="ForceClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
