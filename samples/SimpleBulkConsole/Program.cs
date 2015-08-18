@@ -41,7 +41,7 @@ namespace SimpleBulkConsole
                 }
             }
 
-            Console.WriteLine("\n Press enter to close...");
+            Console.WriteLine("\nPress enter to close...");
             Console.ReadLine();
         }
 
@@ -118,7 +118,6 @@ namespace SimpleBulkConsole
             Console.WriteLine("Accounts deleted");
         }
 
-        [XmlType(TypeName = "sObject")] // account needs typing as an sObject for xml serialization
         public class Account
         {
             public string Name { get; set; }

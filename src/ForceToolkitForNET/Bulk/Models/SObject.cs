@@ -23,15 +23,16 @@ namespace Salesforce.Force.Bulk.Models
             writer.WriteRaw("<sObject>");
             foreach (var entry in this)
             {
-                if (entry.Value.GetType() != typeof (SObject))
+                var value = entry.Value as IXmlSerializable;
+                if (value != null)
                 {
-                    writer.WriteRaw(string.Format("<{0}>{1}</{0}>", entry.Key, entry.Value));
+                    writer.WriteRaw(string.Format("<{0}>", entry.Key));
+                    value.WriteXml(writer);
+                    writer.WriteRaw(string.Format("</{0}>", entry.Key));
                 }
                 else
                 {
-                    writer.WriteRaw(string.Format("<{0}>", entry.Key));
-                    ((SObject) entry.Value).WriteXml(writer);
-                    writer.WriteRaw(string.Format("</{0}>", entry.Key));
+                    writer.WriteRaw(string.Format("<{0}>{1}</{0}>", entry.Key, entry.Value));
                 }
             }
             writer.WriteRaw("</sObject>");
