@@ -5,7 +5,6 @@
         public sealed class OperationType
         {
             public static readonly OperationType Insert = new OperationType("insert");
-            public static readonly OperationType Query = new OperationType("query");
             public static readonly OperationType Update = new OperationType("update");
             public static readonly OperationType Upsert = new OperationType("upsert");
             public static readonly OperationType Delete = new OperationType("delete");
