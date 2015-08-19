@@ -74,7 +74,7 @@ await auth.WebServerAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURCALLBACK
 
 You can see a demonstration of this in the following sample application: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
 
-#### Creating the ForceClient
+#### Creating the ForceClient or BulkForceClient
 
 After this completes successfully you will receive a valid Access Token and Instance URL. The Instance URL returned identifies the web service URL you'll use to call the Force.com REST APIs, passing in the Access Token. Additionally, the authentication client will return the API version number, which is used to construct a valid HTTP request.
 
@@ -86,6 +86,7 @@ var accessToken = auth.AccessToken;
 var apiVersion = auth.ApiVersion;
 
 var client = new ForceClient(instanceUrl, accessToken, apiVersion);
+var bulkClient = new BulkForceClient(instanceUrl, accessToken, apiVersion);
 ```
 
 ### Sample Code
@@ -163,6 +164,55 @@ foreach (var account in accounts.records)
     Console.WriteLine(account.Name);
 }
 ```
+
+### Bulk Sample Code
+
+#### Create
+
+You can create multiple records at once with the Bulk client:
+
+```
+public class Account
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+}
+
+...
+
+var accountsBatch1 = new SObjectList<Account>
+{
+	new Account {Name = "TestStAccount1"},
+	new Account {Name = "TestStAccount2"}
+};
+var accountsBatch2 = new SObjectList<Account>
+{
+	new Account {Name = "TestStAccount3"},
+	new Account {Name = "TestStAccount4"}
+};
+var accountsBatch3 = new SObjectList<Account>
+{
+	new Account {Name = "TestStAccount5"},
+	new Account {Name = "TestStAccount6"}
+};
+
+var accountsBatchList = new List<SObjectList<Account>> 
+{ 
+	accountsBatch1,
+	accountsBatch2,
+	accountsBatch3
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", Bulk.OperationType.Insert, accountsBatchList);
+```
+
+The above code will create 6 accounts in 3 batches. Each batch can hold upto 10,000 records and you can use multiple records.
+For more details on the Salesforce Bulk API, see [the documentation](https://resources.docs.salesforce.com/196/latest/en-us/sfdc/pdf/api_asynch.pdf "Salesforce Bulk API Docs")
+
+#### Update
+
+TODO:
 
 ## Contributing to the Repository ###
 
