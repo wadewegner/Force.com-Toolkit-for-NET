@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Xml;
+using System.Xml.Serialization;
 using NUnit.Framework;
 using Salesforce.Force.Bulk;
 using Salesforce.Force.Bulk.Models;
@@ -176,25 +179,116 @@ namespace Salesforce.Force.UnitTests
         /// It means that other methods dont need testing.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public async void RunJobAndPoll_GoodData_CompleteRunThroughSucceeds()
         {
             var expectedResponses = new List<HttpResponseMessage>
             {
+                // create job
                 new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
+                    Content = new XmlContent(new JobInfoResult
+                    {
+                        ApiVersion = 32.0f,
+                        ConcurrencyMode = "Parallel",
+                        ContentType = "XML",
+                        CreatedById = "test",
+                        CreatedDate = DateTime.Now,
+                        Id = "test",
+                        NumberBatchesCompleted = 0,
+                        NumberBatchesFailed = 0,
+                        NumberBatchesInProgress = 0,
+                        NumberBatchesQueued = 1,
+                        SystemModstamp = DateTime.Now,
+                        State = "Open"
+                    })
                 },
+                // create batch
                 new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
+                    Content = new XmlContent(new BatchInfoResult
+                    {
+                        CreatedDate = DateTime.Now,
+                        Id = "test",
+                        JobId = "test",
+                        NumberRecordsProcessed = 0,
+                        State = "Queued",
+                        SystemModstamp = DateTime.Now
+                    })
+                },
+                // close job
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new XmlContent(new JobInfoResult
+                    {
+                        ApiVersion = 32.0f,
+                        ConcurrencyMode = "Parallel",
+                        ContentType = "XML",
+                        CreatedById = "test",
+                        CreatedDate = DateTime.Now,
+                        Id = "test",
+                        NumberBatchesCompleted = 0,
+                        NumberBatchesFailed = 0,
+                        NumberBatchesInProgress = 0,
+                        NumberBatchesQueued = 1,
+                        SystemModstamp = DateTime.Now,
+                        State = "Closed"
+                    })
+                },
+                // poll batch
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new XmlContent(new BatchInfoResult
+                    {
+                        CreatedDate = DateTime.Now,
+                        Id = "test",
+                        JobId = "test",
+                        NumberRecordsProcessed = 1,
+                        State = "Completed",
+                        SystemModstamp = DateTime.Now
+                    })
+                },
+                // get batch result
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new XmlContent(new BatchResultList
+                    {
+                        new BatchResult
+                        {
+                            Id = "000000000000000000",
+                            Created = true,
+                            Success = true
+                        }
+                    })
                 }
             };
 
             var testingActions = new List<Action<HttpRequestMessage>>
             {
-                r => { },
-                r => { }
+                // create job
+                r =>
+                {
+                    
+                },
+                // create batch
+                r =>
+                {
+                    
+                },
+                // close job
+                r =>
+                {
+                    
+                },
+                // poll batch
+                r =>
+                {
+                    
+                },
+                // get batch result
+                r =>
+                {
+                    
+                }
             };
 
             var inputList = new List<SObjectList<SObject>>
@@ -215,6 +309,19 @@ namespace Salesforce.Force.UnitTests
             {
                 await client.RunJobAndPollAsync("Account", Bulk.Bulk.OperationType.Insert, inputList);
             }
+        }
+
+        private static string MimicSerialization(object inputObject)
+        {
+            var xmlSerializer = new XmlSerializer(inputObject.GetType());
+            var stringWriter = new StringWriter();
+            string result;
+            using (var writer = XmlWriter.Create(stringWriter))
+            {
+                xmlSerializer.Serialize(writer, inputObject);
+                result = stringWriter.ToString();
+            }
+            return result;
         }
     }
 }
