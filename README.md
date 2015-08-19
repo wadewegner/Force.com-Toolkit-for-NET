@@ -229,7 +229,7 @@ var results = await bulkClient.RunJobAndPollAsync("Account",
 						Bulk.OperationType.Insert, accountsBatchList);
 ```
 
-The above code will create 6 accounts in 3 batches. Each batch can hold upto 10,000 records and you can use multiple records.
+The above code will create 6 accounts in 3 batches. Each batch can hold upto 10,000 records and you can use multiple batches for Insert and all of the operations below.
 For more details on the Salesforce Bulk API, see [the documentation](https://resources.docs.salesforce.com/196/latest/en-us/sfdc/pdf/api_asynch.pdf "Salesforce Bulk API Docs").
 
 You can also create objects dynamically using the inbuilt SObject class:
