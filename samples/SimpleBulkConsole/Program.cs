@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Salesforce.Common;
 using Salesforce.Force.Bulk;
 using Salesforce.Force.Bulk.Models;
@@ -19,7 +18,7 @@ namespace SimpleBulkConsole
         private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
         private static readonly string IsSandboxUser = ConfigurationManager.AppSettings["IsSandboxUser"];
 
-        private static void Main()
+        public static void Main()
         {
             try
             {

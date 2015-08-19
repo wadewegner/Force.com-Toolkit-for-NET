@@ -43,21 +43,21 @@ namespace Salesforce.Force.Bulk
             IEnumerable<ISObjectList<T>> recordsLists)
         {
             const float pollingStart = 1000;
-            const float pollingIncrease = 1.6f;
+            const float pollingIncrease = 2.0f;
 
             var batchInfoResults = await RunJob(objectName, operationType, recordsLists);
 
             var batchResults = new List<BatchResultList>();
-            var currentPoll = (int) pollingStart;
+            var currentPoll = pollingStart;
             while (batchInfoResults.Count > 0)
             {
                 var removeList = new List<BatchInfoResult>();
                 foreach (var batchInfoResult in batchInfoResults)
                 {
                     var batchInfoResultNew = await PollBatchAsync(batchInfoResult);
-                    if (batchInfoResultNew.State == Bulk.BatchState.Completed.Value() ||
-                        batchInfoResultNew.State == Bulk.BatchState.Failed.Value() ||
-                        batchInfoResultNew.State == Bulk.BatchState.NotProcessed.Value())
+                    if (batchInfoResultNew.State.Equals(Bulk.BatchState.Completed.Value()) ||
+                        batchInfoResultNew.State.Equals(Bulk.BatchState.Failed.Value()) ||
+                        batchInfoResultNew.State.Equals(Bulk.BatchState.NotProcessed.Value()))
                     {
                         batchResults.Add(await GetBatchResult(batchInfoResultNew));
                         removeList.Add(batchInfoResult);
@@ -68,8 +68,8 @@ namespace Salesforce.Force.Bulk
                     batchInfoResults.Remove(removeItem);
                 }
 
-                await Task.Delay(currentPoll);
-                currentPoll = (int)(currentPoll * pollingIncrease);
+                await Task.Delay((int)currentPoll);
+                currentPoll *= pollingIncrease;
             }
 
             return batchResults;
