@@ -193,7 +193,7 @@ Below are some simple examples that show how to use the ```BulkForceClient```
 You can create multiple records at once with the Bulk client:
 
 ```
-public class Account
+public class Account 
 {
     public string Id { get; set; }
     public string Name { get; set; }
