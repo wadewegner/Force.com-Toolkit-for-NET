@@ -1,6 +1,6 @@
 # Force.com Toolkit for .NET [![Build Status](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET.svg?branch=master)](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET) [![Build status](https://ci.appveyor.com/api/projects/status/43y1npcb2q0u7aca)](https://ci.appveyor.com/project/WadeWegner/force-com-toolkit-for-net)
 
-The Force.com Toolkit for .NET provide an easy way for .NET developers to interact with the Force.com & Chatter REST APIs using native libraries.
+The Force.com Toolkit for .NET provide an easy way for .NET developers to interact with the Force.com, Force.com Bulk & Chatter REST APIs using native libraries.
 
 These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4.5, Windows Phone 8, Windows 8/8.1, and iOS/Android using Xamarin and Mono.NET.
 
@@ -209,9 +209,9 @@ var results = await bulkClient.RunJobAndPollAsync("Account",
 ```
 
 The above code will create 6 accounts in 3 batches. Each batch can hold upto 10,000 records and you can use multiple records.
-For more details on the Salesforce Bulk API, see [the documentation](https://resources.docs.salesforce.com/196/latest/en-us/sfdc/pdf/api_asynch.pdf "Salesforce Bulk API Docs")
+For more details on the Salesforce Bulk API, see [the documentation](https://resources.docs.salesforce.com/196/latest/en-us/sfdc/pdf/api_asynch.pdf "Salesforce Bulk API Docs").
 
-You can also create an object dynamically using the inbuilt SObject class:
+You can also create objects dynamically using the inbuilt SObject class:
 
 ```
 var accountsBatch1 = new SObjectList<SObject>
@@ -220,7 +220,7 @@ var accountsBatch1 = new SObjectList<SObject>
 	{
 		{"Name" = "TestDyAccount1"}
 	},
-	new Account 
+	new SObject 
 	{
 		{"Name" = "TestDyAccount2"}
 	}
@@ -237,6 +237,33 @@ var results = await bulkClient.RunJobAndPollAsync("Account",
 ```
  
 #### Update
+
+Updating multiple records follows the same pattern as above, just change the ```Bulk.OperationType``` to ```Bulk.OperationType.Update```
+
+```
+var accountsBatch1 = new SObjectList<SObject>
+{
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"},
+		{"Name" = "TestDyAccount1"}
+	},
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"},
+		{"Name" = "TestDyAccount2"}
+	}
+};
+
+var accountsBatchList = new List<SObjectList<SObject>> 
+{ 
+	accountsBatch1
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", 
+						Bulk.OperationType.Update, accountsBatchList);
+
+```
 
 TODO:
 
