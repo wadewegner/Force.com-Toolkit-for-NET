@@ -262,35 +262,6 @@ namespace Salesforce.Force.UnitTests
                 }
             };
 
-            var testingActions = new List<Action<HttpRequestMessage>>
-            {
-                // create job
-                r =>
-                {
-                    
-                },
-                // create batch
-                r =>
-                {
-                    
-                },
-                // close job
-                r =>
-                {
-                    
-                },
-                // poll batch
-                r =>
-                {
-                    
-                },
-                // get batch result
-                r =>
-                {
-                    
-                }
-            };
-
             var inputList = new List<SObjectList<SObject>>
             {
                 new SObjectList<SObject>
@@ -300,6 +271,28 @@ namespace Salesforce.Force.UnitTests
                         {"Name", "TestAccount1"}
                     }
                 }
+            };
+
+            var testingActions = new List<Action<HttpRequestMessage>>
+            {
+                // create job
+                r => Assert.AreEqual(r.Content.ReadAsStringAsync().Result, MimicSerialization(new JobInfo
+                {
+                    ContentType = "XML",
+                    Object = "Account",
+                    Operation = Bulk.Bulk.OperationType.Insert.Value()
+                })),
+                // create batch
+                r => Assert.AreEqual(r.Content.ReadAsStringAsync().Result, MimicSerialization(inputList[0])),
+                // close job
+                r => Assert.AreEqual(r.Content.ReadAsStringAsync().Result, MimicSerialization(new JobInfoState
+                {
+                    State = "Closed"
+                })),
+                // poll batch
+                r => { /* NO PAYLOAD */ },
+                // get batch result
+                r => { /* NO PAYLOAD */ }
             };
 
             var httpClient = new HttpClient(new BulkFakeHttpRequestHandler(expectedResponses, testingActions));
