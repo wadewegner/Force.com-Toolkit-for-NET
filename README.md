@@ -33,6 +33,18 @@ You can find this sample here: https://github.com/developerforce/Force.com-Toolk
 
 This sample shows how to write a console application that leverages the async/await paradigm of .NET 4.5 and uses the toolkit to log in to and communicate with a Salesforce organization. Useful for quick POC applications and scheduled jobs.
 
+### Simple Bulk Console Application
+
+You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/SimpleBulkConsole
+
+This sample shows how to write a console application to create, update and delete multiple records using the bulk functionality in the toolkit.
+
+### Advanced Bulk Console Application
+
+You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/AdvancedBulkConsole
+
+This sample shows how to use the methods on the ```BulkForceClient``` to control bulk jobs step by step. It gives an example of a polling method that you could change to implement your own custom polling.
+
 ## Operations
 
 Currently the following operations are supported.
