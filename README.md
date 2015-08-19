@@ -265,7 +265,32 @@ var results = await bulkClient.RunJobAndPollAsync("Account",
 
 ```
 
-TODO:
+#### Delete
+
+As above, you can delete multiple records with ```Bulk.OperationType.Delete```
+
+```
+var accountsBatch1 = new SObjectList<SObject>
+{
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"}
+	},
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"}
+	}
+};
+
+var accountsBatchList = new List<SObjectList<SObject>> 
+{ 
+	accountsBatch1
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", 
+						Bulk.OperationType.Delete, accountsBatchList);
+
+```
 
 ## Contributing to the Repository ###
 
