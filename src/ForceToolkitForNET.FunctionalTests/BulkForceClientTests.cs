@@ -109,7 +109,7 @@ namespace Salesforce.Force.FunctionalTests
 
             Assert.IsTrue(results4 != null);
             Assert.AreEqual(results4.Count, 1);
-            Assert.AreEqual(results4[0].Count, 1);
+            Assert.AreEqual(results4[0].Count, 3);
             Assert.IsFalse(results4[0][0].Created);
             Assert.IsTrue(results4[0][0].Success);
         }
