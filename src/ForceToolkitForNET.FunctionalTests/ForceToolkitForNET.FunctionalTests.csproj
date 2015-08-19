@@ -83,7 +83,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BulkForceClientTests.cs" />
     <Compile Include="ForceClientTests.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Contact.cs" />
