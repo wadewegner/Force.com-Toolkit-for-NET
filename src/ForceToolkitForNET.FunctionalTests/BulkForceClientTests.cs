@@ -9,6 +9,7 @@ using Salesforce.Force.FunctionalTests.Models;
 
 namespace Salesforce.Force.FunctionalTests
 {
+    [TestFixture]
     public class BulkForceClientTests
     {
         private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
