@@ -167,6 +167,15 @@ foreach (var account in accounts.records)
 
 ### Bulk Sample Code
 
+Below are some simple examples that show how to use the ```BulkForceClient```
+
+*NOTE:* The following features are currently not supported
+
+* CSV data type requests / responses
+* Zipped attachment uploads
+* Serial bulk jobs
+* Query type bulk jobs
+
 #### Create
 
 You can create multiple records at once with the Bulk client:
@@ -246,12 +255,12 @@ var accountsBatch1 = new SObjectList<SObject>
 	new SObject 
 	{
 		{"Id" = "YOUR_RECORD_ID"},
-		{"Name" = "TestDyAccount1"}
+		{"Name" = "TestDyAccount1Renamed"}
 	},
 	new SObject 
 	{
 		{"Id" = "YOUR_RECORD_ID"},
-		{"Name" = "TestDyAccount2"}
+		{"Name" = "TestDyAccount2Renamed"}
 	}
 };
 
