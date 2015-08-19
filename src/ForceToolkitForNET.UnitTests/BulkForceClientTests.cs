@@ -16,7 +16,7 @@ namespace Salesforce.Force.UnitTests
         public async void RunJobAndPoll_NullObjectName_ArgumentNullException()
         {
             var client = new BulkForceClient("test", "test", "v32");
-            await client.RunJobAndPoll(null, Bulk.Bulk.OperationType.Insert, new List<ISObjectList<SObject>>());
+            await client.RunJobAndPollAsync(null, Bulk.Bulk.OperationType.Insert, new List<ISObjectList<SObject>>());
 
             // expects exception
         }
@@ -26,7 +26,7 @@ namespace Salesforce.Force.UnitTests
         public async void RunJobAndPoll_NullBatchList_ArgumentNullException()
         {
             var client = new BulkForceClient("test", "test", "v32");
-            await client.RunJobAndPoll<List<ISObjectList<SObject>>>("Account", Bulk.Bulk.OperationType.Insert, null);
+            await client.RunJobAndPollAsync<List<ISObjectList<SObject>>>("Account", Bulk.Bulk.OperationType.Insert, null);
 
             // expects exception
         }
@@ -36,7 +36,7 @@ namespace Salesforce.Force.UnitTests
         public async void RunJob_NullObjectName_ArgumentNullException()
         {
             var client = new BulkForceClient("test", "test", "v32");
-            await client.RunJob(null, Bulk.Bulk.OperationType.Insert, new List<ISObjectList<SObject>>());
+            await client.RunJobAsync(null, Bulk.Bulk.OperationType.Insert, new List<ISObjectList<SObject>>());
 
             // expects exception
         }
@@ -46,7 +46,7 @@ namespace Salesforce.Force.UnitTests
         public async void RunJob_NullBatchList_ArgumentNullException()
         {
             var client = new BulkForceClient("test", "test", "v32");
-            await client.RunJob<List<ISObjectList<SObject>>>("Account", Bulk.Bulk.OperationType.Insert, null);
+            await client.RunJobAsync<List<ISObjectList<SObject>>>("Account", Bulk.Bulk.OperationType.Insert, null);
 
             // expects exception
         }
@@ -146,7 +146,7 @@ namespace Salesforce.Force.UnitTests
         public async void GetBatchResultAsync_NullBatchInfo_ArgumentNullException()
         {
             var client = new BulkForceClient("test", "test", "v32");
-            await client.GetBatchResult(null);
+            await client.GetBatchResultAsync(null);
 
             // expects exception
         }
@@ -156,7 +156,7 @@ namespace Salesforce.Force.UnitTests
         public async void GetBatchResultAsync_NullBatchId_ArgumentNullException()
         {
             var client = new BulkForceClient("test", "test", "v32");
-            await client.GetBatchResult(null, "test");
+            await client.GetBatchResultAsync(null, "test");
 
             // expects exception
         }
@@ -166,7 +166,7 @@ namespace Salesforce.Force.UnitTests
         public async void GetBatchResultAsync_NullJobId_ArgumentNullException()
         {
             var client = new BulkForceClient("test", "test", "v32");
-            await client.GetBatchResult("test", null);
+            await client.GetBatchResultAsync("test", null);
 
             // expects exception
         }
@@ -181,6 +181,10 @@ namespace Salesforce.Force.UnitTests
         {
             var expectedResponses = new List<HttpResponseMessage>
             {
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
+                },
                 new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
@@ -209,7 +213,7 @@ namespace Salesforce.Force.UnitTests
 
             using (client)
             {
-                await client.RunJobAndPoll("Account", Bulk.Bulk.OperationType.Insert, inputList);
+                await client.RunJobAndPollAsync("Account", Bulk.Bulk.OperationType.Insert, inputList);
             }
         }
     }

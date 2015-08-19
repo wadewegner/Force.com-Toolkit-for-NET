@@ -26,7 +26,7 @@ namespace Salesforce.Force.Bulk
             _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
-        public async Task<List<BatchInfoResult>> RunJob<T>(string objectName, Bulk.OperationType operationType,
+        public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, Bulk.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
             if (recordsLists == null) throw new ArgumentNullException("recordsLists");
@@ -41,13 +41,13 @@ namespace Salesforce.Force.Bulk
             return batchResults;
         }
 
-        public async Task<List<BatchResultList>> RunJobAndPoll<T>(string objectName, Bulk.OperationType operationType,
+        public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, Bulk.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
             const float pollingStart = 1000;
             const float pollingIncrease = 2.0f;
 
-            var batchInfoResults = await RunJob(objectName, operationType, recordsLists);
+            var batchInfoResults = await RunJobAsync(objectName, operationType, recordsLists);
 
             var batchResults = new List<BatchResultList>();
             var currentPoll = pollingStart;
@@ -61,7 +61,7 @@ namespace Salesforce.Force.Bulk
                         batchInfoResultNew.State.Equals(Bulk.BatchState.Failed.Value()) ||
                         batchInfoResultNew.State.Equals(Bulk.BatchState.NotProcessed.Value()))
                     {
-                        batchResults.Add(await GetBatchResult(batchInfoResultNew));
+                        batchResults.Add(await GetBatchResultAsync(batchInfoResultNew));
                         removeList.Add(batchInfoResult);
                     }
                 }
@@ -150,13 +150,13 @@ namespace Salesforce.Force.Bulk
                 .ConfigureAwait(false);
         }
 
-        public async Task<BatchResultList> GetBatchResult(BatchInfoResult batchInfo)
+        public async Task<BatchResultList> GetBatchResultAsync(BatchInfoResult batchInfo)
         {
             if (batchInfo == null) throw new ArgumentNullException("batchInfo");
-            return await GetBatchResult(batchInfo.Id, batchInfo.JobId);
+            return await GetBatchResultAsync(batchInfo.Id, batchInfo.JobId);
         }
 
-        public async Task<BatchResultList> GetBatchResult(string batchId, string jobId)
+        public async Task<BatchResultList> GetBatchResultAsync(string batchId, string jobId)
         {
             if (string.IsNullOrEmpty(batchId)) throw new ArgumentNullException("batchId");
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");

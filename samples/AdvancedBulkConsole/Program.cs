@@ -113,7 +113,7 @@ namespace AdvancedBulkConsole
                         newBatchInfo.State.Equals(Bulk.BatchState.Failed.Value()) ||
                         newBatchInfo.State.Equals(Bulk.BatchState.NotProcessed.Value()))
                     {
-                        results.Add(await client.GetBatchResult(newBatchInfo));
+                        results.Add(await client.GetBatchResultAsync(newBatchInfo));
                         removeList.Add(batchInfo);
                     }
                 }

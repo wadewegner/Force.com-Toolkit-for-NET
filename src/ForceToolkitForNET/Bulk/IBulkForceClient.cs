@@ -6,8 +6,8 @@ namespace Salesforce.Force.Bulk
 {
     public interface IBulkForceClient
     {
-        Task<List<BatchInfoResult>> RunJob<T>(string objectName, Bulk.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);
-        Task<List<BatchResultList>> RunJobAndPoll<T>(string objectName, Bulk.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);
+        Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, Bulk.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);
+        Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, Bulk.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);
 
         Task<JobInfoResult> CreateJobAsync(string objectName, Bulk.OperationType operationType);
         Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, ISObjectList<T> recordsObject);
@@ -18,7 +18,7 @@ namespace Salesforce.Force.Bulk
         Task<JobInfoResult> PollJobAsync(string jobId);
         Task<BatchInfoResult> PollBatchAsync(BatchInfoResult batchInfo);
         Task<BatchInfoResult> PollBatchAsync(string batchId, string jobId);
-        Task<BatchResultList> GetBatchResult(BatchInfoResult batchInfo);
-        Task<BatchResultList> GetBatchResult(string batchId, string jobId);
+        Task<BatchResultList> GetBatchResultAsync(BatchInfoResult batchInfo);
+        Task<BatchResultList> GetBatchResultAsync(string batchId, string jobId);
     }
 }
