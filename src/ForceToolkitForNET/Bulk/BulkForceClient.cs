@@ -29,6 +29,8 @@ namespace Salesforce.Force.Bulk
         public async Task<List<BatchInfoResult>> RunJob<T>(string objectName, Bulk.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
+            if (recordsLists == null) throw new ArgumentNullException("recordsLists");
+
             var jobInfoResult = await CreateJobAsync(objectName, operationType);
             var batchResults = new List<BatchInfoResult>();
             foreach (var recordList in recordsLists)
@@ -91,12 +93,14 @@ namespace Salesforce.Force.Bulk
 
         public async Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, ISObjectList<T> recordsList)
         {
+            if (jobInfo == null) throw new ArgumentNullException("jobInfo");
             return await CreateJobBatchAsync(jobInfo.Id, recordsList).ConfigureAwait(false);
         }
 
         public async Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, ISObjectList<T> recordsObject)
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
+            if (recordsObject == null) throw new ArgumentNullException("recordsObject");
 
             return await _bulkServiceHttpClient.HttpPostXmlAsync<BatchInfoResult>(recordsObject, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
                 .ConfigureAwait(false);
@@ -104,6 +108,7 @@ namespace Salesforce.Force.Bulk
 
         public async Task<JobInfoResult> CloseJobAsync(JobInfoResult jobInfo)
         {
+            if (jobInfo == null) throw new ArgumentNullException("jobInfo");
             return await CloseJobAsync(jobInfo.Id);
         }
 
@@ -118,6 +123,7 @@ namespace Salesforce.Force.Bulk
 
         public async Task<JobInfoResult> PollJobAsync(JobInfoResult jobInfo)
         {
+            if (jobInfo == null) throw new ArgumentNullException("jobInfo");
             return await PollJobAsync(jobInfo.Id);
         }
 
@@ -131,6 +137,7 @@ namespace Salesforce.Force.Bulk
 
         public async Task<BatchInfoResult> PollBatchAsync(BatchInfoResult batchInfo)
         {
+            if (batchInfo == null) throw new ArgumentNullException("batchInfo");
             return await PollBatchAsync(batchInfo.Id, batchInfo.JobId);
         }
 
@@ -145,6 +152,7 @@ namespace Salesforce.Force.Bulk
 
         public async Task<BatchResultList> GetBatchResult(BatchInfoResult batchInfo)
         {
+            if (batchInfo == null) throw new ArgumentNullException("batchInfo");
             return await GetBatchResult(batchInfo.Id, batchInfo.JobId);
         }
 

@@ -77,6 +77,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkFakeHttpRequestHandler.cs" />
+    <Compile Include="BulkForceClientTests.cs" />
     <Compile Include="Models\ObjectDescribeMetadata.cs" />
     <Compile Include="Models\ObjectFieldMetadata.cs" />
     <Compile Include="ForceClientTests.cs" />
