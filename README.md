@@ -169,7 +169,7 @@ foreach (var account in accounts.records)
 
 Below are some simple examples that show how to use the ```BulkForceClient```
 
-*NOTE:* The following features are currently not supported
+**NOTE:** The following features are currently not supported
 
 * CSV data type requests / responses
 * Zipped attachment uploads
