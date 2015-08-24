@@ -10,5 +10,11 @@ namespace Salesforce.Chatter.Models
     {
         [JsonProperty(PropertyName = "originalFeedItemId")]
         public string OriginalFeedItemId { get; set; }
+
+        [JsonProperty(PropertyName = "subjectId")]
+        public string SubjectId { get; set; }
+
+        [JsonProperty(PropertyName = "originalFeedElementId")]
+        public string OriginalFeedElementId { get; set; }
     }
 }
