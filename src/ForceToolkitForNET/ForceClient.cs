@@ -166,17 +166,13 @@ namespace Salesforce.Force
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
         }
 
-        /// <summary>
-        /// Executes the specified SOSL search.
-        /// </summary>
-        /// <typeparam name="T">Target deserialization type</typeparam>
-        /// <param name="query">A SOSL query</param>
-        /// <returns>Task[List[T]]</returns>
-        public Task<List<T>> SearchAsync<T>(string query)
+        public Task<List<SearchResult>> SearchAsync(string query)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
+            if (!query.Contains("FIND")) throw new ArgumentException("query does not contain FIND");
+            if (!query.Contains("{") || !query.Contains("}")) throw new ArgumentException("search term must be wrapped in braces");
 
-            return _serviceHttpClient.HttpGetAsync<List<T>>(string.Format("search?q={0}", Uri.EscapeDataString(query)));
+            return _serviceHttpClient.HttpGetAsync<List<SearchResult>>(string.Format("search?q={0}", Uri.EscapeDataString(query)));
         }
 
         public async Task<T> UserInfo<T>(string url)

@@ -41,6 +41,7 @@
     <Compile Include="AuthenticationClient.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
+    <Compile Include="Models\Attributes.cs" />
     <Compile Include="Models\DescribeGlobalResult.cs" />
     <Compile Include="Models\DisplayTypes.cs" />
     <Compile Include="ForceAuthException.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Models\ErrorResponse.cs" />
     <Compile Include="Models\ErrorResponses.cs" />
     <Compile Include="Models\QueryResult.cs" />
+    <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Models\SuccessResponse.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
