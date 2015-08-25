@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Reflection;
 using Salesforce.Common;
@@ -62,13 +63,11 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-            var fields = "";
-            //fields = string.Join(", ", typeof(T).GetRuntimeProperties().Select(p => p.Name));
-            fields = string.Join(", ", typeof(T).GetRuntimeProperties()
-                .Select(p => { 
-                    var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
-                    return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
-                }));
+		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
+		        .Select(p => { 
+		            var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
+		            return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
+		        }));
 
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
