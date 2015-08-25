@@ -21,7 +21,7 @@ namespace Salesforce.Chatter
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
             
             // A change in endpoint for feed item was introduced in v31 of the API.
-            _itemsOrElements = float.Parse(_serviceHttpClient._apiVersion.Substring(1)) > 30 ? "feed-elements" : "feed-items";
+            _itemsOrElements = float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30 ? "feed-elements" : "feed-items";
         }
 
         public Task<T> FeedsAsync<T>()
@@ -37,7 +37,7 @@ namespace Salesforce.Chatter
         public Task<T> PostFeedItemAsync<T>(FeedItemInput feedItemInput, string userId)
         {
             // Feed items not available post v30.0
-            if (float.Parse(_serviceHttpClient._apiVersion.Substring(1)) > 30.0)
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30.0)
             {
                 return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, "chatter/feed-elements");
             }
@@ -57,7 +57,7 @@ namespace Salesforce.Chatter
 
         public Task<T> PostFeedItemCommentAsync<T>(FeedItemInput envelope, string feedId)
         {
-            if (float.Parse(_serviceHttpClient._apiVersion.Substring(1)) > 30.0)
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30.0)
             {
                 return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/{0}/{1}/capabilities/comments/items", _itemsOrElements, feedId));
             }
@@ -67,7 +67,7 @@ namespace Salesforce.Chatter
 
         public Task<T> LikeFeedItemAsync<T>(string feedId)
         {
-            if (float.Parse(_serviceHttpClient._apiVersion.Substring(1))> 30.0)
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1))> 30.0)
             {
                 return _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/{0}/{1}/capabilities/chatter-likes/items", _itemsOrElements, feedId));
             }
@@ -79,7 +79,7 @@ namespace Salesforce.Chatter
         {
             var sharedFeedItem = new SharedFeedItemInput { SubjectId = userId };
 
-            if (float.Parse(_serviceHttpClient._apiVersion.Substring(1)) > 30.0)
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30.0)
             {
                 sharedFeedItem.OriginalFeedElementId = feedId;
                 return _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, "chatter/feed-elements");
