@@ -559,6 +559,15 @@ namespace Salesforce.Force.FunctionalTests
             Assert.That(result.TotalSize, Is.Not.EqualTo(0));
         }
 
+        [Test]
+        public async void Search()
+        {
+            var result = await _client.SearchAsync("FIND {test}");
+
+            Assert.IsNotNull(result);
+        }
+
+        #region Private methods
         private static async Task CreateExternalIdField(string objectName, string fieldName)
         {
             var salesforceClient = new SalesforceClient();
@@ -567,5 +576,6 @@ namespace Salesforce.Force.FunctionalTests
             await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
                     loginResult.MetadataServerUrl, true);
         }
+        #endregion
     }
 }

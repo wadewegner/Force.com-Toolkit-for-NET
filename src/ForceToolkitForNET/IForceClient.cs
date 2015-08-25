@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Salesforce.Common.Models;
 
@@ -23,6 +24,7 @@ namespace Salesforce.Force
         Task<T> DescribeLayoutAsync<T>(string objectName);
         Task<T> DescribeLayoutAsync<T>(string objectName, string recordTypeId);
         Task<T> RecentAsync<T>(int limit = 200);
+        Task<List<SearchResult>> SearchAsync(string query);
         Task<T> UserInfo<T>(string url);
         void Dispose();
     }
