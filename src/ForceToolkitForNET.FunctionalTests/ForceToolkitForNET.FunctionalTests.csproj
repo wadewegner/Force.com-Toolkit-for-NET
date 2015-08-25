@@ -88,6 +88,7 @@
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\ContactsAccountNameQuery.cs" />
     <Compile Include="Models\DeletedRecord.cs" />
+    <Compile Include="Models\Event.cs" />
     <Compile Include="Models\UpdatedRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

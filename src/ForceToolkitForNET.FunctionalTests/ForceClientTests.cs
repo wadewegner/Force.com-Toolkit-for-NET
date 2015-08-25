@@ -575,6 +575,28 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public async void Create_EventWithDate_IsSuccess()
+        {
+            // This test is to ensure we have proper date serialization and don't get the following error:
+            // "Cannot deserialize instance of date from VALUE_STRING value 2015-08-25T11:49:53.0113029-07:00"
+
+            var account = new Account { Name = "New Account", Description = "New Account Description" };
+            var accountSuccessResponse = await _client.CreateAsync("Account", account);
+            
+            var newEvent = new Event()
+            {
+                Description = "new Event",
+                Subject = "new Event",
+                WhatId = accountSuccessResponse.Id,
+                ActivityDate = DateTime.Now
+            };
+            
+            var eventSuccessResponse = await _client.CreateAsync("Event", newEvent);
+
+            Assert.IsNotNullOrEmpty(eventSuccessResponse.Success);
+        }
+
         #region Private methods
         private static async Task CreateExternalIdField(string objectName, string fieldName)
         {
