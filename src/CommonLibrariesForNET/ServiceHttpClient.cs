@@ -17,7 +17,7 @@ namespace Salesforce.Common
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string DateFormat = "s";
         private readonly string _instanceUrl;
-        public string ApiVersion; // needs to be readable for api version based logic
+        public string ApiVersion;
         private readonly HttpClient _httpClient;
 
         public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
@@ -186,7 +186,7 @@ namespace Salesforce.Common
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new CreateableContractResolver(),
+                    //waw - this is purposeful? ContractResolver = new CreateableContractResolver(),
                     DateFormatString = DateFormat
                 });
 

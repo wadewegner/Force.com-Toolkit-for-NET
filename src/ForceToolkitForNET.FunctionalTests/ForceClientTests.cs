@@ -589,7 +589,9 @@ namespace Salesforce.Force.FunctionalTests
                 Description = "new Event",
                 Subject = "new Event",
                 WhatId = accountSuccessResponse.Id,
-                ActivityDate = DateTime.Now
+                ActivityDate = DateTime.Now,
+                DurationInMinutes = 10,
+                ActivityDateTime =  DateTime.Now
             };
             
             var eventSuccessResponse = await _client.CreateAsync("Event", newEvent);
