@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -160,6 +161,19 @@ namespace Salesforce.Force
         public Task<T> RecentAsync<T>(int limit = 200)
         {
             return _serviceHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
+        }
+
+        /// <summary>
+        /// Executes the specified SOSL search.
+        /// </summary>
+        /// <typeparam name="T">Target deserialization type</typeparam>
+        /// <param name="query">A SOSL query</param>
+        /// <returns>Task[List[T]]</returns>
+        public Task<List<T>> SearchAsync<T>(string query)
+        {
+            if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
+
+            return _serviceHttpClient.HttpGetAsync<List<T>>(string.Format("search?q={0}", Uri.EscapeDataString(query)));
         }
 
         public async Task<T> UserInfo<T>(string url)
