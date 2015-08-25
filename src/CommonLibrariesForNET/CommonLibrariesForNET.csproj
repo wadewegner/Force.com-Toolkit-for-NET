@@ -39,9 +39,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AuthenticationClient.cs" />
@@ -73,7 +71,6 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="ForceTookitForNet.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

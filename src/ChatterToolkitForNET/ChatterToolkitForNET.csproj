@@ -39,9 +39,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChatterClient.cs" />
@@ -90,7 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ForceTookitForNet.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
