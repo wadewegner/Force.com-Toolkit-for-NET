@@ -560,9 +560,17 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Search()
+        public async void SearchAsync()
         {
-            var result = await _client.SearchAsync("FIND {test}");
+            var result = await _client.SearchAsync<dynamic>("FIND {test}");
+
+            Assert.IsNotNull(result);
+
+            result = await _client.SearchAsync<dynamic>("FIND {493*} in Phone FIELDS RETURNING Contact(Id, FirstName, Lastname, Email, Phone, MobilePhone)");
+
+            Assert.IsNotNull(result);
+
+            result = await _client.SearchAsync<dynamic>("FIND {493*} in Phone FIELDS RETURNING Lead(Id, FirstName, LastName, Phone, Company), Contact(Id, FirstName, LastName, Phone, MobilePhone)");
 
             Assert.IsNotNull(result);
         }
