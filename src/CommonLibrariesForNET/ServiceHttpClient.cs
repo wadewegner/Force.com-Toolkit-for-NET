@@ -15,6 +15,7 @@ namespace Salesforce.Common
     public class ServiceHttpClient : IServiceHttpClient, IDisposable
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
+        private const string DateFormat = "s";
         private readonly string _instanceUrl;
         public string _apiVersion; // needs to be readable for api version based logic
         private readonly HttpClient _httpClient;
@@ -159,7 +160,8 @@ namespace Salesforce.Common
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new CreateableContractResolver()
+                    ContractResolver = new CreateableContractResolver(),
+                    DateFormatString = DateFormat
                 });
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -184,6 +186,8 @@ namespace Salesforce.Common
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CreateableContractResolver(),
+                    DateFormatString = DateFormat
                 });
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -214,7 +218,8 @@ namespace Salesforce.Common
                 Formatting.None,
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new UpdateableContractResolver()
+                    ContractResolver = new UpdateableContractResolver(),
+                    DateFormatString = DateFormat
                 });
 
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
