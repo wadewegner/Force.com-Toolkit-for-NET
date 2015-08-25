@@ -18,7 +18,7 @@ namespace Salesforce.Chatter.Models
         public string EmailToChatterAddress { get; set; }
 
         [JsonProperty(PropertyName = "fileCount")]
-        public int FileCount { get; set; }
+        public int? FileCount { get; set; }
 
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }

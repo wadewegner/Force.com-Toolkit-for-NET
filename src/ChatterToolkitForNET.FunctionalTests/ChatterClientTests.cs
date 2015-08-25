@@ -236,6 +236,5 @@ namespace Salesforce.Chatter.FunctionalTests
             return feedItem;
         }
         #endregion
-
     }
 }
