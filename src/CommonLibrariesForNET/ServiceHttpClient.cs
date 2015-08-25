@@ -17,16 +17,16 @@ namespace Salesforce.Common
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string DateFormat = "s";
         private readonly string _instanceUrl;
-        public string _apiVersion; // needs to be readable for api version based logic
+        public string ApiVersion; // needs to be readable for api version based logic
         private readonly HttpClient _httpClient;
 
         public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
         {
             _instanceUrl = instanceUrl;
-            _apiVersion = apiVersion;
+            ApiVersion = apiVersion;
             _httpClient = httpClient;
 
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(UserAgent, "/", _apiVersion));
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -40,7 +40,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
             {
@@ -94,14 +94,14 @@ namespace Salesforce.Common
             string response = null;
             var records = new List<T>();
 
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             try
             {
                 do
                 {
                     if (next != null)
-                        url = Common.FormatUrl(string.Format("query/{0}", next.Split('/').Last()), _instanceUrl, _apiVersion);
+                        url = Common.FormatUrl(string.Format("query/{0}", next.Split('/').Last()), _instanceUrl, ApiVersion);
 
                     var request = new HttpRequestMessage
                     {
@@ -154,7 +154,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
                 new JsonSerializerSettings
@@ -206,7 +206,7 @@ namespace Salesforce.Common
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
             {
@@ -247,7 +247,7 @@ namespace Salesforce.Common
 
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
             {
@@ -270,7 +270,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, _apiVersion);
+            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
             {
