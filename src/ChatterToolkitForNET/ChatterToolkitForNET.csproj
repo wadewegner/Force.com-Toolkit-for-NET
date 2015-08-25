@@ -39,12 +39,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChatterClient.cs" />
+    <Compile Include="Models\Capabilities.cs" />
+    <Compile Include="Models\Content.cs" />
     <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="IChatterClient.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\ChatterInfluence.cs" />
     <Compile Include="Models\MessageSegmentInput.cs" />
+    <Compile Include="Models\ObjectFeedItemInput.cs" />
     <Compile Include="Models\TopicCollection.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\UserPage.cs" />

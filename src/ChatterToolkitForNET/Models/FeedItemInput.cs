@@ -16,6 +16,5 @@ namespace Salesforce.Chatter.Models
 
         [JsonProperty(PropertyName = "feedElementType")]
         public String FeedElementType { get; set; }
-
     }
 }
