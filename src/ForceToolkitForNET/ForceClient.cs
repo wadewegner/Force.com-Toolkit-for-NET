@@ -75,13 +75,12 @@ namespace Salesforce.Force
             return results.Records.FirstOrDefault();
         }
 
-        public async Task<string> CreateAsync(string objectName, object record)
+        public async Task<SuccessResponse> CreateAsync(string objectName, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (record == null) throw new ArgumentNullException("record");
 
-            var response = await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
-            return response.Id;
+            return await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
         }
 
         public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
