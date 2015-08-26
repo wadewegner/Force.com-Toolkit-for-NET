@@ -9,7 +9,7 @@ namespace Salesforce.Common
     {
         void Dispose();
         Task<T> HttpGetAsync<T>(string urlSuffix);
-        Task<T> HttpGetRestApiAsync<T>(string apiName, string parameters);
+        Task<T> HttpGetRestApiAsync<T>(string apiName);
         Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName);
         Task<T> HttpGetAsync<T>(Uri uri);
         Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject);

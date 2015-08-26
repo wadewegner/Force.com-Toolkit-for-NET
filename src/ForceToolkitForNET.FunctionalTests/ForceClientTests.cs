@@ -601,12 +601,23 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void ExecuteRestApi()
+        public async void ExecuteRestApiPost()
         {
             const string echo = "Thing to echo";
             
             var json = JObject.Parse(@"{'toecho':'" + echo + "'}");
-            var response = await _client.ExecuteRestApiPost<dynamic>("RestWSTest", json);
+            var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest", json);
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(echo, response);
+        }
+
+        [Test]
+        public async void ExecuteRestApiGet()
+        {
+            const string echo = "stuff";
+
+            var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest");
 
             Assert.IsNotNull(response);
             Assert.AreEqual(echo, response);

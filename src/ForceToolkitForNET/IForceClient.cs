@@ -11,8 +11,8 @@ namespace Salesforce.Force
         Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl);
         Task<QueryResult<T>> QueryAllAsync<T>(string query);
         Task<T> QueryByIdAsync<T>(string objectName, string recordId);
-		Task<T> ExecuteRestApi<T>(string apiName, string parameters);
-        Task<T> ExecuteRestApiPost<T>(string apiName, object inputObject);
+        Task<T> ExecuteRestApiAsync<T>(string apiName);
+        Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject);
         Task<SuccessResponse> CreateAsync(string objectName, object record);
         Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record);
         Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record);

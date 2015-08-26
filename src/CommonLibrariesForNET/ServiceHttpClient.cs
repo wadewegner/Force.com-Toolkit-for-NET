@@ -74,9 +74,9 @@ namespace Salesforce.Common
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
-        public async Task<T> HttpGetRestApiAsync<T>(string apiName, string parameters)
+        public async Task<T> HttpGetRestApiAsync<T>(string apiName)
         {
-            var url = Common.FormatCustomUrl(apiName, parameters, _instanceUrl);
+            var url = Common.FormatRestApiUrl(apiName, _instanceUrl);
 
             return await HttpGetAsync<T>(url);
         }
@@ -186,7 +186,6 @@ namespace Salesforce.Common
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    //waw - this is purposeful? ContractResolver = new CreateableContractResolver(),
                     DateFormatString = DateFormat
                 });
 
