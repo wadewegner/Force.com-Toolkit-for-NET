@@ -74,13 +74,6 @@ namespace Salesforce.Common
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
-        /// <summary>
-        /// Call a custom REST API
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="apiName">The name of the custom REST API</param>
-        /// <param name="parameters">Pre-formatted parameters like this: ?name1=value1&name2=value2&soon=soforth</param>
-        /// <returns></returns>
         public async Task<T> HttpGetRestApiAsync<T>(string apiName, string parameters)
         {
             var url = Common.FormatCustomUrl(apiName, parameters, _instanceUrl);
@@ -150,6 +143,13 @@ namespace Salesforce.Common
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+        }
+
+        public async Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject)
+        {
+            var url = Common.FormatRestApiUrl(apiName, _instanceUrl);
+
+            return await HttpPostAsync<T>(inputObject, url);
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)

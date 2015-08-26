@@ -58,6 +58,15 @@ namespace Salesforce.Force
             var response = await _serviceHttpClient.HttpGetRestApiAsync<T>(apiName, parameters);
             return response;
         }
+
+        public async Task<T> ExecuteRestApiPost<T>(string apiName, object inputObject)
+        {
+            if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
+            if (inputObject == null) throw new ArgumentNullException("inputObject");
+
+            var response = await _serviceHttpClient.HttpPostRestApiAsync<T>(apiName, inputObject);
+            return response;
+        }
         
 		public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {

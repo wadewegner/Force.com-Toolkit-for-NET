@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models;
@@ -597,6 +598,18 @@ namespace Salesforce.Force.FunctionalTests
             var eventSuccessResponse = await _client.CreateAsync("Event", newEvent);
 
             Assert.IsNotNullOrEmpty(eventSuccessResponse.Success);
+        }
+
+        [Test]
+        public async void ExecuteRestApi()
+        {
+            const string echo = "Thing to echo";
+            
+            var json = JObject.Parse(@"{'toecho':'" + echo + "'}");
+            var response = await _client.ExecuteRestApiPost<dynamic>("RestWSTest", json);
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(echo, response);
         }
 
         #region Private methods
