@@ -13,12 +13,12 @@ namespace Salesforce.Common
 
             if (resourceName.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase))
             {
-                return string.Format("{0}{1}", instanceUrl, resourceName);
+                return new Uri(new Uri(instanceUrl), resourceName).ToString();
             }
 
-            return string.Format("{0}/services/data/{1}/{2}", instanceUrl, apiVersion, resourceName);
+            return new Uri(new Uri(instanceUrl), string.Format("/services/data/{0}/{1}", apiVersion, resourceName)).ToString();
         }
-
+        
         public static Uri FormatCustomUrl(string customApi, string parameters, string instanceUrl)
         {
             if (string.IsNullOrEmpty(customApi)) throw new ArgumentNullException("customApi");
