@@ -40,11 +40,11 @@ namespace Salesforce.Common
 
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
+            var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri(url),
+                RequestUri = uri,
                 Method = HttpMethod.Get
             };
 
@@ -87,18 +87,18 @@ namespace Salesforce.Common
             string response = null;
             var records = new List<T>();
 
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
+            var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             try
             {
                 do
                 {
                     if (next != null)
-                        url = Common.FormatUrl(string.Format("query/{0}", next.Split('/').Last()), _instanceUrl, ApiVersion);
+                        uri = Common.FormatUrl(string.Format("query/{0}", next.Split('/').Last()), _instanceUrl, ApiVersion);
 
                     var request = new HttpRequestMessage
                     {
-                        RequestUri = new Uri(url),
+                        RequestUri = uri,
                         Method = HttpMethod.Get
                     };
 
@@ -154,7 +154,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
+            var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
                 new JsonSerializerSettings
@@ -166,7 +166,7 @@ namespace Salesforce.Common
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
+            var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
@@ -205,11 +205,11 @@ namespace Salesforce.Common
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
+            var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri(url),
+                RequestUri = uri,
                 Method = new HttpMethod("PATCH")
             };
 
@@ -246,11 +246,11 @@ namespace Salesforce.Common
 
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
+            var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri(url),
+                RequestUri = uri,
                 Method = HttpMethod.Delete
             };
 
@@ -269,14 +269,7 @@ namespace Salesforce.Common
 
         public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
         {
-            var url = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
-
-            var request = new HttpRequestMessage
-            {
-                RequestUri = new Uri(url),
-                Method = HttpMethod.Post,
-
-            };
+            var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
@@ -296,7 +289,7 @@ namespace Salesforce.Common
             byteArrayContent.Headers.Add("Content-Disposition", String.Format("form-data; name=\"{0}\"; filename=\"{1}\"", headerName, fileName));
             content.Add(byteArrayContent, headerName, fileName);
 
-            var responseMessage = await _httpClient.PostAsync(new Uri(url), content).ConfigureAwait(false);
+            var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)

@@ -5,7 +5,7 @@ namespace Salesforce.Common
 {
     public static class Common
     {
-        public static string FormatUrl(string resourceName, string instanceUrl, string apiVersion)
+        public static Uri FormatUrl(string resourceName, string instanceUrl, string apiVersion)
         {
             if (string.IsNullOrEmpty(resourceName)) throw new ArgumentNullException("resourceName");
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
@@ -13,10 +13,10 @@ namespace Salesforce.Common
 
             if (resourceName.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase))
             {
-                return new Uri(new Uri(instanceUrl), resourceName).ToString();
+                return new Uri(new Uri(instanceUrl), resourceName);
             }
 
-            return new Uri(new Uri(instanceUrl), string.Format("/services/data/{0}/{1}", apiVersion, resourceName)).ToString();
+            return new Uri(new Uri(instanceUrl), string.Format("/services/data/{0}/{1}", apiVersion, resourceName));
         }
         
         public static Uri FormatCustomUrl(string customApi, string parameters, string instanceUrl)
