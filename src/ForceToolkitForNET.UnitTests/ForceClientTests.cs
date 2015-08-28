@@ -10,12 +10,13 @@ namespace Salesforce.Force.UnitTests
     public class ForceClientTests
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
+        private const string ApiVersion = "v34";
 
         [Test]
         public async void Requests_CheckHttpRequestMessage_UserAgent()
         {
-            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32")));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v34", httpClient);
+            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + string.Format("/{0}", ApiVersion))));
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
 
            try
            {
@@ -33,7 +34,7 @@ namespace Salesforce.Force.UnitTests
         {
             var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK) {Content = new JsonContent(new {})};
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v29", httpClient);
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
 
             await forceClient.BasicInformationAsync<object>("");
 
@@ -48,7 +49,7 @@ namespace Salesforce.Force.UnitTests
                 Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
             };
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", "v29", httpClient);
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
 
             var result = await forceClient.BasicInformationAsync<ObjectDescribeMetadata>("ValidObjectName");
 
