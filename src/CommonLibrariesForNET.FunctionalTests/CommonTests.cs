@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using NUnit.Framework;
 using Salesforce.Common.FunctionalTests.Models;
-using Salesforce.Common.Models;
 using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common.FunctionalTests
