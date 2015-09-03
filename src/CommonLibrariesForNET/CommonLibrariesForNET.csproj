@@ -42,23 +42,23 @@
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
     <Compile Include="IBulkServiceHttpClient.cs" />
-    <Compile Include="Models\DescribeGlobalResult.cs" />
-    <Compile Include="Models\DisplayTypes.cs" />
+    <Compile Include="Models\Json\DescribeGlobalResult.cs" />
+    <Compile Include="Models\Json\DisplayTypes.cs" />
     <Compile Include="ForceAuthException.cs" />
     <Compile Include="ForceException.cs" />
     <Compile Include="IAuthenticationClient.cs" />
     <Compile Include="IForceException.cs" />
     <Compile Include="IServiceHttpClient.cs" />
-    <Compile Include="Models\AuthErrorResponse.cs" />
-    <Compile Include="Models\AuthToken.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\ErrorResponse.cs" />
-    <Compile Include="Models\ErrorResponses.cs" />
-    <Compile Include="Models\QueryResult.cs" />
-    <Compile Include="Models\SuccessResponse.cs" />
-    <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="Models\Json\AuthErrorResponse.cs" />
+    <Compile Include="Models\Json\AuthToken.cs" />
+    <Compile Include="Models\Json\Error.cs" />
+    <Compile Include="Models\Json\ErrorResponse.cs" />
+    <Compile Include="Models\Json\ErrorResponses.cs" />
+    <Compile Include="Models\Json\QueryResult.cs" />
+    <Compile Include="Models\Json\SuccessResponse.cs" />
+    <Compile Include="Models\Json\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\ResponseTypes.cs" />
+    <Compile Include="Models\Json\ResponseTypes.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />
     <Compile Include="Serializer\UpdateableContractResolver.cs" />
     <Compile Include="ServiceHttpClient.cs" />
@@ -104,12 +104,14 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

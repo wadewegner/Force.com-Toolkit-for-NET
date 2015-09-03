@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Common.Models;
 using Newtonsoft.Json;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
 {

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Salesforce.Common.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Salesforce.Common.Models.Json;
 using Salesforce.Common.Serializer;
 
 namespace Salesforce.Common

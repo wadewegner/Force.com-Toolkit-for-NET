@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using Salesforce.Common;
 using Salesforce.Common.Models;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Force
 {

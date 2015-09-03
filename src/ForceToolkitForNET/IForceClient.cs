@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Salesforce.Common.Models;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Force
 {

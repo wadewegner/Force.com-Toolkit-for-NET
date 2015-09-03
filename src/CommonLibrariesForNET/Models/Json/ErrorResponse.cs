@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace Salesforce.Common.Models
+namespace Salesforce.Common.Models.Json
 {
     [XmlRoot(Namespace = "http://www.force.com/2009/06/asyncapi/dataload",
      ElementName = "error",

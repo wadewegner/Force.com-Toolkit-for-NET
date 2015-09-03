@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models;
+using Salesforce.Common.Models.Json;
 using Salesforce.Force.FunctionalTests.Models;
 using WadeWegner.Salesforce.SOAPHelpers;
 
