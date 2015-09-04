@@ -63,16 +63,6 @@
     <Compile Include="Models\Json\QueryResult.cs" />
     <Compile Include="Models\Json\SuccessResponse.cs" />
     <Compile Include="Models\Json\UserInfo.cs" />
-    <Compile Include="Models\Xml\BatchInfoResult.cs" />
-    <Compile Include="Models\Xml\BatchResult.cs" />
-    <Compile Include="Models\Xml\BatchResultErrors.cs" />
-    <Compile Include="Models\Xml\BatchResultList.cs" />
-    <Compile Include="Models\Xml\ISObjectList.cs" />
-    <Compile Include="Models\Xml\JobInfo.cs" />
-    <Compile Include="Models\Xml\JobInfoResult.cs" />
-    <Compile Include="Models\Xml\JobInfoState.cs" />
-    <Compile Include="Models\Xml\SObject.cs" />
-    <Compile Include="Models\Xml\SObjectList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Json\ResponseTypes.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using Salesforce.Common.Models;
 using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
