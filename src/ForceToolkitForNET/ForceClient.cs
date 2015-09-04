@@ -222,8 +222,8 @@ namespace Salesforce.Force
 
             var batchInfoResults = await RunJobAsync(objectName, operationType, recordsLists);
 
-            var batchResults = new List<BatchResultList>();
             var currentPoll = pollingStart;
+            var finishedBatchInfoResults = new List<BatchInfoResult>();
             while (batchInfoResults.Count > 0)
             {
                 var removeList = new List<BatchInfoResult>();
@@ -234,8 +234,7 @@ namespace Salesforce.Force
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
                     {
-                        await Task.Delay(4000);
-                        batchResults.Add(await GetBatchResultAsync(batchInfoResultNew));
+                        finishedBatchInfoResults.Add(batchInfoResultNew);
                         removeList.Add(batchInfoResult);
                     }
                 }
@@ -248,6 +247,12 @@ namespace Salesforce.Force
                 currentPoll *= pollingIncrease;
             }
 
+
+            var batchResults = new List<BatchResultList>();
+            foreach (var batchInfoResultComplete in finishedBatchInfoResults)
+            {
+                batchResults.Add(await GetBatchResultAsync(batchInfoResultComplete));
+            }
             return batchResults;
         }
 
