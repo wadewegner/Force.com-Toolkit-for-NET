@@ -16,7 +16,7 @@ namespace Salesforce.Force.UnitTests
         public async void Requests_CheckHttpRequestMessage_UserAgent()
         {
             var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32")));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient, new HttpClient());
 
            try
            {
@@ -35,7 +35,7 @@ namespace Salesforce.Force.UnitTests
         {
             var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK) {Content = new JsonContent(new {})};
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient, new HttpClient());
 
             await forceClient.BasicInformationAsync<object>("");
 
@@ -50,7 +50,7 @@ namespace Salesforce.Force.UnitTests
                 Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
             };
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient, new HttpClient());
 
             var result = await forceClient.BasicInformationAsync<ObjectDescribeMetadata>("ValidObjectName");
 

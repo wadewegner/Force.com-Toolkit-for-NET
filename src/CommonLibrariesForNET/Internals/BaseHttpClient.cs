@@ -34,6 +34,11 @@ namespace Salesforce.Common.Internals
             HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_contentType));
         }
 
+        public string GetApiVersion()
+        {
+            return ApiVersion;
+        }
+
         protected async Task<string> HttpGetAsync(Uri uri)
         {
             var responseMessage = await HttpClient.GetAsync(uri).ConfigureAwait(false);

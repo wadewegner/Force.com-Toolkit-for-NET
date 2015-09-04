@@ -27,7 +27,7 @@ namespace Salesforce.Common
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpGetAsync<T>(new Uri(url));
+            return await HttpGetAsync<T>(url);
         }
 
         public async Task<T> HttpGetAsync<T>(Uri uri)
@@ -48,7 +48,7 @@ namespace Salesforce.Common
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPostAsync<T>(inputObject, new Uri(url));
+            return await HttpPostAsync<T>(inputObject, url);
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)

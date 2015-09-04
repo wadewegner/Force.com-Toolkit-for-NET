@@ -55,7 +55,7 @@ namespace Salesforce.Force
 
             return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
         }
-        
+
         public async Task<T> ExecuteRestApiAsync<T>(string apiName)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
@@ -69,7 +69,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
             if (inputObject == null) throw new ArgumentNullException("inputObject");
 
-            var response = await _serviceHttpClient.HttpPostRestApiAsync<T>(apiName, inputObject);
+            var response = await _jsonHttpClient.HttpPostRestApiAsync<T>(apiName, inputObject);
             return response;
         }
 
@@ -79,7 +79,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
 		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
-		        .Select(p => { 
+		        .Select(p => {
 		            var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
 		            return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
 		        }));
@@ -95,8 +95,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (record == null) throw new ArgumentNullException("record");
 
-            var response = await _jsonHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
-            return response.Id;
+            return await _jsonHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
         }
 
         public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
@@ -186,7 +185,7 @@ namespace Salesforce.Force
             if (!query.Contains("FIND")) throw new ArgumentException("query does not contain FIND");
             if (!query.Contains("{") || !query.Contains("}")) throw new ArgumentException("search term must be wrapped in braces");
 
-            return _serviceHttpClient.HttpGetAsync<List<T>>(string.Format("search?q={0}", Uri.EscapeDataString(query)));
+            return _jsonHttpClient.HttpGetAsync<List<T>>(string.Format("search?q={0}", Uri.EscapeDataString(query)));
         }
 
         public async Task<T> UserInfo<T>(string url)

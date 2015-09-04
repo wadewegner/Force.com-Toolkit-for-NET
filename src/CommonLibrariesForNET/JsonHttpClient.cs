@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -32,7 +33,7 @@ namespace Salesforce.Common
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpGetAsync<T>(new Uri(url));
+            return await HttpGetAsync<T>(url);
         }
 
         public async Task<T> HttpGetAsync<T>(Uri uri)
@@ -70,7 +71,7 @@ namespace Salesforce.Common
                 }
                 try
                 {
-                    var response = await HttpGetAsync(new Uri(url));
+                    var response = await HttpGetAsync(url);
                     var jObject = JObject.Parse(response);
                     var jToken = jObject.GetValue(nodeName);
                     next = (jObject.GetValue("nextRecordsUrl") != null) ? jObject.GetValue("nextRecordsUrl").ToString() : null;
@@ -86,16 +87,9 @@ namespace Salesforce.Common
             return records;
         }
 
-		/// <summary>
-        /// Call a custom REST API
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="apiName">The name of the custom REST API</param>
-        /// <param name="parameters">Pre-formatted parameters like this: ?name1=value1&name2=value2&soon=soforth</param>
-        /// <returns></returns>
-        public async Task<T> HttpGetRestApiAsync<T>(string apiName, string parameters)
+        public async Task<T> HttpGetRestApiAsync<T>(string apiName)
         {
-            var url = Common.FormatCustomUrl(apiName, parameters, InstanceUrl);
+            var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
             return await HttpGetAsync<T>(url);
         }
 
@@ -104,7 +98,7 @@ namespace Salesforce.Common
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPostAsync<T>(inputObject, new Uri(url));
+            return await HttpPostAsync<T>(inputObject, url);
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
@@ -127,12 +121,54 @@ namespace Salesforce.Common
             }
         }
 
+        public async Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject)
+        {
+            var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
+            return await HttpPostAsync<T>(inputObject, url);
+        }
+
+        public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
+        {
+            // BRAD: I think we should probably, in time, refactor multipart and binary support to the BaseHttpClient.
+            // For now though, I just left this in here.
+
+            var uri = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
+
+            var json = JsonConvert.SerializeObject(inputObject,
+                Formatting.None,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
+            var content = new MultipartFormDataContent();
+
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+            stringContent.Headers.Add("Content-Disposition", "form-data; name=\"json\"");
+            content.Add(stringContent);
+
+            var byteArrayContent = new ByteArrayContent(fileContents);
+            byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
+            byteArrayContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"{0}\"; filename=\"{1}\"", headerName, fileName));
+            content.Add(byteArrayContent, headerName, fileName);
+
+            var responseMessage = await HttpClient.PostAsync(uri, content).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<T>(response);
+            }
+
+            throw ParseForceException(response);
+        }
+
         // PATCH
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPatchAsync(inputObject, new Uri(url));
+            return await HttpPatchAsync(inputObject, url);
         }
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri)
@@ -161,7 +197,7 @@ namespace Salesforce.Common
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpDeleteAsync(new Uri(url));
+            return await HttpDeleteAsync(url);
         }
 
         public new async Task<bool> HttpDeleteAsync(Uri uri)
