@@ -251,11 +251,14 @@ namespace Salesforce.Force.UnitTests
                 {
                     Content = new XmlContent(new BatchResultList
                     {
-                        new BatchResult
+                        Items = new SObjectList<BatchResult>
                         {
-                            Id = "000000000000000000",
-                            Created = true,
-                            Success = true
+                            new BatchResult
+                            {
+                                Id = "000000000000000000",
+                                Created = true,
+                                Success = true
+                            }
                         }
                     })
                 }

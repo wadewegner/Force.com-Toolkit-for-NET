@@ -46,13 +46,13 @@ namespace Salesforce.Force.FunctionalTests
 
             Assert.IsTrue(results1 != null, "[results1] empty result object");
             Assert.AreEqual(results1.Count, 1, "[results1] wrong number of results");
-            Assert.AreEqual(results1[0].Count, 3, "[results1] wrong number of result records");
-            Assert.IsTrue(results1[0][0].Created);
-            Assert.IsTrue(results1[0][0].Success);
-            Assert.IsTrue(results1[0][1].Created);
-            Assert.IsTrue(results1[0][1].Success);
-            Assert.IsTrue(results1[0][2].Created);
-            Assert.IsTrue(results1[0][2].Success);
+            Assert.AreEqual(results1[0].Items.Count, 3, "[results1] wrong number of result records");
+            Assert.IsTrue(results1[0].Items[0].Created);
+            Assert.IsTrue(results1[0].Items[0].Success);
+            Assert.IsTrue(results1[0].Items[1].Created);
+            Assert.IsTrue(results1[0].Items[1].Success);
+            Assert.IsTrue(results1[0].Items[2].Created);
+            Assert.IsTrue(results1[0].Items[2].Success);
 
 
             // Make a dynamic typed Account list
@@ -69,16 +69,16 @@ namespace Salesforce.Force.FunctionalTests
 
             Assert.IsTrue(results2 != null, "[results2] empty result object");
             Assert.AreEqual(results2.Count, 1, "[results2] wrong number of results");
-            Assert.AreEqual(results2[0].Count, 3, "[results2] wrong number of result records");
-            Assert.IsTrue(results2[0][0].Created);
-            Assert.IsTrue(results2[0][0].Success);
-            Assert.IsTrue(results2[0][1].Created);
-            Assert.IsTrue(results2[0][1].Success);
-            Assert.IsTrue(results2[0][2].Created);
-            Assert.IsTrue(results2[0][2].Success);
+            Assert.AreEqual(results2[0].Items.Count, 3, "[results2] wrong number of result records");
+            Assert.IsTrue(results2[0].Items[0].Created);
+            Assert.IsTrue(results2[0].Items[0].Success);
+            Assert.IsTrue(results2[0].Items[1].Created);
+            Assert.IsTrue(results2[0].Items[1].Success);
+            Assert.IsTrue(results2[0].Items[2].Created);
+            Assert.IsTrue(results2[0].Items[2].Success);
 
             // get the id of the first account created in the first batch
-            var id = results2[0][0].Id;
+            var id = results2[0].Items[0].Id;
             dtAccountsBatch = new SObjectList<SObject>
             {
                 new SObject
@@ -94,14 +94,14 @@ namespace Salesforce.Force.FunctionalTests
 
             Assert.IsTrue(results3 != null);
             Assert.AreEqual(results3.Count, 1);
-            Assert.AreEqual(results3[0].Count, 1);
-            Assert.AreEqual(results3[0][0].Id, id);
-            Assert.IsFalse(results3[0][0].Created);
-            Assert.IsTrue(results3[0][0].Success);
+            Assert.AreEqual(results3[0].Items.Count, 1);
+            Assert.AreEqual(results3[0].Items[0].Id, id);
+            Assert.IsFalse(results3[0].Items[0].Created);
+            Assert.IsTrue(results3[0].Items[0].Success);
 
             // create an Id list for the original strongly typed accounts created
             var idBatch = new SObjectList<SObject>();
-            idBatch.AddRange(results1[0].Select(result => new SObject { { "Id", result.Id } }));
+            idBatch.AddRange(results1[0].Items.Select(result => new SObject { { "Id", result.Id } }));
 
             // delete all the strongly typed accounts
             var results4 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Delete,
@@ -111,9 +111,9 @@ namespace Salesforce.Force.FunctionalTests
 
             Assert.IsTrue(results4 != null, "[results4] empty result object");
             Assert.AreEqual(results4.Count, 1, "[results4] wrong number of results");
-            Assert.AreEqual(results4[0].Count, 3, "[results4] wrong number of result records");
-            Assert.IsFalse(results4[0][0].Created);
-            Assert.IsTrue(results4[0][0].Success);
+            Assert.AreEqual(results4[0].Items.Count, 3, "[results4] wrong number of result records");
+            Assert.IsFalse(results4[0].Items[0].Created);
+            Assert.IsTrue(results4[0].Items[0].Success);
         }
     }
 
