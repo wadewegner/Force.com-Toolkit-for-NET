@@ -234,6 +234,7 @@ namespace Salesforce.Force
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
                     {
+                        await Task.Delay(4000);
                         batchResults.Add(await GetBatchResultAsync(batchInfoResultNew));
                         removeList.Add(batchInfoResult);
                     }

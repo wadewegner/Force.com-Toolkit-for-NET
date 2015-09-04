@@ -65,6 +65,7 @@ namespace Salesforce.Force.FunctionalTests
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
                     {
+                        await Task.Delay(4000);
                         var resultObj = await _client.GetBatchResultAsync(batchInfoResultNew);
                         Assert.AreEqual(resultObj.Count, 3, "[lowLevel] three results not returned: " + batchInfoResultNew.State);
                         batchResults.Add(resultObj);
