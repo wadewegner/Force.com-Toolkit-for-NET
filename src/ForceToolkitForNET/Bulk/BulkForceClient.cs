@@ -9,7 +9,7 @@ namespace Salesforce.Force.Bulk
 {
     public class BulkForceClient : IBulkForceClient, IDisposable
     {
-        private readonly BulkServiceHttpClient _bulkServiceHttpClient;
+        private readonly XmlHttpClient _xmlHttpClient;
 
         public BulkForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient())
@@ -23,7 +23,7 @@ namespace Salesforce.Force.Bulk
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
-            _bulkServiceHttpClient = new BulkServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
+            _xmlHttpClient = new XmlHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
 
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, Bulk.OperationType operationType,
@@ -88,7 +88,7 @@ namespace Salesforce.Force.Bulk
                 Operation = operationType.Value()
             };
 
-            return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
+            return await _xmlHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
         }
 
         public async Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, ISObjectList<T> recordsList)
@@ -102,7 +102,7 @@ namespace Salesforce.Force.Bulk
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
             if (recordsObject == null) throw new ArgumentNullException("recordsObject");
 
-            return await _bulkServiceHttpClient.HttpPostXmlAsync<BatchInfoResult>(recordsObject, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
+            return await _xmlHttpClient.HttpPostAsync<BatchInfoResult>(recordsObject, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
                 .ConfigureAwait(false);
         }
 
@@ -117,7 +117,7 @@ namespace Salesforce.Force.Bulk
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
             var state = new JobInfoState {State = "Closed"};
-            return await _bulkServiceHttpClient.HttpPostXmlAsync<JobInfoResult>(state, string.Format("/services/async/{{0}}/job/{0}", jobId))
+            return await _xmlHttpClient.HttpPostAsync<JobInfoResult>(state, string.Format("/services/async/{{0}}/job/{0}", jobId))
                 .ConfigureAwait(false);
         }
 
@@ -131,7 +131,7 @@ namespace Salesforce.Force.Bulk
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
-            return await _bulkServiceHttpClient.HttpGetXmlAsync<JobInfoResult>(string.Format("/services/async/{{0}}/job/{0}", jobId))
+            return await _xmlHttpClient.HttpGetAsync<JobInfoResult>(string.Format("/services/async/{{0}}/job/{0}", jobId))
                 .ConfigureAwait(false);
         }
 
@@ -146,7 +146,7 @@ namespace Salesforce.Force.Bulk
             if (string.IsNullOrEmpty(batchId)) throw new ArgumentNullException("batchId");
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
-            return await _bulkServiceHttpClient.HttpGetXmlAsync<BatchInfoResult>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}", jobId, batchId))
+            return await _xmlHttpClient.HttpGetAsync<BatchInfoResult>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}", jobId, batchId))
                 .ConfigureAwait(false);
         }
 
@@ -161,13 +161,13 @@ namespace Salesforce.Force.Bulk
             if (string.IsNullOrEmpty(batchId)) throw new ArgumentNullException("batchId");
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
-            return await _bulkServiceHttpClient.HttpGetXmlAsync<BatchResultList>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}/result", jobId, batchId))
+            return await _xmlHttpClient.HttpGetAsync<BatchResultList>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}/result", jobId, batchId))
                .ConfigureAwait(false);
         }
 
         public void Dispose()
         {
-            _bulkServiceHttpClient.Dispose();
+            _xmlHttpClient.Dispose();
         }
     }
 }
