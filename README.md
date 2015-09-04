@@ -17,7 +17,7 @@ Install-Package DeveloperForce.Force
 Install-Package DeveloperForce.Chatter 
 ```
 
-## Samples
+## Samples 
 
 The toolkit includes the following sample applications.
 
