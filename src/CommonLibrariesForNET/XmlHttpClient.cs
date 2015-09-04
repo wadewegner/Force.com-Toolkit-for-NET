@@ -36,7 +36,7 @@ namespace Salesforce.Common
             try
             {
                 var response = await HttpGetAsync(uri);
-                if (typeof(T) == typeof(BatchInfoResult))
+                if (typeof(T) == typeof(BatchResultList))
                 {
                     throw new Exception(response);
                 }
