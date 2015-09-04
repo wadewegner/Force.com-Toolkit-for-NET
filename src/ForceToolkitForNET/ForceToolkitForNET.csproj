@@ -47,16 +47,6 @@
     <Compile Include="Bulk\BulkForceClient.cs" />
     <Compile Include="Bulk\Bulk.cs" />
     <Compile Include="Bulk\IBulkForceClient.cs" />
-    <Compile Include="Bulk\Models\BatchInfoResult.cs" />
-    <Compile Include="Bulk\Models\BatchResult.cs" />
-    <Compile Include="Bulk\Models\BatchResultErrors.cs" />
-    <Compile Include="Bulk\Models\BatchResultList.cs" />
-    <Compile Include="Bulk\Models\ISObjectList.cs" />
-    <Compile Include="Bulk\Models\JobInfo.cs" />
-    <Compile Include="Bulk\Models\JobInfoResult.cs" />
-    <Compile Include="Bulk\Models\JobInfoState.cs" />
-    <Compile Include="Bulk\Models\SObject.cs" />
-    <Compile Include="Bulk\Models\SObjectList.cs" />
     <Compile Include="IForceClient.cs" />
     <Compile Include="ForceClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
