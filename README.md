@@ -6,7 +6,7 @@ These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.c
 
 The Common Libraries for .NET provides functionality used by the [Force.com Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ForceToolkitForNET) and the [Chatter Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ChatterToolkitForNET). While you can use the Common Libraries for .NET independently, it is recommended that you use it through one of the toolkits.
 
-## NuGet Packages
+## NuGet Packages 
 
 ### Published Packages
 
