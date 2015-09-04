@@ -14,7 +14,7 @@ You can try the libraries immmediately by installing the following [DeveloperFor
 
 ```
 Install-Package DeveloperForce.Force
-Install-Package DeveloperForce.Chatter 
+Install-Package DeveloperForce.Chatter
 ```
 
 ## Samples 
