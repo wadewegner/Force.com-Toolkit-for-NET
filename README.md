@@ -8,7 +8,7 @@ The Common Libraries for .NET provides functionality used by the [Force.com Tool
 
 ## NuGet Packages 
 
-### Published Packages 
+### Published Packages
 
 You can try the libraries immmediately by installing the following [DeveloperForce NuGet packages](https://www.nuget.org/profiles/DeveloperForce/).
 
