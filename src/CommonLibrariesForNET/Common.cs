@@ -16,7 +16,7 @@ namespace Salesforce.Common
                 return new Uri(new Uri(instanceUrl), resourceName);
             }
 
-	    if (resourceName.StartsWith("/services/async", StringComparison.CurrentCultureIgnoreCase))
+	        if (resourceName.StartsWith("/services/async", StringComparison.CurrentCultureIgnoreCase))
             {
                 return new Uri(new Uri(instanceUrl), string.Format(resourceName, apiVersion));
             }

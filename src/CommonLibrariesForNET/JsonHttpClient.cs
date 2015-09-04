@@ -15,6 +15,7 @@ namespace Salesforce.Common
 {
     public class JsonHttpClient : BaseHttpClient, IJsonHttpClient
     {
+        private const string DateFormat = "s";
 
         public JsonHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
             : base(instanceUrl, apiVersion, "application/json", httpClient)
@@ -48,8 +49,15 @@ namespace Salesforce.Common
                     return JsonConvert.DeserializeObject<T>(jArray.ToString());
                 }
                 // else
-                var jObject = JObject.Parse(response);
-                return JsonConvert.DeserializeObject<T>(jObject.ToString());
+                try
+                {
+                    var jObject = JObject.Parse(response);
+                    return JsonConvert.DeserializeObject<T>(jObject.ToString());
+                }
+                catch
+                {
+                    return JsonConvert.DeserializeObject<T>(response);
+                }
             }
             catch (BaseHttpClientException e)
             {
@@ -108,7 +116,8 @@ namespace Salesforce.Common
                    new JsonSerializerSettings
                    {
                        NullValueHandling = NullValueHandling.Ignore,
-                       ContractResolver = new CreateableContractResolver()
+                       ContractResolver = new CreateableContractResolver(),
+                       DateFormatString = DateFormat
                    });
             try
             {
@@ -177,7 +186,8 @@ namespace Salesforce.Common
                 Formatting.None,
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new UpdateableContractResolver()
+                    ContractResolver = new UpdateableContractResolver(),
+                    DateFormatString = DateFormat
                 });
             try
             {

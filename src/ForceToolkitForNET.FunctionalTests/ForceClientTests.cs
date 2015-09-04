@@ -584,8 +584,8 @@ namespace Salesforce.Force.FunctionalTests
 
             var account = new Account { Name = "New Account", Description = "New Account Description" };
             var accountSuccessResponse = await _client.CreateAsync("Account", account);
-            
-            var newEvent = new Event()
+
+            var newEvent = new Event
             {
                 Description = "new Event",
                 Subject = "new Event",
@@ -594,7 +594,7 @@ namespace Salesforce.Force.FunctionalTests
                 DurationInMinutes = 10,
                 ActivityDateTime =  DateTime.Now
             };
-            
+
             var eventSuccessResponse = await _client.CreateAsync("Event", newEvent);
 
             Assert.IsNotNullOrEmpty(eventSuccessResponse.Success);
@@ -604,7 +604,7 @@ namespace Salesforce.Force.FunctionalTests
         public async void ExecuteRestApiPost()
         {
             const string echo = "Thing to echo";
-            
+
             var json = JObject.Parse(@"{'toecho':'" + echo + "'}");
             var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest", json);
 
