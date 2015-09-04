@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Salesforce.Common
+namespace Salesforce.Common.Internals
 {
     public abstract class BaseHttpClient : IDisposable
     {

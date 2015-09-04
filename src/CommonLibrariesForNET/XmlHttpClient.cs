@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Salesforce.Common.Internals;
 using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common

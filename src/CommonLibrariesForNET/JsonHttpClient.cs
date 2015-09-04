@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Salesforce.Common.Internals;
 using Salesforce.Common.Models.Json;
 using Salesforce.Common.Serializer;
 

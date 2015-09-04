@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Salesforce.Common
+namespace Salesforce.Common.Internals
 {
     internal sealed class BaseHttpClientException : Exception
     {
