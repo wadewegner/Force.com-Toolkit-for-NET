@@ -37,14 +37,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChatterClient.cs" />
+    <Compile Include="Models\Capabilities.cs" />
+    <Compile Include="Models\Content.cs" />
     <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="IChatterClient.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\ChatterInfluence.cs" />
     <Compile Include="Models\MessageSegmentInput.cs" />
+    <Compile Include="Models\ObjectFeedItemInput.cs" />
     <Compile Include="Models\TopicCollection.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\UserPage.cs" />
@@ -98,8 +105,8 @@
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wp8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http">

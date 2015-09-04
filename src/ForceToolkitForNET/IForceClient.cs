@@ -14,8 +14,9 @@ namespace Salesforce.Force
         Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl);
         Task<QueryResult<T>> QueryAllAsync<T>(string query);
         Task<T> QueryByIdAsync<T>(string objectName, string recordId);
-		Task<T> ExecuteRestApi<T>(string apiName, string parameters);
-        Task<string> CreateAsync(string objectName, object record);
+        Task<T> ExecuteRestApiAsync<T>(string apiName);
+        Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject);
+        Task<SuccessResponse> CreateAsync(string objectName, object record);
         Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record);
         Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record);
         Task<bool> DeleteAsync(string objectName, string recordId);
@@ -27,6 +28,7 @@ namespace Salesforce.Force
         Task<T> DescribeLayoutAsync<T>(string objectName);
         Task<T> DescribeLayoutAsync<T>(string objectName, string recordTypeId);
         Task<T> RecentAsync<T>(int limit = 200);
+        Task<List<T>> SearchAsync<T>(string query);
         Task<T> UserInfo<T>(string url);
 
         // BULK

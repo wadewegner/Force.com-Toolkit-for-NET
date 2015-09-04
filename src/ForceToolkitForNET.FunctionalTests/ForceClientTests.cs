@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models.Json;
@@ -103,7 +104,7 @@ namespace Salesforce.Force.FunctionalTests
         [Test]
         public async void Query_ContactsWithAccountName_IsNotEmpty()
         {
-            var queryResult = await _client.QueryAsync<Models.QueryTest.Contact>("SELECT AccountId, Account.Name, Email, Phone, Name, Title, MobilePhone FROM Contact");
+            var queryResult = await _client.QueryAsync<Models.QueryTest.Contact>("SELECT AccountId, Account.Name, Email, Phone, Name, Title, MobilePhone FROM Contact Where Account.Name != null");
 
             Assert.IsNotNull(queryResult);
             Assert.IsNotNull(queryResult.Records);
@@ -130,9 +131,9 @@ namespace Salesforce.Force.FunctionalTests
         public async void Create_Account_Typed()
         {
             var account = new Account { Name = "New Account", Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
+            var successResponse = await _client.CreateAsync("Account", account);
 
-            Assert.IsNotNullOrEmpty(id);
+            Assert.IsNotNullOrEmpty(successResponse.Id);
         }
 
         [Test]
@@ -166,18 +167,18 @@ namespace Salesforce.Force.FunctionalTests
         public async void Create_Contact_Typed_Annotations()
         {
             var contact = new Contact { Id = "Id", IsDeleted = false, AccountId = "AccountId", Name = "Name", FirstName = "FirstName", LastName = "LastName", Description = "Description" };
-            var id = await _client.CreateAsync("Contact", contact);
+            var successResponse = await _client.CreateAsync("Contact", contact);
 
-            Assert.IsNotNullOrEmpty(id);
+            Assert.IsNotNullOrEmpty(successResponse.Id);
         }
 
         [Test]
         public async void Create_Account_Untyped()
         {
             var account = new { Name = "New Account", Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
+            var successResponse = await _client.CreateAsync("Account", account);
 
-            Assert.IsNotNullOrEmpty(id);
+            Assert.IsNotNullOrEmpty(successResponse.Id);
         }
 
         [Test]
@@ -219,11 +220,11 @@ namespace Salesforce.Force.FunctionalTests
             const string newName = "New Account 2";
 
             var account = new Account { Name = originalName, Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
+            var successResponse = await _client.CreateAsync("Account", account);
 
             account.Name = newName;
 
-            var success = await _client.UpdateAsync("Account", id, account);
+            var success = await _client.UpdateAsync("Account", successResponse.Id, account);
 
             Assert.IsNotNull(success);
         }
@@ -237,11 +238,11 @@ namespace Salesforce.Force.FunctionalTests
                 const string newName = "New Account 2";
 
                 var account = new Account { Name = originalName, Description = "New Account Description" };
-                var id = await _client.CreateAsync("Account", account);
+                var successResponse = await _client.CreateAsync("Account", account);
 
                 account.Name = newName;
 
-                await _client.UpdateAsync("BadAccount", id, account);
+                await _client.UpdateAsync("BadAccount", successResponse.Id, account);
             }
             catch (ForceException ex)
             {
@@ -260,11 +261,11 @@ namespace Salesforce.Force.FunctionalTests
                 const string newName = "New Account 2";
 
                 var account = new { Name = originalName, Description = "New Account Description" };
-                var id = await _client.CreateAsync("Account", account);
+                var successResponse = await _client.CreateAsync("Account", account);
 
                 var updatedAccount = new { BadName = newName, Description = "New Account Description" };
 
-                await _client.UpdateAsync("Account", id, updatedAccount);
+                await _client.UpdateAsync("Account", successResponse.Id, updatedAccount);
             }
             catch (ForceException ex)
             {
@@ -281,11 +282,11 @@ namespace Salesforce.Force.FunctionalTests
             const string newName = "New Account 2";
 
             var account = new Account { Name = originalName, Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
+            var successResponse = await _client.CreateAsync("Account", account);
             account.Name = newName;
-            await _client.UpdateAsync("Account", id, account);
+            await _client.UpdateAsync("Account", successResponse.Id, account);
 
-            var result = await _client.QueryByIdAsync<Account>("Account", id);
+            var result = await _client.QueryByIdAsync<Account>("Account", successResponse.Id);
 
             Assert.True(result.Name == newName);
         }
@@ -294,8 +295,8 @@ namespace Salesforce.Force.FunctionalTests
         public async void Delete_Account_IsSuccess()
         {
             var account = new Account { Name = "New Account", Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
-            var success = await _client.DeleteAsync("Account", id);
+            var successResponse = await _client.CreateAsync("Account", account);
+            var success = await _client.DeleteAsync("Account", successResponse.Id);
 
             Assert.IsTrue(success);
         }
@@ -306,8 +307,8 @@ namespace Salesforce.Force.FunctionalTests
             try
             {
                 var account = new Account { Name = "New Account", Description = "New Account Description" };
-                var id = await _client.CreateAsync("Account", account);
-                var success = await _client.DeleteAsync("BadAccount", id);
+                var successResponse = await _client.CreateAsync("Account", account);
+                var success = await _client.DeleteAsync("BadAccount", successResponse.Id);
 
                 Assert.IsTrue(success);
             }
@@ -339,10 +340,10 @@ namespace Salesforce.Force.FunctionalTests
         public async void Delete_Account_ValidateIsGone()
         {
             var account = new Account { Name = "New Account", Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
-            await _client.DeleteAsync("Account", id);
+            var successResponse = await _client.CreateAsync("Account", account);
+            await _client.DeleteAsync("Account", successResponse.Id);
 
-            var result = await _client.QueryByIdAsync<Account>("Account", id);
+            var result = await _client.QueryByIdAsync<Account>("Account", successResponse.Id);
 
             Assert.IsNull(result);
         }
@@ -375,9 +376,9 @@ namespace Salesforce.Force.FunctionalTests
         public async void Object_GetDeleted_IsNotNull()
         {
             var account = new Account { Name = "New Account to Delete", Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
+            var successResponse = await _client.CreateAsync("Account", account);
 
-            await _client.DeleteAsync("Account", id);
+            await _client.DeleteAsync("Account", successResponse.Id);
             var dateTime = DateTime.Now;
 
             await Task.Run(() => Thread.Sleep(5000));
@@ -398,12 +399,12 @@ namespace Salesforce.Force.FunctionalTests
             const string newName = "New Account 2";
 
             var account = new Account { Name = originalName, Description = "New Account Description" };
-            var id = await _client.CreateAsync("Account", account);
+            var successResponse = await _client.CreateAsync("Account", account);
 
             account.Name = newName;
             var dateTime = DateTime.Now;
 
-            await _client.UpdateAsync("Account", id, account);
+            await _client.UpdateAsync("Account", successResponse.Id, account);
 
             await Task.Run(() => Thread.Sleep(5000));
 
@@ -559,6 +560,70 @@ namespace Salesforce.Force.FunctionalTests
             Assert.That(result.TotalSize, Is.Not.EqualTo(0));
         }
 
+        [Test]
+        public async void SearchAsync()
+        {
+            var result = await _client.SearchAsync<dynamic>("FIND {test}");
+
+            Assert.IsNotNull(result);
+
+            result = await _client.SearchAsync<dynamic>("FIND {493*} in Phone FIELDS RETURNING Contact(Id, FirstName, Lastname, Email, Phone, MobilePhone)");
+
+            Assert.IsNotNull(result);
+
+            result = await _client.SearchAsync<dynamic>("FIND {493*} in Phone FIELDS RETURNING Lead(Id, FirstName, LastName, Phone, Company), Contact(Id, FirstName, LastName, Phone, MobilePhone)");
+
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public async void Create_EventWithDate_IsSuccess()
+        {
+            // This test is to ensure we have proper date serialization and don't get the following error:
+            // "Cannot deserialize instance of date from VALUE_STRING value 2015-08-25T11:49:53.0113029-07:00"
+
+            var account = new Account { Name = "New Account", Description = "New Account Description" };
+            var accountSuccessResponse = await _client.CreateAsync("Account", account);
+            
+            var newEvent = new Event()
+            {
+                Description = "new Event",
+                Subject = "new Event",
+                WhatId = accountSuccessResponse.Id,
+                ActivityDate = DateTime.Now,
+                DurationInMinutes = 10,
+                ActivityDateTime =  DateTime.Now
+            };
+            
+            var eventSuccessResponse = await _client.CreateAsync("Event", newEvent);
+
+            Assert.IsNotNullOrEmpty(eventSuccessResponse.Success);
+        }
+
+        [Test]
+        public async void ExecuteRestApiPost()
+        {
+            const string echo = "Thing to echo";
+            
+            var json = JObject.Parse(@"{'toecho':'" + echo + "'}");
+            var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest", json);
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(echo, response);
+        }
+
+        [Test]
+        public async void ExecuteRestApiGet()
+        {
+            const string echo = "stuff";
+
+            var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest");
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(echo, response);
+        }
+
+        #region Private methods
         private static async Task CreateExternalIdField(string objectName, string fieldName)
         {
             var salesforceClient = new SalesforceClient();
@@ -567,5 +632,6 @@ namespace Salesforce.Force.FunctionalTests
             await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
                     loginResult.MetadataServerUrl, true);
         }
+        #endregion
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Reflection;
 using Salesforce.Common;
@@ -54,13 +55,21 @@ namespace Salesforce.Force
 
             return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
         }
-
-        public async Task<T> ExecuteRestApi<T>(string apiName, string parameters)
+        
+        public async Task<T> ExecuteRestApiAsync<T>(string apiName)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
-            if (string.IsNullOrEmpty(parameters)) throw new ArgumentNullException("parameters");
 
-            var response = await _jsonHttpClient.HttpGetRestApiAsync<T>(apiName, parameters);
+            var response = await _jsonHttpClient.HttpGetRestApiAsync<T>(apiName);
+            return response;
+        }
+
+        public async Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject)
+        {
+            if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
+            if (inputObject == null) throw new ArgumentNullException("inputObject");
+
+            var response = await _serviceHttpClient.HttpPostRestApiAsync<T>(apiName, inputObject);
             return response;
         }
 
@@ -69,7 +78,11 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties().Select(p => p.Name));
+		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
+		        .Select(p => { 
+		            var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
+		            return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
+		        }));
 
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
@@ -77,7 +90,7 @@ namespace Salesforce.Force
             return results.Records.FirstOrDefault();
         }
 
-        public async Task<string> CreateAsync(string objectName, object record)
+        public async Task<SuccessResponse> CreateAsync(string objectName, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (record == null) throw new ArgumentNullException("record");
@@ -165,6 +178,15 @@ namespace Salesforce.Force
         public Task<T> RecentAsync<T>(int limit = 200)
         {
             return _jsonHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
+        }
+
+        public Task<List<T>> SearchAsync<T>(string query)
+        {
+            if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
+            if (!query.Contains("FIND")) throw new ArgumentException("query does not contain FIND");
+            if (!query.Contains("{") || !query.Contains("}")) throw new ArgumentException("search term must be wrapped in braces");
+
+            return _serviceHttpClient.HttpGetAsync<List<T>>(string.Format("search?q={0}", Uri.EscapeDataString(query)));
         }
 
         public async Task<T> UserInfo<T>(string url)

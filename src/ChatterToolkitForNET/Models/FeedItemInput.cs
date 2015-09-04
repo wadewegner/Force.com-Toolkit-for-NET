@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 
 namespace Salesforce.Chatter.Models
 {
@@ -9,5 +10,11 @@ namespace Salesforce.Chatter.Models
 
         [JsonProperty(PropertyName = "body")]
         public MessageBodyInput Body { get; set; }
+
+        [JsonProperty(PropertyName = "subjectId")]
+        public String SubjectId { get; set; }
+
+        [JsonProperty(PropertyName = "feedElementType")]
+        public String FeedElementType { get; set; }
     }
 }

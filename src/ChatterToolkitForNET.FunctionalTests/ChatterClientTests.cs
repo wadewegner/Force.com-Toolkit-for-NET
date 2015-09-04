@@ -26,7 +26,7 @@ namespace Salesforce.Chatter.FunctionalTests
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
 
-            const string apiVersion = "v30.0";
+            const string apiVersion = "v34.0";
             _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, apiVersion);
         }
 
@@ -227,13 +227,14 @@ namespace Salesforce.Chatter.FunctionalTests
             var feedItemInput = new FeedItemInput()
             {
                 Attachment = null,
-                Body = body
+                Body = body,
+                SubjectId = id,
+                FeedElementType = "FeedItem"
             };
 
             var feedItem = await chatter.PostFeedItemAsync<FeedItem>(feedItemInput, id);
             return feedItem;
         }
         #endregion
-
     }
 }

@@ -8,18 +8,21 @@ namespace Salesforce.Chatter
 {
     public class ChatterClient : IChatterClient, IDisposable
     {
-        private JsonHttpClient _jsonHttpClient;
-
-        public ChatterClient(string instanceUrl, string accessToken, string apiVersion) 
-            : this (instanceUrl, accessToken, apiVersion, new HttpClient())
+        private readonly JsonHttpClient _jsonHttpClient;
+	private readonly string _itemsOrElements = "feed-items";
+        public ChatterClient(string instanceUrl, string accessToken, string apiVersion)
+            : this(instanceUrl, accessToken, apiVersion, new HttpClient())
         {
         }
 
         public ChatterClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
         {
-            _jsonHttpClient = new JsonHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
+            _jsonHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
+            
+            // A change in endpoint for feed item was introduced in v31 of the API.
+            _itemsOrElements = float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30 ? "feed-elements" : "feed-items";
         }
-        
+
         public Task<T> FeedsAsync<T>()
         {
             return _jsonHttpClient.HttpGetAsync<T>("chatter/feeds");
@@ -32,32 +35,65 @@ namespace Salesforce.Chatter
 
         public Task<T> PostFeedItemAsync<T>(FeedItemInput feedItemInput, string userId)
         {
-            return _jsonHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/feed-items", userId));
+            // Feed items not available post v30.0
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30.0)
+            {
+                return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, "chatter/feed-elements");
+            }
+               
+            return _jsonHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/{1}", userId, _itemsOrElements));
+        }
+
+        public Task<T> PostFeedItemToObjectAsync<T>(ObjectFeedItemInput envelope)
+        {
+            return _serviceHttpClient.HttpPostAsync<T>(envelope, "chatter/feed-elements/");
+        }
+
+        public Task<T> PostFeedItemWithAttachmentAsync<T>(ObjectFeedItemInput envelope, byte[] fileContents, string fileName)
+        {
+            return _serviceHttpClient.HttpBinaryDataPostAsync<T>("chatter/feed-elements/", envelope, fileContents, "feedElementFileUpload", fileName);
         }
 
         public Task<T> PostFeedItemCommentAsync<T>(FeedItemInput envelope, string feedId)
         {
-            return _jsonHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/feed-items/{0}/comments", feedId));
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30.0)
+            {
+                return _jsonHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/{0}/{1}/capabilities/comments/items", _itemsOrElements, feedId));
+            }
+            
+            return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/{0}/{1}/comments", _itemsOrElements, feedId));
         }
 
         public Task<T> LikeFeedItemAsync<T>(string feedId)
         {
-            return _jsonHttpClient.HttpPostAsync<T>(null, string.Format("chatter/feed-items/{0}/likes", feedId));
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1))> 30.0)
+            {
+                return _jsonHttpClient.HttpPostAsync<T>(null, string.Format("chatter/{0}/{1}/capabilities/chatter-likes/items", _itemsOrElements, feedId));
+            }
+         
+            return _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/{0}/{1}/likes", _itemsOrElements, feedId));
         }
 
         public Task<T> ShareFeedItemAsync<T>(string feedId, string userId)
         {
-            var sharedFeedItem = new SharedFeedItemInput {OriginalFeedItemId = feedId};
+            var sharedFeedItem = new SharedFeedItemInput { SubjectId = userId };
 
-            return _jsonHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/feed-items", userId));
+            if (float.Parse(_serviceHttpClient.ApiVersion.Substring(1)) > 30.0)
+            {
+                sharedFeedItem.OriginalFeedElementId = feedId;
+                return _jsonHttpClient.HttpPostAsync<T>(sharedFeedItem, "chatter/feed-elements");
+            }
+             
+            sharedFeedItem.OriginalFeedItemId = feedId;
+            return _serviceHttpClient.HttpPostAsync<T>(sharedFeedItem, string.Format("chatter/feeds/user-profile/{0}/{1}", userId, _itemsOrElements));
         }
 
         public Task<T> GetMyNewsFeedAsync<T>(string query = "")
         {
-            var url = "chatter/feeds/news/me/feed-items";
+            var url = string.Format("chatter/feeds/news/me/{0}", _itemsOrElements);
 
             if (!string.IsNullOrEmpty(query))
-                url += string.Format("?q={0}",query);
+                url += string.Format("?q={0}", query);
 
             return _jsonHttpClient.HttpGetAsync<T>(url);
         }
@@ -69,7 +105,7 @@ namespace Salesforce.Chatter
 
         public Task<T> GetGroupFeedAsync<T>(string groupId)
         {
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("chatter/feeds/record/{0}/feed-items", groupId));
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("chatter/feeds/record/{0}/{1}", _itemsOrElements, groupId));
         }
 
         public Task<T> GetUsersAsync<T>()
