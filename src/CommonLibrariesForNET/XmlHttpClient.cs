@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Salesforce.Common.Internals;
 using Salesforce.Common.Models.Json;
 using Salesforce.Common.Models.Xml;
@@ -38,7 +39,7 @@ namespace Salesforce.Common
                 var response = await HttpGetAsync(uri);
                 if (typeof(T) == typeof(BatchResultList))
                 {
-                    throw new Exception(response);
+                    throw new Exception(JsonConvert.SerializeObject(DeserializeXmlString<T>(response)));
                 }
                 return DeserializeXmlString<T>(response);
             }
