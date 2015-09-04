@@ -44,9 +44,9 @@ namespace Salesforce.Force.FunctionalTests
                     new List<SObjectList<Account>> { stAccountsBatch });
             // (one SObjectList<T> per batch, the example above uses one batch)
 
-            Assert.IsTrue(results1 != null);
-            Assert.AreEqual(results1.Count, 1);
-            Assert.AreEqual(results1[0].Count, 3);
+            Assert.IsTrue(results1 != null, "[results1] empty result object");
+            Assert.AreEqual(results1.Count, 1, "[results1] wrong number of results");
+            Assert.AreEqual(results1[0].Count, 3, "[results1] wrong number of result records");
             Assert.IsTrue(results1[0][0].Created);
             Assert.IsTrue(results1[0][0].Success);
             Assert.IsTrue(results1[0][1].Created);
@@ -67,9 +67,9 @@ namespace Salesforce.Force.FunctionalTests
             var results2 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Insert,
                     new List<SObjectList<SObject>> { dtAccountsBatch });
 
-            Assert.IsTrue(results2 != null);
-            Assert.AreEqual(results2.Count, 1);
-            Assert.AreEqual(results2[0].Count, 3);
+            Assert.IsTrue(results2 != null, "[results2] empty result object");
+            Assert.AreEqual(results2.Count, 1, "[results2] wrong number of results");
+            Assert.AreEqual(results2[0].Count, 3, "[results2] wrong number of result records");
             Assert.IsTrue(results2[0][0].Created);
             Assert.IsTrue(results2[0][0].Success);
             Assert.IsTrue(results2[0][1].Created);
@@ -107,9 +107,9 @@ namespace Salesforce.Force.FunctionalTests
             var results4 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Delete,
                     new List<SObjectList<SObject>> { idBatch });
 
-            Assert.IsTrue(results4 != null);
-            Assert.AreEqual(results4.Count, 1);
-            Assert.AreEqual(results4[0].Count, 3);
+            Assert.IsTrue(results4 != null, "[results4] empty result object");
+            Assert.AreEqual(results4.Count, 1, "[results4] wrong number of results");
+            Assert.AreEqual(results4[0].Count, 3, "[results4] wrong number of result records");
             Assert.IsFalse(results4[0][0].Created);
             Assert.IsTrue(results4[0][0].Success);
         }
