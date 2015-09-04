@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models.Xml;
@@ -39,9 +40,48 @@ namespace Salesforce.Force.FunctionalTests
                 new Account {Name = "TestStAccount3"}
             };
 
-            // insert the accounts
-            var results1 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Insert,
-                    new List<SObjectList<Account>> { stAccountsBatch });
+            // insert the accounts (the long way)
+            const float pollingStart = 1000;
+            const float pollingIncrease = 2.0f;
+
+            var jobInfoResult = await _client.CreateJobAsync("Account", BulkConstants.OperationType.Insert);
+            var batchInfoResults = new List<BatchInfoResult>();
+            foreach (var recordList in new List<SObjectList<Account>> { stAccountsBatch })
+            {
+                batchInfoResults.Add(await _client.CreateJobBatchAsync(jobInfoResult, recordList));
+            }
+            Assert.AreEqual(batchInfoResults.Count, 1, "[lowLevel] batchresults not added");
+            await _client.CloseJobAsync(jobInfoResult);
+
+            var batchResults = new List<BatchResultList>();
+            var currentPoll = pollingStart;
+            while (batchInfoResults.Count > 0)
+            {
+                var removeList = new List<BatchInfoResult>();
+                foreach (var batchInfoResult in batchInfoResults)
+                {
+                    var batchInfoResultNew = await _client.PollBatchAsync(batchInfoResult);
+                    if (batchInfoResultNew.State.Equals(BulkConstants.BatchState.Completed.Value()) ||
+                        batchInfoResultNew.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
+                        batchInfoResultNew.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
+                    {
+                        var resultObj = await _client.GetBatchResultAsync(batchInfoResultNew);
+                        Assert.AreEqual(resultObj.Count, 3, "[lowLevel] three results not returned");
+                        batchResults.Add(resultObj);
+                        removeList.Add(batchInfoResult);
+                    }
+                }
+                foreach (var removeItem in removeList)
+                {
+                    batchInfoResults.Remove(removeItem);
+                }
+
+                await Task.Delay((int)currentPoll);
+                currentPoll *= pollingIncrease;
+            }
+
+            var results1 = batchResults;
+
             // (one SObjectList<T> per batch, the example above uses one batch)
 
             Assert.IsTrue(results1 != null, "[results1] empty result object");
