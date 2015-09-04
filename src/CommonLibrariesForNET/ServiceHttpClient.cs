@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Salesforce.Common.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Salesforce.Common.Models.Json;
@@ -223,7 +223,7 @@ namespace Salesforce.Common
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode) {
-                if (responseMessage.StatusCode != System.Net.HttpStatusCode.NoContent) {
+                if (responseMessage.StatusCode != HttpStatusCode.NoContent) {
                     var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                     var r = JsonConvert.DeserializeObject<SuccessResponse>(response);

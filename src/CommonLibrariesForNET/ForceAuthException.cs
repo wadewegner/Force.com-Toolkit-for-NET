@@ -1,5 +1,4 @@
-﻿using Salesforce.Common.Models;
-using Salesforce.Common.Models.Json;
+﻿using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
 {

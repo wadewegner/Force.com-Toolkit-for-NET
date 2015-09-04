@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Salesforce.Force.Bulk.Models;
+using Salesforce.Common.Models.Xml;
 
 namespace Salesforce.Force.Bulk
 {

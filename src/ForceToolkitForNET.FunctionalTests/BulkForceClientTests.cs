@@ -3,8 +3,8 @@ using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using Salesforce.Common;
+using Salesforce.Common.Models.Xml;
 using Salesforce.Force.Bulk;
-using Salesforce.Force.Bulk.Models;
 using Salesforce.Force.FunctionalTests.Models;
 
 namespace Salesforce.Force.FunctionalTests

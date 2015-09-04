@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Xml;
 using System.Xml.Serialization;
 using NUnit.Framework;
+using Salesforce.Common.Models.Xml;
 using Salesforce.Force.Bulk;
-using Salesforce.Force.Bulk.Models;
 
 namespace Salesforce.Force.UnitTests
 {

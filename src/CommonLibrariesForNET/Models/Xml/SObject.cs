@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Salesforce.Force.Bulk.Models
+namespace Salesforce.Common.Models.Xml
 {
     public sealed class SObject : Dictionary<string,object>, IXmlSerializable
     {
@@ -15,7 +16,7 @@ namespace Salesforce.Force.Bulk.Models
 
         public void ReadXml(XmlReader reader)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void WriteXml(XmlWriter writer)

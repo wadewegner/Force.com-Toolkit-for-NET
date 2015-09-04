@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Salesforce.Force.Bulk.Models
+namespace Salesforce.Common.Models.Xml
 {
     [XmlRoot(Namespace = "http://www.force.com/2009/06/asyncapi/dataload", ElementName = "sObjects")]
     public sealed class SObjectList<T> : List<T>, ISObjectList<T>
@@ -18,7 +18,7 @@ namespace Salesforce.Force.Bulk.Models
 
         public void ReadXml(XmlReader reader)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void WriteXml(XmlWriter writer)

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Salesforce.Force.Bulk.Models
+namespace Salesforce.Common.Models.Xml
 {
     [XmlType(TypeName = "errors")]
     public class BatchResultErrors

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Common;
-using Salesforce.Force.Bulk.Models;
+using Salesforce.Common.Models.Xml;
 
 namespace Salesforce.Force.Bulk
 {
