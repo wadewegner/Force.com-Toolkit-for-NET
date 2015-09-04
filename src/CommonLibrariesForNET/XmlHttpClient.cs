@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Salesforce.Common.Internals;
 using Salesforce.Common.Models.Json;
+using Salesforce.Common.Models.Xml;
 
 namespace Salesforce.Common
 {
@@ -35,6 +36,10 @@ namespace Salesforce.Common
             try
             {
                 var response = await HttpGetAsync(uri);
+                if (typeof(T) == typeof(BatchInfoResult))
+                {
+                    throw new Exception(response);
+                }
                 return DeserializeXmlString<T>(response);
             }
             catch (BaseHttpClientException e)
