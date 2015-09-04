@@ -4,8 +4,8 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Salesforce.Common;
-using Salesforce.Force.Bulk;
-using Salesforce.Force.Bulk.Models;
+using Salesforce.Common.Models.Xml;
+using Salesforce.Force;
 
 namespace SimpleBulkConsole
 {
@@ -58,7 +58,7 @@ namespace SimpleBulkConsole
             Console.WriteLine("Connected to Salesforce");
 
             // Get a bulk client
-            var client = new BulkForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             // Make a strongly typed Account list
             var stAccountsBatch = new SObjectList<Account>
@@ -69,7 +69,7 @@ namespace SimpleBulkConsole
             };
 
             // insert the accounts
-            var results1 = await client.RunJobAndPollAsync("Account", Bulk.OperationType.Insert,
+            var results1 = await client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Insert,
                     new List<SObjectList<Account>>{stAccountsBatch});
             // (one SObjectList<T> per batch, the example above uses one batch)
 
@@ -84,7 +84,7 @@ namespace SimpleBulkConsole
             };
 
             // insert the accounts
-            var results2 = await client.RunJobAndPollAsync("Account", Bulk.OperationType.Insert,
+            var results2 = await client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Insert,
                     new List<SObjectList<SObject>>{dtAccountsBatch});
 
             Console.WriteLine("Dynamically typed accounts created");
@@ -101,7 +101,7 @@ namespace SimpleBulkConsole
             };
 
              // update the first accounts name (dont really need bulk for this, just an example)
-            var results3 = await client.RunJobAndPollAsync("Account", Bulk.OperationType.Update,
+            var results3 = await client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Update,
                     new List<SObjectList<SObject>>{dtAccountsBatch});
 
             Console.WriteLine("Account with ID {0} updated", id);
@@ -111,7 +111,7 @@ namespace SimpleBulkConsole
             idBatch.AddRange(results1[0].Select(result => new SObject {{"Id", result.Id}}));
 
             // delete all the strongly typed accounts
-            var results4 = await client.RunJobAndPollAsync("Account", Bulk.OperationType.Delete,
+            var results4 = await client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Delete,
                     new List<SObjectList<SObject>>{idBatch});
 
             Console.WriteLine("Accounts deleted");

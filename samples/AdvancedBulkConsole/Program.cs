@@ -4,8 +4,8 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Salesforce.Common;
-using Salesforce.Force.Bulk;
-using Salesforce.Force.Bulk.Models;
+using Salesforce.Common.Models.Xml;
+using Salesforce.Force;
 
 namespace AdvancedBulkConsole
 {
@@ -58,10 +58,10 @@ namespace AdvancedBulkConsole
             Console.WriteLine("Connected to Salesforce");
 
             // Get a bulk client
-            var client = new BulkForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
+            var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
             // create a job
-            var jobInfo = await client.CreateJobAsync("Account", Bulk.OperationType.Insert);
+            var jobInfo = await client.CreateJobAsync("Account", BulkConstants.OperationType.Insert);
             Console.WriteLine("Created a Job");
 
             // Make a dynamic typed Account list
@@ -109,9 +109,9 @@ namespace AdvancedBulkConsole
                 foreach (var batchInfo in batchInfoList)
                 {
                     var newBatchInfo = await client.PollBatchAsync(batchInfo);
-                    if (newBatchInfo.State.Equals(Bulk.BatchState.Completed.Value()) ||
-                        newBatchInfo.State.Equals(Bulk.BatchState.Failed.Value()) ||
-                        newBatchInfo.State.Equals(Bulk.BatchState.NotProcessed.Value()))
+                    if (newBatchInfo.State.Equals(BulkConstants.BatchState.Completed.Value()) ||
+                        newBatchInfo.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
+                        newBatchInfo.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
                     {
                         results.Add(await client.GetBatchResultAsync(newBatchInfo));
                         removeList.Add(batchInfo);
