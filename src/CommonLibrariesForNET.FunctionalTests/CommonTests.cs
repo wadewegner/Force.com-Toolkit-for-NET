@@ -18,7 +18,7 @@ namespace Salesforce.Common.FunctionalTests
         private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
 	    
 	    private AuthenticationClient _auth;
-	    private ServiceHttpClient _serviceHttpClient;
+	    private JsonHttpClient _jsonHttpClient;
 
 	    [TestFixtureSetUp]
         public void Init()
@@ -26,7 +26,7 @@ namespace Salesforce.Common.FunctionalTests
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
 
-            _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
+            _jsonHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
 
         //[Test]
@@ -37,7 +37,7 @@ namespace Salesforce.Common.FunctionalTests
         //            new KeyValuePair<string, string>("AccessToken", _auth.AccessToken)
         //        });
 
-        //    var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
+        //    var response = await _jsonHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
 
         //    Assert.IsNotNull(response);
         //}
@@ -46,7 +46,7 @@ namespace Salesforce.Common.FunctionalTests
         public async void Query_Describe()
         {
             const string objectName = "Account";
-            var response = await _serviceHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
+            var response = await _jsonHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
             
             Assert.IsNotNull(response);
         }
@@ -54,7 +54,7 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public async void Query_Objects()
         {
-            var response = await _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
+            var response = await _jsonHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
 
             Assert.IsTrue(response.MaxBatchSize > 0);
             Assert.IsTrue(response.SObjects.Count > 0);
@@ -64,7 +64,7 @@ namespace Salesforce.Common.FunctionalTests
         public async void Query_Select_Account()
         {
             const string query = "SELECT Id FROM Account";
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            var response = await _jsonHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
             Assert.IsTrue(response.TotalSize > 0);
             Assert.IsTrue(response.Records.Count > 0);
@@ -74,7 +74,7 @@ namespace Salesforce.Common.FunctionalTests
         public async void Query_Select_Count()
         {
             const string query = "SELECT count() FROM Account";
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            var response = await _jsonHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
             Assert.IsTrue(response.TotalSize > 0);
             Assert.IsTrue(response.Records.Count == 0);
@@ -111,7 +111,7 @@ namespace Salesforce.Common.FunctionalTests
 	    public async void Upsert_Update_CheckReturn()
 	    {
             var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
-            var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
+            var response = await _jsonHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
 
             Assert.IsNotNull(response);
 	    }
@@ -120,7 +120,7 @@ namespace Salesforce.Common.FunctionalTests
         public async void Upsert_New_CheckReturnInclude()
         {
             var account = new Account { Name = "New Account" + DateTime.Now.Ticks, Description = "New Account Description" + DateTime.Now.Ticks };
-            var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
+            var response = await _jsonHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Id);
@@ -133,7 +133,7 @@ namespace Salesforce.Common.FunctionalTests
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
 
 	        var badToken = "badtoken";
-            var serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
+            var serviceHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
 
             const string query = "SELECT count() FROM Account";
 

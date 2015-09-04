@@ -39,6 +39,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AuthenticationClient.cs" />
+    <Compile Include="BaseHttpClient.cs" />
+    <Compile Include="BaseHttpClientException.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
     <Compile Include="IBulkServiceHttpClient.cs" />
@@ -48,7 +50,7 @@
     <Compile Include="ForceException.cs" />
     <Compile Include="IAuthenticationClient.cs" />
     <Compile Include="IForceException.cs" />
-    <Compile Include="IServiceHttpClient.cs" />
+    <Compile Include="IJsonHttpClient.cs" />
     <Compile Include="Models\Json\AuthErrorResponse.cs" />
     <Compile Include="Models\Json\AuthToken.cs" />
     <Compile Include="Models\Json\Error.cs" />
@@ -71,7 +73,7 @@
     <Compile Include="Models\Json\ResponseTypes.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />
     <Compile Include="Serializer\UpdateableContractResolver.cs" />
-    <Compile Include="ServiceHttpClient.cs" />
+    <Compile Include="JsonHttpClient.cs" />
     <Compile Include="Attributes\UpdateableAttribute.cs" />
     <Compile Include="BulkServiceHttpClient.cs" />
   </ItemGroup>
