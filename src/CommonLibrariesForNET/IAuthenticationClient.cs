@@ -2,7 +2,7 @@
 
 namespace Salesforce.Common
 {
-    interface IAuthenticationClient
+    public interface IAuthenticationClient
     {
         string InstanceUrl { get; set; }
         string AccessToken { get; set; }
