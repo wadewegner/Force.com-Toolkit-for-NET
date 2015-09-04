@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models.Xml;
-using Salesforce.Force.Bulk;
 using Salesforce.Force.FunctionalTests.Models;
 
 namespace Salesforce.Force.FunctionalTests
@@ -19,14 +18,14 @@ namespace Salesforce.Force.FunctionalTests
         private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
 
         private AuthenticationClient _auth;
-        private BulkForceClient _client;
+        private ForceClient _client;
 
         [TestFixtureSetUp]
         public void Init()
         {
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password).Wait();
-            _client = new BulkForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
+            _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
 
         [Test]
@@ -41,7 +40,7 @@ namespace Salesforce.Force.FunctionalTests
             };
 
             // insert the accounts
-            var results1 = await _client.RunJobAndPollAsync("Account", Bulk.Bulk.OperationType.Insert,
+            var results1 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Insert,
                     new List<SObjectList<Account>> { stAccountsBatch });
             // (one SObjectList<T> per batch, the example above uses one batch)
 
@@ -65,7 +64,7 @@ namespace Salesforce.Force.FunctionalTests
             };
 
             // insert the accounts
-            var results2 = await _client.RunJobAndPollAsync("Account", Bulk.Bulk.OperationType.Insert,
+            var results2 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Insert,
                     new List<SObjectList<SObject>> { dtAccountsBatch });
 
             Assert.IsTrue(results2 != null);
@@ -90,7 +89,7 @@ namespace Salesforce.Force.FunctionalTests
             };
 
             // update the first accounts name (dont really need bulk for this, just an example)
-            var results3 = await _client.RunJobAndPollAsync("Account", Bulk.Bulk.OperationType.Update,
+            var results3 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Update,
                     new List<SObjectList<SObject>> { dtAccountsBatch });
 
             Assert.IsTrue(results3 != null);
@@ -105,7 +104,7 @@ namespace Salesforce.Force.FunctionalTests
             idBatch.AddRange(results1[0].Select(result => new SObject { { "Id", result.Id } }));
 
             // delete all the strongly typed accounts
-            var results4 = await _client.RunJobAndPollAsync("Account", Bulk.Bulk.OperationType.Delete,
+            var results4 = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Delete,
                     new List<SObjectList<SObject>> { idBatch });
 
             Assert.IsTrue(results4 != null);

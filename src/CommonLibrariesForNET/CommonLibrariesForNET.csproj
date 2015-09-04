@@ -39,8 +39,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AuthenticationClient.cs" />
-    <Compile Include="BaseHttpClient.cs" />
-    <Compile Include="BaseHttpClientException.cs" />
+    <Compile Include="Internals\BaseHttpClient.cs" />
+    <Compile Include="Internals\BaseHttpClientException.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
     <Compile Include="IXmlHttpClient.cs" />

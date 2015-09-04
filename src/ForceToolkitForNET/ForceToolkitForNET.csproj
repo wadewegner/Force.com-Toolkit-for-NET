@@ -44,9 +44,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bulk\BulkForceClient.cs" />
-    <Compile Include="Bulk\Bulk.cs" />
-    <Compile Include="Bulk\IBulkForceClient.cs" />
+    <Compile Include="BulkConstants.cs" />
     <Compile Include="IForceClient.cs" />
     <Compile Include="ForceClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,6 @@
-﻿namespace Salesforce.Force.Bulk
+﻿namespace Salesforce.Force
 {
-    public static class Bulk
+    public static class BulkConstants
     {
         public sealed class OperationType
         {
