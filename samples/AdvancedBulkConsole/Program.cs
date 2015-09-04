@@ -102,7 +102,7 @@ namespace AdvancedBulkConsole
             // poll
             var pollStart = 1.0f;
             const float pollIncrease = 2.0f;
-            var results = new List<BatchResultList>();
+            var completeList = new List<BatchInfoResult>();
             while (batchInfoList.Count > 0)
             {
                 var removeList = new List<BatchInfoResult>();
@@ -113,7 +113,7 @@ namespace AdvancedBulkConsole
                         newBatchInfo.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
                         newBatchInfo.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
                     {
-                        results.Add(await client.GetBatchResultAsync(newBatchInfo));
+                        completeList.Add(newBatchInfo);
                         removeList.Add(batchInfo);
                     }
                 }
@@ -125,8 +125,15 @@ namespace AdvancedBulkConsole
                 pollStart *= pollIncrease;
             }
 
+            // get results
+            var results = new List<BatchResultList>();
+            foreach (var completeBatch in completeList)
+            {
+                results.Add(await client.GetBatchResultAsync(completeBatch));
+            }
+
             Console.WriteLine("All Batches Complete, \"var results\" contains the result objects (Each is a list containing a result for each record):");
-            foreach (var result in results.SelectMany(resultList => resultList))
+            foreach (var result in results.SelectMany(resultList => resultList.Items))
             {
                 Console.WriteLine("Id:{0}, Created:{1}, Success:{2}, Errors:{3}", result.Id, result.Created, result.Success, result.Errors != null);
                 if (result.Errors != null)
@@ -137,11 +144,10 @@ namespace AdvancedBulkConsole
                     {
                         Console.WriteLine("\tField:{0}", field);
                     }
-                    Console.WriteLine("\t{0}",resultErrors.Message);
-                    Console.WriteLine("\t{0}",resultErrors.StatusCode);
+                    Console.WriteLine("\t{0}", resultErrors.Message);
+                    Console.WriteLine("\t{0}", resultErrors.StatusCode);
                 }
             }
-
         }
     }
 }
