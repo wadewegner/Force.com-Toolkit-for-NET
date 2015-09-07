@@ -16,11 +16,11 @@ namespace Salesforce.Force.FunctionalTests
     [TestFixture]
     public class ForceClientTests
     {
-        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
-        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
-        private static readonly string Username = ConfigurationManager.AppSettings["Username"];
-        private static readonly string Password = ConfigurationManager.AppSettings["Password"];
-        private static readonly string OrganizationId = ConfigurationManager.AppSettings["OrganizationId"];
+        private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private static string _username = ConfigurationManager.AppSettings["Username"];
+        private static string _password = ConfigurationManager.AppSettings["Password"];
+        private static string _organizationId = ConfigurationManager.AppSettings["OrganizationId"];
 
         private AuthenticationClient _auth;
         private ForceClient _client;
@@ -28,8 +28,17 @@ namespace Salesforce.Force.FunctionalTests
         [TestFixtureSetUp]
         public void Init()
         {
+            if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password) && string.IsNullOrEmpty(_organizationId))
+            {
+                _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
+                _consumerSecret = Environment.GetEnvironmentVariable("ConsumerSecret");
+                _username = Environment.GetEnvironmentVariable("Username");
+                _password = Environment.GetEnvironmentVariable("Password");
+                _organizationId = Environment.GetEnvironmentVariable("OrganizationId");
+            }
+
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
 
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
@@ -626,7 +635,7 @@ namespace Salesforce.Force.FunctionalTests
         private static async Task CreateExternalIdField(string objectName, string fieldName)
         {
             var salesforceClient = new SalesforceClient();
-            var loginResult = await salesforceClient.Login(Username, Password, OrganizationId);
+            var loginResult = await salesforceClient.Login(_username, _password, _organizationId);
 
             await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
                     loginResult.MetadataServerUrl, true);
