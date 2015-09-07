@@ -357,6 +357,29 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
+        public async void Delete_External_ValidateIsGone()
+        {
+            const string objectName = "Account";
+            const string fieldName = "ExternalId__c";
+            var fieldId = "123" + DateTime.Now.Ticks;
+
+            await CreateExternalIdField(objectName, fieldName);
+
+            var account = new Account { Name = "Upserted To Delete", Description = "Upserted Account Description to Delete" };
+            var success = await _client.UpsertExternalAsync(objectName, fieldName, fieldId, account);
+
+            var resultExists = await _client.QueryByIdAsync<Account>("Account", success.Id);
+
+            Assert.IsNotNull(resultExists);
+
+            await _client.DeleteExternalAsync("Account", fieldName, fieldId);
+
+            var resultDoesNotExists = await _client.QueryByIdAsync<Account>("Account", success.Id);
+
+            Assert.IsNull(resultDoesNotExists);
+        }
+
+        [Test]
         public async void Objects_GetAllObjects_IsNotNull()
         {
             var objects = await _client.GetObjectsAsync<object>();
