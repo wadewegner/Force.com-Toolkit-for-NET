@@ -13,11 +13,10 @@ namespace Salesforce.Common.FunctionalTests
     {
         private static readonly string TokenRequestEndpointUrl = ConfigurationManager.AppSettings["TokenRequestEndpointUrl"];
 
-        private static string _securityToken = ConfigurationManager.AppSettings["SecurityToken"];
         private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
         private static string _username = ConfigurationManager.AppSettings["Username"];
-        private static string _password = ConfigurationManager.AppSettings["Password"] + _securityToken;
+        private static string _password = ConfigurationManager.AppSettings["Password"];
 	    
 	    private AuthenticationClient _auth;
 	    private ServiceHttpClient _serviceHttpClient;
@@ -25,9 +24,8 @@ namespace Salesforce.Common.FunctionalTests
 	    [TestFixtureSetUp]
         public void Init()
         {
-            if (string.IsNullOrEmpty(_securityToken))
+            if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password))
             {
-                _securityToken = Environment.GetEnvironmentVariable("SecurityToken");
                 _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
                 _consumerSecret = Environment.GetEnvironmentVariable("ConsumerSecret");
                 _username = Environment.GetEnvironmentVariable("Username");

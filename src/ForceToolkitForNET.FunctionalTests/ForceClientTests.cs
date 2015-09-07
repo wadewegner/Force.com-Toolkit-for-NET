@@ -16,11 +16,10 @@ namespace Salesforce.Force.FunctionalTests
     [TestFixture]
     public class ForceClientTests
     {
-        private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
         private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
         private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
         private static readonly string Username = ConfigurationManager.AppSettings["Username"];
-        private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
+        private static readonly string Password = ConfigurationManager.AppSettings["Password"];
         private static readonly string OrganizationId = ConfigurationManager.AppSettings["OrganizationId"];
 
         private AuthenticationClient _auth;
