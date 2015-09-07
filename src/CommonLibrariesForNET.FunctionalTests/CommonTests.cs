@@ -12,11 +12,12 @@ namespace Salesforce.Common.FunctionalTests
     public class CommonTests
     {
         private static readonly string TokenRequestEndpointUrl = ConfigurationManager.AppSettings["TokenRequestEndpointUrl"];
-        private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
-        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
-        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
-        private static readonly string Username = ConfigurationManager.AppSettings["Username"];
-        private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
+
+        private static string _securityToken = ConfigurationManager.AppSettings["SecurityToken"];
+        private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private static string _username = ConfigurationManager.AppSettings["Username"];
+        private static string _password = ConfigurationManager.AppSettings["Password"] + _securityToken;
 	    
 	    private AuthenticationClient _auth;
 	    private ServiceHttpClient _serviceHttpClient;
@@ -24,24 +25,33 @@ namespace Salesforce.Common.FunctionalTests
 	    [TestFixtureSetUp]
         public void Init()
         {
+            if (string.IsNullOrEmpty(_securityToken))
+            {
+                _securityToken = Environment.GetEnvironmentVariable("SecurityToken");
+                _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
+                _consumerSecret = Environment.GetEnvironmentVariable("ConsumerSecret");
+                _username = Environment.GetEnvironmentVariable("Username");
+                _password = Environment.GetEnvironmentVariable("Password");
+            }
+
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
 
             _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
 
-        //[Test]
-        //public async void Get_UserInfo()
-        //{
-        //    var objectName = new FormUrlEncodedContent(new[]
-        //        {
-        //            new KeyValuePair<string, string>("AccessToken", _auth.AccessToken)
-        //        });
+        [Test]
+        public async void Get_UserInfo()
+        {
+            var objectName = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("AccessToken", _auth.AccessToken)
+                });
 
-        //    var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
+            var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
 
-        //    Assert.IsNotNull(response);
-        //}
+            Assert.IsNotNull(response);
+        }
 
         [Test]
         public async void Query_Describe()
@@ -98,7 +108,7 @@ namespace Salesforce.Common.FunctionalTests
         {
             try
             {
-                await _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, "WRONGPASSWORD", TokenRequestEndpointUrl);
+                await _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, "WRONGPASSWORD", TokenRequestEndpointUrl);
             }
             catch (ForceAuthException ex)
             {
@@ -131,7 +141,7 @@ namespace Salesforce.Common.FunctionalTests
 	    public async void BadTokenHandling()
 	    {
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
 
 	        var badToken = "badtoken";
             var serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());

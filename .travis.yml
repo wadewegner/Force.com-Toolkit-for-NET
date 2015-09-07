@@ -3,6 +3,15 @@ sudo: false
 
 solution: src/ForceToolkitForNET.sln
 
+env:
+  global:
+    - secure: "iPnI4GGfD/d47EYULXX2utRlxMQXZk6/x0W35S5dhI/pKt5KmTP/uudvMkgfwUdP7YgxqBmJR1ewL+IQQM42ceQRv6H3hegNgs5I3cXFwinrXb3L4fyHQRdIZz0zlUrdrM4lgaQxlfpQHal0zol7W1neG4g2Xj33EVUdrqPfQjs=" #SecurityToken
+    - secure: "cTZ/NtbAT83dysNpzuRWbh0Cia4YY4WnWqx0dFq98rNeXE02+UjCL7q0dWmhkSxvP8YYvXMXj+13J/NAH0sPyrXR+BIOsDEpR8aoB6gaGh5H6FkONq41JZcfFd5/s4OsuZ/QlMSK21oAPOZU9K+tHjrb5xUf9osey9OBx+HNlcY=" #ConsumerKey
+    - secure: "Fmz1IrfGgcKKIAvBccKn5Hi/kKpE+Hs/hJAOIhTBniInMcoE0dcUCNYCV16uYjDvUsVNDDi0Tz/bk/UJh8kZNPJkkCQfys60l7Bl/mZ2r6umaBuiS0Xp0ZKSabsCnCLZWUSfIJdCEMgqBWOFNicfuXHRd/h0n31Pe2qFOwCzwA8=" #ConsumerSecret
+    - secure: "M1875n8CTGSc50Vufd+V4FgdvdSHPqvnHLJmk3MBSCSPRBQ15FvxtSCPY24cDgCzNyOA3dSOkISGj1bwNj607QB4ao1sFK8ytIhwFgSC3udlSUu/b+3FyI1RSD5j5ZT9qB74nna+0hsijU6txMAf8vVWI9dorZCYCDAlaSEbU1Y=" #Username
+    - secure: "hp1L5pgWkugdNp4WmC0vhrwi0SRcAiujVJGA1Gsm+dppGO9m1+nz98N/Q3vwUkiFoY+T9LvL3tx0FFpaVEbSCCH+uv/WOS9GfQQgVL75oXIoOha9gB+ogD0DWARrvrDc+rshdPQjJn7G33lOWF5PrWORxZlskoMPr6P9NzhfGm8=" #Password
+    - secure: "Ez7qB2PZ/gBXCdOirR0jqcOYDRK9DtPiBFg9p9LTo4VTNZ6UqBrpPLsKGyQSry/zzvI532Y8vtOPL8PNpBaGOexyJ6M0fWQUjjT0/+p53w3syhYRiqJZOiY0PWoq2beRYIFScUNzbaRdZL4cDNsLHaNV+h8KGTYZ+gVXhYerU94=" #OrganizationId
+
 install:
   - nuget restore src/ForceToolkitForNET.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner

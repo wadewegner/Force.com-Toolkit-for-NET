@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -11,11 +12,11 @@ namespace Salesforce.Chatter.FunctionalTests
     public class ChatterClientTests
     {
         private static readonly string TokenRequestEndpointUrl = ConfigurationManager.AppSettings["TokenRequestEndpointUrl"];
-        private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
-        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
-        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
-        private static readonly string Username = ConfigurationManager.AppSettings["Username"];
-        private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
+        private static string _securityToken = ConfigurationManager.AppSettings["SecurityToken"];
+        private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private static string _username = ConfigurationManager.AppSettings["Username"];
+        private static string _password = ConfigurationManager.AppSettings["Password"] + _securityToken;
 
         private AuthenticationClient _auth;
         private ChatterClient _chatterClient;
@@ -23,8 +24,17 @@ namespace Salesforce.Chatter.FunctionalTests
         [TestFixtureSetUp]
         public void Init()
         {
+            if (string.IsNullOrEmpty(_securityToken))
+            {
+                _securityToken = Environment.GetEnvironmentVariable("SecurityToken");
+                _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
+                _consumerSecret = Environment.GetEnvironmentVariable("ConsumerSecret");
+                _username = Environment.GetEnvironmentVariable("Username");
+                _password = Environment.GetEnvironmentVariable("Password");
+            }
+
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password, TokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
 
             const string apiVersion = "v34.0";
             _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, apiVersion);
