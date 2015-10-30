@@ -18,24 +18,39 @@ namespace Salesforce.Common
         private const string DateFormat = "s";
         private readonly string _instanceUrl;
         public string ApiVersion;
-        private readonly HttpClient _httpClient;
+        private HttpClient _httpClient;
+        private readonly bool _disposeHttpClient;
 
-        public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
+        public ServiceHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient = null)
         {
             _instanceUrl = instanceUrl;
             ApiVersion = apiVersion;
-            _httpClient = httpClient;
+
+            if (httpClient == null)
+            {
+                _httpClient = new HttpClient();
+                _disposeHttpClient = true;
+            }
+            else
+            {
+                _httpClient = httpClient;    
+            }
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
         }
 
         public void Dispose()
         {
-            _httpClient.Dispose();
+            if (_disposeHttpClient)
+            {
+                _httpClient.Dispose();
+            }
+            _httpClient = null;
         }
 
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
@@ -49,7 +64,7 @@ namespace Salesforce.Common
             };
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -103,7 +118,7 @@ namespace Salesforce.Common
                     };
 
                     var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
-                    response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
                     if (responseMessage.IsSuccessStatusCode)
                     {
@@ -133,7 +148,7 @@ namespace Salesforce.Common
             };
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -167,7 +182,7 @@ namespace Salesforce.Common
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -191,7 +206,7 @@ namespace Salesforce.Common
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -229,7 +244,7 @@ namespace Salesforce.Common
             {
                 if (responseMessage.StatusCode != System.Net.HttpStatusCode.NoContent)
                 {
-                    var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
                     var r = JsonConvert.DeserializeObject<SuccessResponse>(response);
                     return r;
@@ -239,7 +254,7 @@ namespace Salesforce.Common
                 return success;
             }
 
-            var error = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var error = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(error);
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
@@ -261,7 +276,7 @@ namespace Salesforce.Common
                 return true;
             }
 
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
@@ -290,7 +305,7 @@ namespace Salesforce.Common
             content.Add(byteArrayContent, headerName, fileName);
 
             var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
