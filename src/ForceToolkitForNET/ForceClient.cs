@@ -49,6 +49,15 @@ namespace Salesforce.Force
 
             return _serviceHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
         }
+
+        public async Task<System.IO.Stream> GetBlobAsync(String objectName, String objectId, String fieldName)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException(nameof(objectName));
+            if (string.IsNullOrEmpty(objectId)) throw new ArgumentNullException(nameof(objectId));
+            if (string.IsNullOrEmpty(fieldName)) throw new ArgumentNullException(nameof(fieldName));
+
+            return await _serviceHttpClient.HttpGetBlobAsync($"sobjects/{objectName}/{objectId}/{fieldName}");
+        }
         
         public async Task<T> ExecuteRestApiAsync<T>(string apiName)
         {

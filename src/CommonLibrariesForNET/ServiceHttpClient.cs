@@ -38,6 +38,29 @@ namespace Salesforce.Common
             _httpClient.Dispose();
         }
 
+        public async Task<System.IO.Stream> HttpGetBlobAsync(string urlSuffix)
+        {
+            var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
+
+            var request = new HttpRequestMessage
+            {
+                RequestUri = uri,
+                Method = HttpMethod.Get
+            };
+
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStreamAsync();
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return response;
+            }
+            else
+            {
+                return new System.IO.MemoryStream();
+            }
+        }
+
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
         {
             var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
