@@ -154,6 +154,12 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
+            return await HttpPostAsync<T>(inputObject, urlSuffix, null);
+        }
+
+
+        public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix, Dictionary<string, string> headers)
+        {
             var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
@@ -164,9 +170,24 @@ namespace Salesforce.Common
                     DateFormatString = DateFormat
                 });
 
+
+            var request = new HttpRequestMessage
+            {
+                RequestUri = uri,
+                Method = new HttpMethod("POST")
+            };
+
+            if (headers != null)
+            {
+                foreach (var h in headers)
+                {
+                    request.Headers.Add(h.Key, h.Value);
+                }
+            }
+
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
@@ -181,6 +202,11 @@ namespace Salesforce.Common
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
         {
+            return await HttpPostAsync<T>(inputObject, uri, null);
+        }
+
+        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri, Dictionary<string, string> headers)
+        {
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
                 new JsonSerializerSettings
@@ -189,8 +215,22 @@ namespace Salesforce.Common
                     DateFormatString = DateFormat
                 });
 
+            var request = new HttpRequestMessage
+            {
+                RequestUri = uri,
+                Method = new HttpMethod("POST")
+            };
+
+            if (headers != null)
+            {
+                foreach (var h in headers)
+                {
+                    request.Headers.Add(h.Key, h.Value);
+                }
+            }
+
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var responseMessage = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
@@ -205,6 +245,12 @@ namespace Salesforce.Common
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
         {
+            return await HttpPatchAsync(inputObject, urlSuffix, null);
+        }
+
+
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, Dictionary<string, string> headers)
+        {
             var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
 
             var request = new HttpRequestMessage
@@ -212,6 +258,14 @@ namespace Salesforce.Common
                 RequestUri = uri,
                 Method = new HttpMethod("PATCH")
             };
+
+            if (headers != null)
+            {
+                foreach (var h in headers)
+                {
+                    request.Headers.Add(h.Key, h.Value);
+                }
+            }
 
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
@@ -243,6 +297,7 @@ namespace Salesforce.Common
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(error);
             throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
+        
 
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
         {

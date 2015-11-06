@@ -84,6 +84,7 @@ namespace Salesforce.Force
             return results.Records.FirstOrDefault();
         }
 
+
         public async Task<SuccessResponse> CreateAsync(string objectName, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
@@ -91,6 +92,25 @@ namespace Salesforce.Force
 
             return await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
         }
+
+        public async Task<SuccessResponse> CreateAsync(string objectName, object record, Dictionary<string, string> headers)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (record == null) throw new ArgumentNullException("record");
+
+            return await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName), headers).ConfigureAwait(false);
+        }
+
+
+        public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record, Dictionary<string, string> headers)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
+            if (record == null) throw new ArgumentNullException("record");
+
+            return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId), headers);
+        }
+
 
         public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
         {
@@ -110,6 +130,22 @@ namespace Salesforce.Force
 
             return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId));
         }
+
+        public Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record, Dictionary<string, string> headers)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(externalFieldName)) throw new ArgumentNullException("externalFieldName");
+            if (string.IsNullOrEmpty(externalId)) throw new ArgumentNullException("externalId");
+            if (record == null) throw new ArgumentNullException("record");
+
+            return _serviceHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId), headers);
+        }
+
+
+
+
+
+
 
         public Task<bool> DeleteAsync(string objectName, string recordId)
         {
