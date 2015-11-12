@@ -14,17 +14,11 @@ namespace Salesforce.Force
     {
         private readonly ServiceHttpClient _serviceHttpClient;
 
-        public ForceClient(string instanceUrl, string accessToken, string apiVersion)
-            : this(instanceUrl, accessToken, apiVersion, new HttpClient())
-        {
-        }
-
-        public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient)
+        public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient = null)
         {
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
-            if (httpClient == null) throw new ArgumentNullException("httpClient");
 
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
         }
