@@ -55,12 +55,12 @@ await auth.UsernamePasswordAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURU
 
 The Web-Server Authentication Flow requires a few additional steps but has the advantage of allowing you to authenticate your users and let them interact with the Force.com using their own access token.
 
-First, you need to authetnicate your user. You can do this by creating a URL that directs the user to the Salesforce authentication service. You'll pass along some key information, including your consumer key (which identifies your Connected App) and a callback URL to your service.
+First, you need to authenticate your user. You can do this by creating a URL that directs the user to the Salesforce authentication service. You'll pass along some key information, including your consumer key (which identifies your Connected App) and a callback URL to your service.
 
 ```
 var url =
     Common.FormatAuthUrl(
-        "https://login.salesforce.com/services/oauth2/authorize", // if using test org then replace login with text
+        "https://login.salesforce.com/services/oauth2/authorize", // if using sandbox org then replace login with test
         ResponseTypes.Code,
         "YOURCONSUMERKEY",
         HttpUtility.UrlEncode("YOURCALLBACKURL"));
