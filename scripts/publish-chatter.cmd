@@ -1,3 +1,3 @@
-"assets/NuGet.exe" push "../artifacts/DeveloperForce.Chatter.1.1.0.nupkg"
+"assets/NuGet.exe" push "../artifacts/DeveloperForce.Chatter.1.2.1.nupkg"
 
-"assets/NuGet.exe" push "../artifacts/DeveloperForce.Chatter.1.1.0.symbols.nupkg"
+"assets/NuGet.exe" push "../artifacts/DeveloperForce.Chatter.1.2.1.symbols.nupkg"
