@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Salesforce.Chatter.Models;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 
 namespace Salesforce.Chatter
 {
@@ -41,7 +42,7 @@ namespace Salesforce.Chatter
             {
                 return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, "chatter/feed-elements");
             }
-               
+
             return _serviceHttpClient.HttpPostAsync<T>(feedItemInput, string.Format("chatter/feeds/news/{0}/{1}", userId, _itemsOrElements));
         }
 
@@ -61,7 +62,7 @@ namespace Salesforce.Chatter
             {
                 return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/{0}/{1}/capabilities/comments/items", _itemsOrElements, feedId));
             }
-            
+
             return _serviceHttpClient.HttpPostAsync<T>(envelope, string.Format("chatter/{0}/{1}/comments", _itemsOrElements, feedId));
         }
 
@@ -71,7 +72,7 @@ namespace Salesforce.Chatter
             {
                 return _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/{0}/{1}/capabilities/chatter-likes/items", _itemsOrElements, feedId));
             }
-         
+
             return _serviceHttpClient.HttpPostAsync<T>(null, string.Format("chatter/{0}/{1}/likes", _itemsOrElements, feedId));
         }
 

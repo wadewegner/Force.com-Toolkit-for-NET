@@ -161,20 +161,12 @@ namespace Salesforce.Common
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix, Dictionary<string, string> headers)
         {
             var uri = Common.FormatUrl(urlSuffix, _instanceUrl, ApiVersion);
-            var json = JsonConvert.SerializeObject(inputObject,
-                Formatting.None,
-                new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new CreateableContractResolver(),
-                    DateFormatString = DateFormat
-                });
-
 
             var request = new HttpRequestMessage
             {
                 RequestUri = uri,
-                Method = new HttpMethod("POST")
+                Method = new HttpMethod("POST"),
+
             };
 
             if (headers != null)
@@ -185,7 +177,16 @@ namespace Salesforce.Common
                 }
             }
 
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonConvert.SerializeObject(inputObject,
+                Formatting.None,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CreateableContractResolver(),
+                    DateFormatString = DateFormat
+                });
+
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);

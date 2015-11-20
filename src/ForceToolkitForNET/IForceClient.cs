@@ -23,8 +23,6 @@ namespace Salesforce.Force
         Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record);
         Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record, Dictionary<string, string> headers);
 
-        
-        
         Task<bool> DeleteAsync(string objectName, string recordId);
         Task<bool> DeleteExternalAsync(string objectName, string externalFieldName, string externalId);
         Task<DescribeGlobalResult<T>> GetObjectsAsync<T>();
