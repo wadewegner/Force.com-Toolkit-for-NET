@@ -20,7 +20,9 @@
         EntityIsDeleted,
         MalFormedId,
         InvalidQueryFilterOperator,
-        InvalidSessionId
+        InvalidSessionId,
+        RequestLimitExceeded,
+        FieldIntegrityException
     }
     
 }
