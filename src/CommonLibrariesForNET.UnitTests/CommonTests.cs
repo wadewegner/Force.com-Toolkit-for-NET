@@ -159,5 +159,21 @@ namespace Salesforce.Common.UnitTests
                 await httpClient.HttpGetAsync<object>("wade");
             }
         }
+
+        [Test]
+        public void NewServiceHttpClient_ResetsUserAgents()
+        {
+            var httpClientUserAgent = UserAgent + "/v34";
+
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(httpClientUserAgent);
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(httpClientUserAgent);
+            Assert.AreEqual(httpClientUserAgent + " " + httpClientUserAgent, httpClient.DefaultRequestHeaders.UserAgent.ToString());
+
+            var serviceClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", httpClient);
+
+            // Ensure the old user agent header is replaced.
+            Assert.AreEqual(httpClientUserAgent, httpClient.DefaultRequestHeaders.UserAgent.ToString());
+        }
     }
 }
