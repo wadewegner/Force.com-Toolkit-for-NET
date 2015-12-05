@@ -29,7 +29,7 @@
         DeleteRequiredOnCascade,
         DuplicateCommNickname,
         EmailBatchSizeLimitExceeded,
-        EmailTOCaseInvalidRouting,
+        EmailToCaseInvalidRouting,
         EmailToCaseLimitExceeded,
         EmailToCaseNotEnabled,
         ExceededIdLimit,
@@ -240,5 +240,4 @@
         WeblinkSizeLimitExceeded,
         WrongControllerType
     }
-
 }
