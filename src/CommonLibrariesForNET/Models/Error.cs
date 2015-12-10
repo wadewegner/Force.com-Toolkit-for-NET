@@ -238,6 +238,7 @@
         UnsupportedApexTriggerOperation,
         UnverifiedSenderAddress,
         WeblinkSizeLimitExceeded,
-        WrongControllerType
+        WrongControllerType,
+        NonJsonErrorResponse
     }
 }
