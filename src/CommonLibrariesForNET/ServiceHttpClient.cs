@@ -87,8 +87,15 @@ namespace Salesforce.Common
                 }
             }
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            if (responseMessage.Content.Headers.ContentType != null && responseMessage.Content.Headers.ContentType.ToString().Contains("application/json"))
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            }
+            else
+            {
+                throw new ForceException(Error.NonJsonErrorResponse, response);
+            }
         }
 
         public async Task<T> HttpGetRestApiAsync<T>(string apiName)
@@ -158,8 +165,16 @@ namespace Salesforce.Common
                 return r;
             }
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            if (responseMessage.Content.Headers.ContentType != null && responseMessage.Content.Headers.ContentType.ToString().Contains("application/json"))
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            }
+            else
+            {
+                throw new ForceException(Error.NonJsonErrorResponse, response);
+            }
+
         }
 
         public async Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject)
@@ -192,8 +207,16 @@ namespace Salesforce.Common
                 return r;
             }
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            if (responseMessage.Content.Headers.ContentType != null && responseMessage.Content.Headers.ContentType.ToString().Contains("application/json"))
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            }
+            else
+            {
+                throw new ForceException(Error.NonJsonErrorResponse, response);
+            }
+
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
@@ -216,8 +239,16 @@ namespace Salesforce.Common
                 return r;
             }
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            if (responseMessage.Content.Headers.ContentType != null && responseMessage.Content.Headers.ContentType.ToString().Contains("application/json"))
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            }
+            else
+            {
+                throw new ForceException(Error.NonJsonErrorResponse, response);
+            }
+
         }
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
@@ -257,8 +288,16 @@ namespace Salesforce.Common
             }
 
             var error = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(error);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            if (responseMessage.Content.Headers.ContentType != null && responseMessage.Content.Headers.ContentType.ToString().Contains("application/json"))
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(error);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            }
+            else
+            {
+                throw new ForceException(Error.NonJsonErrorResponse, error);
+            }
+
         }
 
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
@@ -280,8 +319,15 @@ namespace Salesforce.Common
 
             var response = await responseMessage.Content.ReadAsDecompressedStringAsync().ConfigureAwait(false);
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            if (responseMessage.Content.Headers.ContentType != null && responseMessage.Content.Headers.ContentType.ToString().Contains("application/json"))
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            }
+            else
+            {
+                throw new ForceException(Error.NonJsonErrorResponse, response);
+            }
         }
 
         public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
@@ -315,8 +361,15 @@ namespace Salesforce.Common
                 return r;
             }
 
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
-            throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            if (responseMessage.Content.Headers.ContentType != null && responseMessage.Content.Headers.ContentType.ToString().Contains("application/json"))
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(response);
+                throw new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            }
+            else
+            {
+                throw new ForceException(Error.NonJsonErrorResponse, response);
+            }
         }
     }
 }
