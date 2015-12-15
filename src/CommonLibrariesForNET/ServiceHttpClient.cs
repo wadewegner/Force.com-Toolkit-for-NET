@@ -36,7 +36,7 @@ namespace Salesforce.Common
                 _httpClient = httpClient;    
             }
 
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
+            _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgent, ApiVersion));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
