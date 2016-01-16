@@ -283,7 +283,7 @@ namespace Salesforce.Common
                     return r;
                 }
 
-                var success = new SuccessResponse { Id = "", Errors = "", Success = "true" };
+                var success = new SuccessResponse { Id = "", Errors = "", Success = true };
                 return success;
             }
 

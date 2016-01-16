@@ -8,7 +8,7 @@ namespace Salesforce.Common.Models
         public string Id;
 
         [JsonProperty(PropertyName = "success")]
-        public string Success;
+        public bool Success;
 
         [JsonProperty(PropertyName = "errors")]
         public object Errors;
