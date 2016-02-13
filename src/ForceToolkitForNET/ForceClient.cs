@@ -67,6 +67,10 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
 		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
+                .Where(p => {
+                    var customAttribute = p.GetCustomAttribute<IgnoreDataMemberAttribute>();
+                    return (customAttribute == null);                    
+                })
 		        .Select(p => { 
 		            var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
 		            return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
