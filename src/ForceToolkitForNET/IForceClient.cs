@@ -5,7 +5,7 @@ using Salesforce.Common.Models;
 
 namespace Salesforce.Force
 {
-    public interface IForceClient
+    public interface IForceClient : IDisposable
     {
         Task<QueryResult<T>> QueryAsync<T>(string query);
         Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl);
@@ -28,6 +28,5 @@ namespace Salesforce.Force
         Task<T> RecentAsync<T>(int limit = 200);
         Task<List<T>> SearchAsync<T>(string query);
         Task<T> UserInfo<T>(string url);
-        void Dispose();
     }
 }

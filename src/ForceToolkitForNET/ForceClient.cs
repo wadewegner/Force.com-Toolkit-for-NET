@@ -10,7 +10,7 @@ using Salesforce.Common.Models;
 
 namespace Salesforce.Force
 {
-    public class ForceClient : IForceClient, IDisposable
+    public class ForceClient : IForceClient
     {
         private readonly ServiceHttpClient _serviceHttpClient;
 
