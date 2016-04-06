@@ -12,7 +12,7 @@ using Salesforce.Common.Serializer;
 
 namespace Salesforce.Common
 {
-    public class ServiceHttpClient : IServiceHttpClient, IDisposable
+    public class ServiceHttpClient : IServiceHttpClient
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string DateFormat = "s";
@@ -48,7 +48,7 @@ namespace Salesforce.Common
 
         public void Dispose()
         {
-            if (_disposeHttpClient)
+            if (_disposeHttpClient && _httpClient != null)
             {
                 _httpClient.Dispose();
             }
