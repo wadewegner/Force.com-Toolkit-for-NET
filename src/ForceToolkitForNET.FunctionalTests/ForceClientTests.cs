@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Dynamic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -39,6 +40,9 @@ namespace Salesforce.Force.FunctionalTests
 
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
+
+            // Use TLS 1.2 (instead of defaulting to 1.0)
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }

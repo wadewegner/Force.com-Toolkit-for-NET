@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Chatter.Models;
@@ -35,6 +37,10 @@ namespace Salesforce.Chatter.FunctionalTests
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
 
             const string apiVersion = "v34.0";
+
+            // Use TLS 1.2 (instead of defaulting to 1.0)
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, apiVersion);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
 using Salesforce.Common.FunctionalTests.Models;
@@ -34,6 +35,9 @@ namespace Salesforce.Common.FunctionalTests
 
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
+
+            // Use TLS 1.2 (instead of defaulting to 1.0)
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
