@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET", "ForceToolkitForNET\ForceToolkitForNET.csproj", "{1CC985BC-27F3-4F1D-8946-F4DDB084B58F}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatterToolkitForNET.FunctionalTests", "ChatterToolkitForNET.FunctionalTests\ChatterToolkitForNET.FunctionalTests.csproj", "{451DB133-5C2D-4401-954A-726DDBD46993}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatterToolkitForNET", "ChatterToolkitForNET\ChatterToolkitForNET.csproj", "{011B1F31-45AA-4CD1-BB97-F4A508408365}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B03D1336-1DA2-4623-B408-85A89C840A77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

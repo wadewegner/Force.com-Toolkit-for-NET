@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Common.FunctionalTests.Models;
 using Salesforce.Common.Models;
@@ -33,30 +34,25 @@ namespace Salesforce.Common.FunctionalTests
                 _password = Environment.GetEnvironmentVariable("Password");
             }
 
-            _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
-
             // Use TLS 1.2 (instead of defaulting to 1.0)
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+            _auth = new AuthenticationClient();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
+            
             _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
 
         [Test]
-        public async void Get_UserInfo()
+        public async Task Get_UserInfo()
         {
-            var objectName = new FormUrlEncodedContent(new[]
-                {
-                    new KeyValuePair<string, string>("AccessToken", _auth.AccessToken)
-                });
-
             var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
 
             Assert.IsNotNull(response);
         }
 
         [Test]
-        public async void Query_Describe()
+        public async Task Query_Describe()
         {
             const string objectName = "Account";
             var response = await _serviceHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
@@ -65,7 +61,7 @@ namespace Salesforce.Common.FunctionalTests
         }
 
         [Test]
-        public async void Query_Objects()
+        public async Task Query_Objects()
         {
             var response = await _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
 
@@ -74,7 +70,7 @@ namespace Salesforce.Common.FunctionalTests
         }
 
         [Test]
-        public async void Query_Select_Account()
+        public async Task Query_Select_Account()
         {
             const string query = "SELECT Id FROM Account";
             var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
@@ -84,7 +80,7 @@ namespace Salesforce.Common.FunctionalTests
         }
 
         [Test]
-        public async void Query_Select_Count()
+        public async Task Query_Select_Count()
         {
             const string query = "SELECT count() FROM Account";
             var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
@@ -96,17 +92,17 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public void Auth_UsernamePassword_HasAccessToken()
         {
-            Assert.IsNotNullOrEmpty(_auth.AccessToken);
+            Assert.That(_auth.AccessToken, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
         public void Auth_UsernamePassword_HasInstanceUrl()
         {
-            Assert.IsNotNullOrEmpty(_auth.InstanceUrl);
+            Assert.That(_auth.InstanceUrl, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
-        public async void Auth_InvalidLogin()
+        public async Task Auth_InvalidLogin()
         {
             try
             {
@@ -121,7 +117,7 @@ namespace Salesforce.Common.FunctionalTests
         }
 
 	    [Test]
-	    public async void Upsert_Update_CheckReturn()
+	    public async Task Upsert_Update_CheckReturn()
 	    {
             var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
             var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
@@ -130,7 +126,7 @@ namespace Salesforce.Common.FunctionalTests
 	    }
 
         [Test]
-        public async void Upsert_New_CheckReturnInclude()
+        public async Task Upsert_New_CheckReturnInclude()
         {
             var account = new Account { Name = "New Account" + DateTime.Now.Ticks, Description = "New Account Description" + DateTime.Now.Ticks };
             var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
@@ -140,11 +136,8 @@ namespace Salesforce.Common.FunctionalTests
         }
 
 	    [Test]
-	    public async void BadTokenHandling()
+	    public async Task BadTokenHandling()
 	    {
-            _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
-
 	        var badToken = "badtoken";
             var serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
 

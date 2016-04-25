@@ -38,17 +38,17 @@ namespace Salesforce.Force.FunctionalTests
                 _organizationId = Environment.GetEnvironmentVariable("OrganizationId");
             }
 
-            _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
-
             // Use TLS 1.2 (instead of defaulting to 1.0)
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+            _auth = new AuthenticationClient();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
+            
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
 
         [Test]
-        public async void AsyncTaskCompletion_ExpandoObject()
+        public async Task AsyncTaskCompletion_ExpandoObject()
         {
             dynamic account = new ExpandoObject();
             account.Name = "ExpandoName" + DateTime.Now.Ticks;
@@ -60,7 +60,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void UserInfo_IsNotNull()
+        public async Task UserInfo_IsNotNull()
         {
             var userInfo = await _client.UserInfo<UserInfo>(_auth.Id);
 
@@ -68,7 +68,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Query_Accounts_Continuation()
+        public async Task Query_Accounts_Continuation()
         {
             var accounts = await _client.QueryAsync<Account>("SELECT count() FROM Account");
 
@@ -98,7 +98,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Query_Count()
+        public async Task Query_Count()
         {
             var accounts = await _client.QueryAsync<Account>("SELECT count() FROM Account");
 
@@ -106,7 +106,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Query_Accounts_IsNotEmpty()
+        public async Task Query_Accounts_IsNotEmpty()
         {
             var accounts = await _client.QueryAsync<Account>("SELECT Id, name, description FROM Account");
 
@@ -114,7 +114,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Query_ContactsWithAccountName_IsNotEmpty()
+        public async Task Query_ContactsWithAccountName_IsNotEmpty()
         {
             var queryResult = await _client.QueryAsync<Models.QueryTest.Contact>("SELECT AccountId, Account.Name, Email, Phone, Name, Title, MobilePhone FROM Contact Where Account.Name != null");
 
@@ -125,7 +125,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Query_Accounts_BadObject()
+        public async Task Query_Accounts_BadObject()
         {
             try
             {
@@ -140,16 +140,16 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Create_Account_Typed()
+        public async Task Create_Account_Typed()
         {
             var account = new Account { Name = "New Account", Description = "New Account Description" };
             var successResponse = await _client.CreateAsync("Account", account);
 
-            Assert.IsNotNullOrEmpty(successResponse.Id);
+            Assert.That(successResponse.Id, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
-        public async void QueryAll_Accounts_IsNotEmpty()
+        public async Task QueryAll_Accounts_IsNotEmpty()
         {
             var accounts = await _client.QueryAllAsync<Account>("SELECT Id, name, description FROM Account");
 
@@ -157,7 +157,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void QueryAll_Accounts_Continuation()
+        public async Task QueryAll_Accounts_Continuation()
         {
             var accounts = await _client.QueryAllAsync<Account>("SELECT count() FROM Account");
 
@@ -176,25 +176,25 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Create_Contact_Typed_Annotations()
+        public async Task Create_Contact_Typed_Annotations()
         {
             var contact = new Contact { Id = "Id", IsDeleted = false, AccountId = "AccountId", Name = "Name", FirstName = "FirstName", LastName = "LastName", Description = "Description" };
             var successResponse = await _client.CreateAsync("Contact", contact);
 
-            Assert.IsNotNullOrEmpty(successResponse.Id);
+            Assert.That(successResponse.Id, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
-        public async void Create_Account_Untyped()
+        public async Task Create_Account_Untyped()
         {
             var account = new { Name = "New Account", Description = "New Account Description" };
             var successResponse = await _client.CreateAsync("Account", account);
 
-            Assert.IsNotNullOrEmpty(successResponse.Id);
+            Assert.That(successResponse.Id, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
-        public async void Create_Account_Untyped_BadObject()
+        public async Task Create_Account_Untyped_BadObject()
         {
             try
             {
@@ -210,7 +210,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Create_Account_Untyped_BadFields()
+        public async Task Create_Account_Untyped_BadFields()
         {
             try
             {
@@ -226,7 +226,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Update_Account_IsSuccess()
+        public async Task Update_Account_IsSuccess()
         {
             const string originalName = "New Account";
             const string newName = "New Account 2";
@@ -242,7 +242,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Update_Account_BadObject()
+        public async Task Update_Account_BadObject()
         {
             try
             {
@@ -265,7 +265,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Update_Account_BadField()
+        public async Task Update_Account_BadField()
         {
             try
             {
@@ -288,7 +288,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Update_Account_NameChanged()
+        public async Task Update_Account_NameChanged()
         {
             const string originalName = "New Account";
             const string newName = "New Account 2";
@@ -304,7 +304,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Delete_Account_IsSuccess()
+        public async Task Delete_Account_IsSuccess()
         {
             var account = new Account { Name = "New Account", Description = "New Account Description" };
             var successResponse = await _client.CreateAsync("Account", account);
@@ -314,7 +314,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Delete_Account_ObjectDoesNotExist()
+        public async Task Delete_Account_ObjectDoesNotExist()
         {
             try
             {
@@ -333,7 +333,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Delete_Account_IdDoesNotExist()
+        public async Task Delete_Account_IdDoesNotExist()
         {
             try
             {
@@ -349,7 +349,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Delete_Account_ValidateIsGone()
+        public async Task Delete_Account_ValidateIsGone()
         {
             var account = new Account { Name = "New Account", Description = "New Account Description" };
             var successResponse = await _client.CreateAsync("Account", account);
@@ -361,7 +361,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Delete_External_ValidateIsGone()
+        public async Task Delete_External_ValidateIsGone()
         {
             const string objectName = "Account";
             const string fieldName = "ExternalId__c";
@@ -384,7 +384,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Objects_GetAllObjects_IsNotNull()
+        public async Task Objects_GetAllObjects_IsNotNull()
         {
             var objects = await _client.GetObjectsAsync<object>();
 
@@ -392,7 +392,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Object_BasicInformation_IsNotNull()
+        public async Task Object_BasicInformation_IsNotNull()
         {
             var accounts = await _client.BasicInformationAsync<object>("Account");
 
@@ -400,7 +400,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Object_Describe_IsNotNull()
+        public async Task Object_Describe_IsNotNull()
         {
             var accounts = await _client.DescribeAsync<object>("Account");
 
@@ -408,7 +408,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Object_GetDeleted_IsNotNull()
+        public async Task Object_GetDeleted_IsNotNull()
         {
             var account = new Account { Name = "New Account to Delete", Description = "New Account Description" };
             var successResponse = await _client.CreateAsync("Account", account);
@@ -428,7 +428,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Object_GetUpdated_IsNotNull()
+        public async Task Object_GetUpdated_IsNotNull()
         {
             const string originalName = "New Account";
             const string newName = "New Account 2";
@@ -452,7 +452,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Object_DescribeLayout_IsNotNull()
+        public async Task Object_DescribeLayout_IsNotNull()
         {
             var accountsLayout = await _client.DescribeLayoutAsync<dynamic>("Account");
 
@@ -468,7 +468,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Recent_IsNotNull()
+        public async Task Recent_IsNotNull()
         {
             var recent = await _client.RecentAsync<object>(5);
 
@@ -476,7 +476,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Upsert_Account_Update_IsSuccess()
+        public async Task Upsert_Account_Update_IsSuccess()
         {
             const string objectName = "Account";
             const string fieldName = "ExternalId__c";
@@ -491,7 +491,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Upsert_Account_Insert_IsSuccess()
+        public async Task Upsert_Account_Insert_IsSuccess()
         {
             const string objectName = "Account";
             const string fieldName = "ExternalId__c";
@@ -503,11 +503,11 @@ namespace Salesforce.Force.FunctionalTests
 
             Assert.IsNotNull(success);
             Assert.IsNotNull(success.Id);
-            Assert.IsNotNullOrEmpty(success.Id);
+            Assert.That(success.Id, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
-        public async void Upsert_Account_BadObject()
+        public async Task Upsert_Account_BadObject()
         {
             try
             {
@@ -523,7 +523,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Upsert_Account_BadField()
+        public async Task Upsert_Account_BadField()
         {
             try
             {
@@ -539,7 +539,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Upsert_Account_NameChanged()
+        public async Task Upsert_Account_NameChanged()
         {
             const string fieldName = "ExternalId__c";
             await CreateExternalIdField("Account", fieldName);
@@ -560,7 +560,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void UpdateExternalAsync_AccountSource()
+        public async Task UpdateExternalAsync_AccountSource()
         {
             dynamic a = new ExpandoObject();
             a.AccountSource = "TestAccountSource";
@@ -585,7 +585,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void QueryLeadWithUnescapedCharactersInEmail()
+        public async Task QueryLeadWithUnescapedCharactersInEmail()
         {
             const string query = "SELECT Id FROM Lead WHERE email = 'forcetoolkit+issue@gmail.com'";
             var result = await _client.QueryAsync<dynamic>(query);
@@ -596,7 +596,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void SearchAsync()
+        public async Task SearchAsync()
         {
             var result = await _client.SearchAsync<dynamic>("FIND {test}");
 
@@ -612,7 +612,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void Create_EventWithDate_IsSuccess()
+        public async Task Create_EventWithDate_IsSuccess()
         {
             // This test is to ensure we have proper date serialization and don't get the following error:
             // "Cannot deserialize instance of date from VALUE_STRING value 2015-08-25T11:49:53.0113029-07:00"
@@ -636,7 +636,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void ExecuteRestApiPost()
+        public async Task ExecuteRestApiPost()
         {
             const string echo = "Thing to echo";
             
@@ -648,7 +648,7 @@ namespace Salesforce.Force.FunctionalTests
         }
 
         [Test]
-        public async void ExecuteRestApiGet()
+        public async Task ExecuteRestApiGet()
         {
             const string echo = "stuff";
 

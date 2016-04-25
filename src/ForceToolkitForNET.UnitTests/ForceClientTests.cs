@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using System.Net;
 using Salesforce.Force.UnitTests.Models;
@@ -10,10 +11,10 @@ namespace Salesforce.Force.UnitTests
     public class ForceClientTests
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
-        private const string ApiVersion = "v34";
+        private const string ApiVersion = "v36";
 
         [Test]
-        public async void Requests_CheckHttpRequestMessage_UserAgent()
+        public async Task Requests_CheckHttpRequestMessage_UserAgent()
         {
             var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + string.Format("/{0}", ApiVersion))));
             var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
@@ -29,20 +30,18 @@ namespace Salesforce.Force.UnitTests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public async void GetBasicInformationAsync_EmptyObjectName_ThrowsException()
+        public async Task GetBasicInformationAsync_EmptyObjectName_ThrowsException()
         {
             var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK) {Content = new JsonContent(new {})};
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
             var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
 
-            await forceClient.BasicInformationAsync<object>("");
-
-            // expects exception
+            Action<ArgumentNullException> asserts = exception => Assert.That(exception.Message, Is.Not.Null);
+            await AssertEx.ThrowsAsync(() => forceClient.BasicInformationAsync<object>(""), asserts);
         }
 
         [Test]
-        public async void GetBasicInformationAsync_ValidObjectName_ReturnsParsedResponse()
+        public async Task GetBasicInformationAsync_ValidObjectName_ReturnsParsedResponse()
         {
             var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK)
             {
@@ -53,7 +52,7 @@ namespace Salesforce.Force.UnitTests
 
             var result = await forceClient.BasicInformationAsync<ObjectDescribeMetadata>("ValidObjectName");
 
-            Assert.IsNotNullOrEmpty(result.Name);
+            Assert.That(result.Name, Is.Not.Null.And.Not.Empty);
             Assert.AreEqual("User", result.Name);
         }
     }
