@@ -1,4 +1,6 @@
 language: csharp
+mono:
+  - latest
 sudo: false
 
 solution: src/ForceToolkitForNET.sln
