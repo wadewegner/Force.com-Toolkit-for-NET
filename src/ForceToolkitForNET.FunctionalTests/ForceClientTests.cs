@@ -10,7 +10,7 @@ using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models;
 using Salesforce.Force.FunctionalTests.Models;
-using WadeWegner.Salesforce.SOAPHelpers;
+//using WadeWegner.Salesforce.SOAPHelpers;
 
 namespace Salesforce.Force.FunctionalTests
 {
@@ -360,28 +360,28 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNull(result);
         }
 
-        [Test]
-        public async Task Delete_External_ValidateIsGone()
-        {
-            const string objectName = "Account";
-            const string fieldName = "ExternalId__c";
-            var fieldId = "123" + DateTime.Now.Ticks;
+        //[Test]
+        //public async Task Delete_External_ValidateIsGone()
+        //{
+        //    const string objectName = "Account";
+        //    const string fieldName = "ExternalId__c";
+        //    var fieldId = "123" + DateTime.Now.Ticks;
 
-            await CreateExternalIdField(objectName, fieldName);
+        //    await CreateExternalIdField(objectName, fieldName);
 
-            var account = new Account { Name = "Upserted To Delete", Description = "Upserted Account Description to Delete" };
-            var success = await _client.UpsertExternalAsync(objectName, fieldName, fieldId, account);
+        //    var account = new Account { Name = "Upserted To Delete", Description = "Upserted Account Description to Delete" };
+        //    var success = await _client.UpsertExternalAsync(objectName, fieldName, fieldId, account);
 
-            var resultExists = await _client.QueryByIdAsync<Account>("Account", success.Id);
+        //    var resultExists = await _client.QueryByIdAsync<Account>("Account", success.Id);
 
-            Assert.IsNotNull(resultExists);
+        //    Assert.IsNotNull(resultExists);
 
-            await _client.DeleteExternalAsync("Account", fieldName, fieldId);
+        //    await _client.DeleteExternalAsync("Account", fieldName, fieldId);
 
-            var resultDoesNotExists = await _client.QueryByIdAsync<Account>("Account", success.Id);
+        //    var resultDoesNotExists = await _client.QueryByIdAsync<Account>("Account", success.Id);
 
-            Assert.IsNull(resultDoesNotExists);
-        }
+        //    Assert.IsNull(resultDoesNotExists);
+        //}
 
         [Test]
         public async Task Objects_GetAllObjects_IsNotNull()
@@ -475,36 +475,36 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNotNull(recent);
         }
 
-        [Test]
-        public async Task Upsert_Account_Update_IsSuccess()
-        {
-            const string objectName = "Account";
-            const string fieldName = "ExternalId__c";
+        //[Test]
+        //public async Task Upsert_Account_Update_IsSuccess()
+        //{
+        //    const string objectName = "Account";
+        //    const string fieldName = "ExternalId__c";
 
-            await CreateExternalIdField(objectName, fieldName);
+        //    await CreateExternalIdField(objectName, fieldName);
 
-            var account = new Account { Name = "Upserted Account", Description = "Upserted Account Description" };
-            var success = await _client.UpsertExternalAsync(objectName, fieldName, "123", account);
+        //    var account = new Account { Name = "Upserted Account", Description = "Upserted Account Description" };
+        //    var success = await _client.UpsertExternalAsync(objectName, fieldName, "123", account);
 
-            Assert.IsNotNull(success);
-            Assert.IsEmpty(success.Id);
-        }
+        //    Assert.IsNotNull(success);
+        //    Assert.IsEmpty(success.Id);
+        //}
 
-        [Test]
-        public async Task Upsert_Account_Insert_IsSuccess()
-        {
-            const string objectName = "Account";
-            const string fieldName = "ExternalId__c";
+        //[Test]
+        //public async Task Upsert_Account_Insert_IsSuccess()
+        //{
+        //    const string objectName = "Account";
+        //    const string fieldName = "ExternalId__c";
 
-            await CreateExternalIdField(objectName, fieldName);
+        //    await CreateExternalIdField(objectName, fieldName);
 
-            var account = new Account { Name = "Upserted Account" + DateTime.Now.Ticks, Description = "New Upserted Account Description" + DateTime.Now.Ticks };
-            var success = await _client.UpsertExternalAsync(objectName, fieldName, "123" + DateTime.Now.Ticks, account);
+        //    var account = new Account { Name = "Upserted Account" + DateTime.Now.Ticks, Description = "New Upserted Account Description" + DateTime.Now.Ticks };
+        //    var success = await _client.UpsertExternalAsync(objectName, fieldName, "123" + DateTime.Now.Ticks, account);
 
-            Assert.IsNotNull(success);
-            Assert.IsNotNull(success.Id);
-            Assert.That(success.Id, Is.Not.Null.And.Not.Empty);
-        }
+        //    Assert.IsNotNull(success);
+        //    Assert.IsNotNull(success.Id);
+        //    Assert.That(success.Id, Is.Not.Null.And.Not.Empty);
+        //}
 
         [Test]
         public async Task Upsert_Account_BadObject()
@@ -538,51 +538,51 @@ namespace Salesforce.Force.FunctionalTests
             }
         }
 
-        [Test]
-        public async Task Upsert_Account_NameChanged()
-        {
-            const string fieldName = "ExternalId__c";
-            await CreateExternalIdField("Account", fieldName);
+        //[Test]
+        //public async Task Upsert_Account_NameChanged()
+        //{
+        //    const string fieldName = "ExternalId__c";
+        //    await CreateExternalIdField("Account", fieldName);
 
-            const string originalName = "New Account External Upsert";
-            const string newName = "New Account External Upsert 2";
+        //    const string originalName = "New Account External Upsert";
+        //    const string newName = "New Account External Upsert 2";
 
-            var account = new Account { Name = originalName, Description = "New Account Description" };
-            await _client.UpsertExternalAsync("Account", fieldName, "4", account);
+        //    var account = new Account { Name = originalName, Description = "New Account Description" };
+        //    await _client.UpsertExternalAsync("Account", fieldName, "4", account);
 
-            account.Name = newName;
-            await _client.UpsertExternalAsync("Account", fieldName, "4", account);
+        //    account.Name = newName;
+        //    await _client.UpsertExternalAsync("Account", fieldName, "4", account);
 
-            var accountResult = await _client.QueryAsync<Account>(string.Format("SELECT Name FROM Account WHERE {0} = '4'", fieldName));
-            var firstOrDefault = accountResult.Records.FirstOrDefault();
+        //    var accountResult = await _client.QueryAsync<Account>(string.Format("SELECT Name FROM Account WHERE {0} = '4'", fieldName));
+        //    var firstOrDefault = accountResult.Records.FirstOrDefault();
 
-            Assert.True(firstOrDefault != null && firstOrDefault.Name == newName);
-        }
+        //    Assert.True(firstOrDefault != null && firstOrDefault.Name == newName);
+        //}
 
-        [Test]
-        public async Task UpdateExternalAsync_AccountSource()
-        {
-            dynamic a = new ExpandoObject();
-            a.AccountSource = "TestAccountSource";
-            a.Name = "TestAccountName";
+        //[Test]
+        //public async Task UpdateExternalAsync_AccountSource()
+        //{
+        //    dynamic a = new ExpandoObject();
+        //    a.AccountSource = "TestAccountSource";
+        //    a.Name = "TestAccountName";
 
-            const string objectName = "Account";
-            const string fieldName = "External_Id__c";
+        //    const string objectName = "Account";
+        //    const string fieldName = "External_Id__c";
 
-            await CreateExternalIdField(objectName, fieldName);
+        //    await CreateExternalIdField(objectName, fieldName);
 
-            var externalId = Convert.ToString(DateTime.Now.Ticks);
+        //    var externalId = Convert.ToString(DateTime.Now.Ticks);
 
-            var success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
-            Assert.IsNotNull(success.Id);
-            Assert.IsNotNull(success);
+        //    var success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
+        //    Assert.IsNotNull(success.Id);
+        //    Assert.IsNotNull(success);
 
-            a.AccountSource = "TestAccountSource2";
+        //    a.AccountSource = "TestAccountSource2";
 
-            success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
-            Assert.IsNotNull(success);
-            Assert.IsEmpty(success.Id);
-        }
+        //    success = await _client.UpsertExternalAsync(objectName, fieldName, externalId, a);
+        //    Assert.IsNotNull(success);
+        //    Assert.IsEmpty(success.Id);
+        //}
 
         [Test]
         public async Task QueryLeadWithUnescapedCharactersInEmail()
@@ -658,15 +658,15 @@ namespace Salesforce.Force.FunctionalTests
             Assert.AreEqual(echo, response);
         }
 
-        #region Private methods
-        private static async Task CreateExternalIdField(string objectName, string fieldName)
-        {
-            var salesforceClient = new SalesforceClient();
-            var loginResult = await salesforceClient.Login(_username, _password, _organizationId);
+        //#region Private methods
+        //private static async Task CreateExternalIdField(string objectName, string fieldName)
+        //{
+        //    var salesforceClient = new SalesforceClient();
+        //    var loginResult = await salesforceClient.Login(_username, _password, _organizationId);
 
-            await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
-                    loginResult.MetadataServerUrl, true);
-        }
-        #endregion
+        //    await salesforceClient.CreateCustomField(objectName, fieldName, loginResult.SessionId,
+        //            loginResult.MetadataServerUrl, true);
+        //}
+        //#endregion
     }
 }
