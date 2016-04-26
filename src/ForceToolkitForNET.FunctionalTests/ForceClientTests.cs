@@ -26,7 +26,7 @@ namespace Salesforce.Force.FunctionalTests
         private AuthenticationClient _auth;
         private ForceClient _client;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Init()
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password) && string.IsNullOrEmpty(_organizationId))
