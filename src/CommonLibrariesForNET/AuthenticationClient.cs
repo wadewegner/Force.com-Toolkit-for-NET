@@ -163,6 +163,7 @@ namespace Salesforce.Common
                 var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
 
                 AccessToken = authToken.AccessToken;
+                RefreshToken = refreshToken;
                 InstanceUrl = authToken.InstanceUrl;
                 Id = authToken.Id;
             }
