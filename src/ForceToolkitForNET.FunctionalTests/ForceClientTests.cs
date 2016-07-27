@@ -26,7 +26,7 @@ namespace Salesforce.Force.FunctionalTests
         private AuthenticationClient _auth;
         private ForceClient _client;
 
-        [OneTimeSetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password) && string.IsNullOrEmpty(_organizationId))
@@ -43,7 +43,7 @@ namespace Salesforce.Force.FunctionalTests
 
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
-            
+
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
 
@@ -239,6 +239,33 @@ namespace Salesforce.Force.FunctionalTests
             var success = await _client.UpdateAsync("Account", successResponse.Id, account);
 
             Assert.IsNotNull(success);
+        }
+
+
+
+        [Test]
+        public async Task Update_Account_NullValues()
+        {
+            const string originalName = "New Account";
+            const string newName = "New Account 2";
+
+            var newAccount = new Account { Name = originalName, Description = "New Account Description" };
+            var success1 = await _client.CreateAsync("Account", newAccount);
+            Assert.IsNotNull(success1);
+
+            var id = success1.Id;
+
+            const string query = "SELECT AccountNumber,AccountSource,Active__c,AnnualRevenue,BillingAddress,BillingCity,BillingCountry,BillingGeocodeAccuracy,BillingLatitude,BillingLongitude,BillingPostalCode,BillingState,BillingStreet,CleanStatus,CreatedById,CreatedDate,CustomerPriority__c,DandbCompanyId,Description,DunsNumber,ExternalId__c,External_Id__c,Fax,Id,Industry,IsDeleted,Jigsaw,JigsawCompanyId,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate,MasterRecordId,MyCustomField__c,NaicsCode,NaicsDesc,Name,NumberOfEmployees,NumberofLocations__c,OwnerId,Ownership,ParentId,Phone,PhotoUrl,Rating,ShippingAddress,ShippingCity,ShippingCountry,ShippingGeocodeAccuracy,ShippingLatitude,ShippingLongitude,ShippingPostalCode,ShippingState,ShippingStreet,Sic,SicDesc,Site,SLAExpirationDate__c,SLASerialNumber__c,SLA__c,SystemModstamp,TickerSymbol,Tradestyle,Type,UpsellOpportunity__c,Website,YearStarted FROM Account WHERE Id = '{0}'";
+
+            var account1 = await _client.QueryAsync<Account>(string.Format(query, id));
+            var newAccount2 = new Account { Name = newName };
+
+            var success2 = await _client.UpdateAsync("Account", id, newAccount2);
+            Assert.IsNotNull(success2);
+
+            var account2 = await _client.QueryAsync<Account>(string.Format(query, id));
+
+            Assert.AreEqual(account1.Records[0].Description, account2.Records[0].Description);
         }
 
         [Test]
@@ -619,7 +646,7 @@ namespace Salesforce.Force.FunctionalTests
 
             var account = new Account { Name = "New Account", Description = "New Account Description" };
             var accountSuccessResponse = await _client.CreateAsync("Account", account);
-            
+
             var newEvent = new Event()
             {
                 Description = "new Event",
@@ -627,9 +654,9 @@ namespace Salesforce.Force.FunctionalTests
                 WhatId = accountSuccessResponse.Id,
                 ActivityDate = DateTime.Now,
                 DurationInMinutes = 10,
-                ActivityDateTime =  DateTime.Now
+                ActivityDateTime = DateTime.Now
             };
-            
+
             var eventSuccessResponse = await _client.CreateAsync("Event", newEvent);
 
             Assert.IsTrue(eventSuccessResponse.Success);
@@ -639,7 +666,7 @@ namespace Salesforce.Force.FunctionalTests
         public async Task ExecuteRestApiPost()
         {
             const string echo = "Thing to echo";
-            
+
             var json = JObject.Parse(@"{'toecho':'" + echo + "'}");
             var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest", json);
 
@@ -657,6 +684,7 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNotNull(response);
             Assert.AreEqual(echo, response);
         }
+
 
         //#region Private methods
         //private static async Task CreateExternalIdField(string objectName, string fieldName)
