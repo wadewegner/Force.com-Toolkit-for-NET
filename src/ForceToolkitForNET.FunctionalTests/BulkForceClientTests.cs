@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models.Xml;
