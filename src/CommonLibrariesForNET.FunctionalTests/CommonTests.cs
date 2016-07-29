@@ -23,7 +23,7 @@ namespace Salesforce.Common.FunctionalTests
 	    private AuthenticationClient _auth;
 	    private ServiceHttpClient _serviceHttpClient;
 
-	    [OneTimeSetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password))
@@ -113,8 +113,31 @@ namespace Salesforce.Common.FunctionalTests
                 Assert.IsNotNull(ex);
                 Assert.IsNotNull(ex.Message);
                 Assert.IsNotNull(ex.Error);
+                Assert.IsNotNull(ex.HttpStatusCode);
+
+                Assert.AreEqual(ex.Message, "authentication failure");
+                Assert.AreEqual(ex.Error, Error.InvalidGrant);
+                Assert.AreEqual(ex.HttpStatusCode, HttpStatusCode.BadRequest);
             }
         }
+
+	    [Test]
+	    public async Task Auth_InvalidRequestEndpointUrl()
+	    {
+	        const string requestEndpointUrl = "https://login.salesforce.com/services/oauth2/authorizeee"; // typo in the url
+
+	        try
+	        {
+                await _auth.WebServerAsync("clientId", "clientSecret", "sfdc://success", "code", requestEndpointUrl);
+	        }
+            catch (ForceAuthException ex)
+	        {
+	            Assert.IsNotNull(ex);
+                
+                Assert.AreEqual(ex.Error, Error.UnknownException);
+                Assert.AreEqual(ex.Message, "Unexpected character encountered while parsing value: <. Path '', line 0, position 0.");
+	        }
+	    }
 
 	    [Test]
 	    public async Task Upsert_Update_CheckReturn()
