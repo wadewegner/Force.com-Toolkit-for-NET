@@ -23,6 +23,11 @@ namespace Salesforce.Force.FunctionalTests
         [TestFixtureSetUp]
         public void Init()
         {
+            // Use TLS 1.2 (instead of defaulting to 1.0)
+            const int SecurityProtocolTypeTls11 = 768;
+            const int SecurityProtocolTypeTls12 = 3072;
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
+
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password).Wait();
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
