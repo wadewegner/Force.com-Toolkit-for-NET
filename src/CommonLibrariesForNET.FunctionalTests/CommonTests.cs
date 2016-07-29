@@ -23,7 +23,7 @@ namespace Salesforce.Common.FunctionalTests
 	    private AuthenticationClient _auth;
 	    private ServiceHttpClient _serviceHttpClient;
 
-	    [OneTimeSetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password))
@@ -113,6 +113,11 @@ namespace Salesforce.Common.FunctionalTests
                 Assert.IsNotNull(ex);
                 Assert.IsNotNull(ex.Message);
                 Assert.IsNotNull(ex.Error);
+                Assert.IsNotNull(ex.HttpStatusCode);
+
+                Assert.AreEqual(ex.Message, "authentication failure");
+                Assert.AreEqual(ex.Error, Error.InvalidGrant);
+                Assert.AreEqual(ex.HttpStatusCode, HttpStatusCode.BadRequest);
             }
         }
 
