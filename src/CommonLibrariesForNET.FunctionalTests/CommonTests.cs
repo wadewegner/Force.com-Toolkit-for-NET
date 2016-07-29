@@ -122,6 +122,24 @@ namespace Salesforce.Common.FunctionalTests
         }
 
 	    [Test]
+	    public async Task Auth_InvalidRequestEndpointUrl()
+	    {
+	        const string requestEndpointUrl = "https://login.salesforce.com/services/oauth2/authorizeee"; // typo in the url
+
+	        try
+	        {
+                await _auth.WebServerAsync("clientId", "clientSecret", "sfdc://success", "code", requestEndpointUrl);
+	        }
+            catch (ForceAuthException ex)
+	        {
+	            Assert.IsNotNull(ex);
+                
+                Assert.AreEqual(ex.Error, Error.UnknownException);
+                Assert.AreEqual(ex.Message, "Unexpected character encountered while parsing value: <. Path '', line 0, position 0.");
+	        }
+	    }
+
+	    [Test]
 	    public async Task Upsert_Update_CheckReturn()
 	    {
             var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };

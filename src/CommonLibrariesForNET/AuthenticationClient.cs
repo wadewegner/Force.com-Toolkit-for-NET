@@ -129,8 +129,16 @@ namespace Salesforce.Common
             }
             else
             {
-                var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription);
+                try
+                {
+                    var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
+                    throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription);
+                }
+                catch (Exception ex)
+                {
+                    throw new ForceAuthException(Error.UnknownException, ex.Message);
+                }
+                
             }
         }
 
