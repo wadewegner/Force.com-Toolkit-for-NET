@@ -91,8 +91,8 @@ namespace SimpleConsole
             // Create a sample record
             Console.WriteLine("Creating test record.");
             var account = new Account { Name = "Test Account" };
-            account.Id = await client.CreateAsync(Account.SObjectTypeName, account);
-            if (account.Id == null)
+            var response = await client.CreateAsync(Account.SObjectTypeName, account);
+            if (!string.Equals(response.Success, "true", StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine("Failed to create test record.");
                 return;
