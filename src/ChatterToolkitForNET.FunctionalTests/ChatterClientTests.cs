@@ -21,8 +21,8 @@ namespace Salesforce.Chatter.FunctionalTests
 
         private AuthenticationClient _auth;
         private ChatterClient _chatterClient;
-        
-        [OneTimeSetUp]
+
+        [TestFixtureSetUp]
         public void Init()
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password))

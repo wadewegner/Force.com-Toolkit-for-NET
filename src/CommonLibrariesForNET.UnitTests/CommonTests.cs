@@ -58,7 +58,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -78,7 +78,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -98,7 +98,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpPostAsync<object>(null, "wade");
             }
@@ -118,7 +118,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpPatchAsync(null, "wade");
             }
@@ -138,7 +138,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpDeleteAsync("wade");
             }
@@ -155,7 +155,7 @@ namespace Salesforce.Common.UnitTests
 
             client.DefaultRequestHeaders.Add("headername", "headervalue");
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -171,7 +171,7 @@ namespace Salesforce.Common.UnitTests
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(httpClientUserAgent);
             Assert.AreEqual(httpClientUserAgent + " " + httpClientUserAgent, httpClient.DefaultRequestHeaders.UserAgent.ToString());
 
-            var serviceClient = new ServiceHttpClient("http://localhost:1899", "v36", "accessToken", httpClient);
+            var serviceClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", httpClient);
 
             // Ensure the old user agent header is replaced.
             Assert.AreEqual(httpClientUserAgent, httpClient.DefaultRequestHeaders.UserAgent.ToString());

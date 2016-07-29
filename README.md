@@ -1,6 +1,6 @@
 # Force.com Toolkit for .NET [![Build status](https://ci.appveyor.com/api/projects/status/43y1npcb2q0u7aca)](https://ci.appveyor.com/project/WadeWegner/force-com-toolkit-for-net)
 
-The Force.com Toolkit for .NET provide an easy way for .NET developers to interact with the Force.com & Chatter REST APIs using native libraries.
+The Force.com Toolkit for .NET provide an easy way for .NET developers to interact with the Force.com, Force.com Bulk & Chatter REST APIs using native libraries.
 
 These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4.5, Windows Phone 8, Windows 8/8.1, and iOS/Android using Xamarin and Mono.NET.
 
@@ -17,7 +17,7 @@ Install-Package DeveloperForce.Force
 Install-Package DeveloperForce.Chatter
 ```
 
-## Samples
+## Samples 
 
 The toolkit includes the following sample applications.
 
@@ -32,6 +32,18 @@ This sample shows how you can use the [Web Server OAuth Authentication Flow](htt
 You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/SimpleConsole
 
 This sample shows how to write a console application that leverages the async/await paradigm of .NET 4.5 and uses the toolkit to log in to and communicate with a Salesforce organization. Useful for quick POC applications and scheduled jobs.
+
+### Simple Bulk Console Application
+
+You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/SimpleBulkConsole
+
+This sample shows how to write a console application to create, update and delete multiple records using the bulk functionality in the toolkit.
+
+### Advanced Bulk Console Application
+
+You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/AdvancedBulkConsole
+
+This sample shows how to use the methods on the ```BulkForceClient``` to control bulk jobs step by step. It gives an example of a polling method that you could change to implement your own custom polling.
 
 ## Operations
 
@@ -74,7 +86,7 @@ await auth.WebServerAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURCALLBACK
 
 You can see a demonstration of this in the following sample application: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
 
-#### Creating the ForceClient
+#### Creating the ForceClient or BulkForceClient
 
 After this completes successfully you will receive a valid Access Token and Instance URL. The Instance URL returned identifies the web service URL you'll use to call the Force.com REST APIs, passing in the Access Token. Additionally, the authentication client will return the API version number, which is used to construct a valid HTTP request.
 
@@ -86,6 +98,7 @@ var accessToken = auth.AccessToken;
 var apiVersion = auth.ApiVersion;
 
 var client = new ForceClient(instanceUrl, accessToken, apiVersion);
+var bulkClient = new BulkForceClient(instanceUrl, accessToken, apiVersion);
 ```
 
 ### Sample Code
@@ -162,6 +175,142 @@ foreach (var account in accounts.records)
 {
     Console.WriteLine(account.Name);
 }
+```
+
+### Bulk Sample Code
+
+Below are some simple examples that show how to use the ```BulkForceClient```
+
+**NOTE:** The following features are currently not supported
+
+* CSV data type requests / responses
+* Zipped attachment uploads
+* Serial bulk jobs
+* Query type bulk jobs
+
+#### Create
+
+You can create multiple records at once with the Bulk client:
+
+```
+public class Account 
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+}
+
+...
+
+var accountsBatch1 = new SObjectList<Account>
+{
+	new Account {Name = "TestStAccount1"},
+	new Account {Name = "TestStAccount2"}
+};
+var accountsBatch2 = new SObjectList<Account>
+{
+	new Account {Name = "TestStAccount3"},
+	new Account {Name = "TestStAccount4"}
+};
+var accountsBatch3 = new SObjectList<Account>
+{
+	new Account {Name = "TestStAccount5"},
+	new Account {Name = "TestStAccount6"}
+};
+
+var accountsBatchList = new List<SObjectList<Account>> 
+{ 
+	accountsBatch1,
+	accountsBatch2,
+	accountsBatch3
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", 
+						Bulk.OperationType.Insert, accountsBatchList);
+```
+
+The above code will create 6 accounts in 3 batches. Each batch can hold upto 10,000 records and you can use multiple batches for Insert and all of the operations below.
+For more details on the Salesforce Bulk API, see [the documentation](https://resources.docs.salesforce.com/196/latest/en-us/sfdc/pdf/api_asynch.pdf "Salesforce Bulk API Docs").
+
+You can also create objects dynamically using the inbuilt SObject class:
+
+```
+var accountsBatch1 = new SObjectList<SObject>
+{
+	new SObject 
+	{
+		{"Name" = "TestDyAccount1"}
+	},
+	new SObject 
+	{
+		{"Name" = "TestDyAccount2"}
+	}
+};
+
+var accountsBatchList = new List<SObjectList<SObject>> 
+{ 
+	accountsBatch1
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", 
+						Bulk.OperationType.Insert, accountsBatchList);
+
+```
+ 
+#### Update
+
+Updating multiple records follows the same pattern as above, just change the ```Bulk.OperationType``` to ```Bulk.OperationType.Update```
+
+```
+var accountsBatch1 = new SObjectList<SObject>
+{
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"},
+		{"Name" = "TestDyAccount1Renamed"}
+	},
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"},
+		{"Name" = "TestDyAccount2Renamed"}
+	}
+};
+
+var accountsBatchList = new List<SObjectList<SObject>> 
+{ 
+	accountsBatch1
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", 
+						Bulk.OperationType.Update, accountsBatchList);
+
+```
+
+#### Delete
+
+As above, you can delete multiple records with ```Bulk.OperationType.Delete```
+
+```
+var accountsBatch1 = new SObjectList<SObject>
+{
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"}
+	},
+	new SObject 
+	{
+		{"Id" = "YOUR_RECORD_ID"}
+	}
+};
+
+var accountsBatchList = new List<SObjectList<SObject>> 
+{ 
+	accountsBatch1
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", 
+						Bulk.OperationType.Delete, accountsBatchList);
+
 ```
 
 ## Contributing to the Repository ###

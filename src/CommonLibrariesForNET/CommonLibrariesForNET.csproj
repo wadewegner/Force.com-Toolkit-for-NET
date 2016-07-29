@@ -44,30 +44,44 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AuthenticationClient.cs" />
+    <Compile Include="Internals\BaseHttpClient.cs" />
+    <Compile Include="Internals\BaseHttpClientException.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
     <Compile Include="Extensions\HttpContentCompressedDataExtensions.cs" />
-    <Compile Include="Models\DescribeGlobalResult.cs" />
-    <Compile Include="Models\DisplayTypes.cs" />
+    <Compile Include="IXmlHttpClient.cs" />
+    <Compile Include="Models\Json\DescribeGlobalResult.cs" />
+    <Compile Include="Models\Json\DisplayTypes.cs" />
     <Compile Include="ForceAuthException.cs" />
     <Compile Include="ForceException.cs" />
     <Compile Include="IAuthenticationClient.cs" />
     <Compile Include="IForceException.cs" />
-    <Compile Include="IServiceHttpClient.cs" />
-    <Compile Include="Models\AuthErrorResponse.cs" />
-    <Compile Include="Models\AuthToken.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\ErrorResponse.cs" />
-    <Compile Include="Models\ErrorResponses.cs" />
-    <Compile Include="Models\QueryResult.cs" />
-    <Compile Include="Models\SuccessResponse.cs" />
-    <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="IJsonHttpClient.cs" />
+    <Compile Include="Models\Json\AuthErrorResponse.cs" />
+    <Compile Include="Models\Json\AuthToken.cs" />
+    <Compile Include="Models\Json\Error.cs" />
+    <Compile Include="Models\Json\ErrorResponse.cs" />
+    <Compile Include="Models\Json\ErrorResponses.cs" />
+    <Compile Include="Models\Json\QueryResult.cs" />
+    <Compile Include="Models\Json\SuccessResponse.cs" />
+    <Compile Include="Models\Json\UserInfo.cs" />
+    <Compile Include="Models\Xml\BatchInfoResult.cs" />
+    <Compile Include="Models\Xml\BatchResult.cs" />
+    <Compile Include="Models\Xml\BatchResultErrors.cs" />
+    <Compile Include="Models\Xml\BatchResultList.cs" />
+    <Compile Include="Models\Xml\ISObjectList.cs" />
+    <Compile Include="Models\Xml\JobInfo.cs" />
+    <Compile Include="Models\Xml\JobInfoResult.cs" />
+    <Compile Include="Models\Xml\JobInfoState.cs" />
+    <Compile Include="Models\Xml\SObject.cs" />
+    <Compile Include="Models\Xml\SObjectList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\ResponseTypes.cs" />
+    <Compile Include="Models\Json\ResponseTypes.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />
     <Compile Include="Serializer\UpdateableContractResolver.cs" />
-    <Compile Include="ServiceHttpClient.cs" />
+    <Compile Include="JsonHttpClient.cs" />
     <Compile Include="Attributes\UpdateableAttribute.cs" />
+    <Compile Include="XmlHttpClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

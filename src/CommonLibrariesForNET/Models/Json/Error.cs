@@ -1,4 +1,4 @@
-﻿namespace Salesforce.Common.Models
+﻿namespace Salesforce.Common.Models.Json
 {
     public enum Error
     {

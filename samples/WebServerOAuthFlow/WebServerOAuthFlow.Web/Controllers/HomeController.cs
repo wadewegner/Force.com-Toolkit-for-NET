@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Salesforce.Common;
 using Salesforce.Common.Models;
+using Salesforce.Common.Models.Json;
 
 namespace WebServerOAuthFlow.Web.Controllers
 {
