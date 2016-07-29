@@ -10,6 +10,7 @@ namespace Salesforce.Force.UnitTests
     public class JsonContent : HttpContent
     {
         private readonly MemoryStream _stream = new MemoryStream();
+        
         public JsonContent(object value)
         {
             Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -18,7 +19,6 @@ namespace Salesforce.Force.UnitTests
             serializer.Serialize(jw, value);
             jw.Flush();
             _stream.Position = 0;
-
         }
 
         protected JsonContent(string content)
@@ -35,6 +35,7 @@ namespace Salesforce.Force.UnitTests
             string content = File.ReadAllText(filepath);
             return new JsonContent(content);
         }
+
         protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             return _stream.CopyToAsync(stream);

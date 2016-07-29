@@ -1,6 +1,6 @@
 language: csharp
 mono:
-  - latest
+  - 4.4.1
 sudo: false
 
 solution: src/ForceToolkitForNET.sln
@@ -15,12 +15,12 @@ env:
 
 install:
   - nuget restore src/ForceToolkitForNET.sln
-  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 
 script:
   - xbuild /p:Configuration=Debug src/ForceToolkitForNET.sln
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe src/ForceToolkitForNET.UnitTests/bin/Debug/Salesforce.Force.UnitTests.dll
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.UnitTests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
