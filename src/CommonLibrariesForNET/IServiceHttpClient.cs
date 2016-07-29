@@ -5,9 +5,8 @@ using Salesforce.Common.Models;
 
 namespace Salesforce.Common
 {
-    public interface IServiceHttpClient
+    public interface IServiceHttpClient : IDisposable
     {
-        void Dispose();
         Task<T> HttpGetAsync<T>(string urlSuffix);
         Task<T> HttpGetRestApiAsync<T>(string apiName);
         Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName);

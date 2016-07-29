@@ -178,5 +178,18 @@ namespace Salesforce.Common.FunctionalTests
                 Assert.IsNotNull(ex.Error);
             }
 	    }
+
+	    [Test]
+	    public void CheckInterfaces()
+	    {
+            using (IAuthenticationClient aa = new AuthenticationClient())
+            {
+                Assert.IsNotNull(aa);
+            }
+            using (IServiceHttpClient aa = new ServiceHttpClient("instanceUrl", "apiVersion", "accessToken"))
+            {
+                Assert.IsNotNull(aa);
+            }
+	    }
     }
 }
