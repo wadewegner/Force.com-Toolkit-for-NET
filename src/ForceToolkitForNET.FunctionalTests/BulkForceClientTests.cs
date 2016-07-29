@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System;
 using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models.Xml;
@@ -12,11 +13,11 @@ namespace Salesforce.Force.FunctionalTests
     [TestFixture]
     public class BulkForceClientTests
     {
-        private static readonly string SecurityToken = ConfigurationManager.AppSettings["SecurityToken"];
-        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
-        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
-        private static readonly string Username = ConfigurationManager.AppSettings["Username"];
-        private static readonly string Password = ConfigurationManager.AppSettings["Password"] + SecurityToken;
+        private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private static string _username = ConfigurationManager.AppSettings["Username"];
+        private static string _password = ConfigurationManager.AppSettings["Password"];
+        private static string _organizationId = ConfigurationManager.AppSettings["OrganizationId"];
 
         private AuthenticationClient _auth;
         private ForceClient _client;
@@ -24,13 +25,22 @@ namespace Salesforce.Force.FunctionalTests
         [TestFixtureSetUp]
         public void Init()
         {
+            if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password) && string.IsNullOrEmpty(_organizationId))
+            {
+                _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
+                _consumerSecret = Environment.GetEnvironmentVariable("ConsumerSecret");
+                _username = Environment.GetEnvironmentVariable("Username");
+                _password = Environment.GetEnvironmentVariable("Password");
+                _organizationId = Environment.GetEnvironmentVariable("OrganizationId");
+            }
+
             // Use TLS 1.2 (instead of defaulting to 1.0)
             const int SecurityProtocolTypeTls11 = 768;
             const int SecurityProtocolTypeTls12 = 3072;
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
 
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(ConsumerKey, ConsumerSecret, Username, Password).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
             _client = new ForceClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
 
