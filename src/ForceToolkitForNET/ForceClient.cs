@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using System.Reflection;
 using Salesforce.Common;
 using Salesforce.Common.Models;
+using Salesforce.Common.Soql;
 
 namespace Salesforce.Force
 {
     public class ForceClient : IForceClient, IDisposable
     {
         private readonly ServiceHttpClient _serviceHttpClient;
+
+	    public ISelectListResolver SelectListResolver { get; set; }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClient = null)
         {
@@ -21,6 +24,8 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
 
             _serviceHttpClient = new ServiceHttpClient(instanceUrl, apiVersion, accessToken, httpClient);
+
+			SelectListResolver = new DataMemberSelectListResolver();
         }
 
         public Task<QueryResult<T>> QueryAsync<T>(string query)
@@ -66,11 +71,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
-		        .Select(p => { 
-		            var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
-		            return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
-		        }));
+		    var fields = SelectListResolver.GetFieldsList<T>();
 
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);

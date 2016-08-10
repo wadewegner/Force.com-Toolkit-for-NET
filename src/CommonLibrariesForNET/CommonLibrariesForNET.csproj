@@ -68,6 +68,9 @@
     <Compile Include="Serializer\UpdateableContractResolver.cs" />
     <Compile Include="ServiceHttpClient.cs" />
     <Compile Include="Attributes\UpdateableAttribute.cs" />
+    <Compile Include="Soql\DataMemberSelectListResolver.cs" />
+    <Compile Include="Soql\ISelectListResolver.cs" />
+    <Compile Include="Soql\JsonPropertySelectListResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
