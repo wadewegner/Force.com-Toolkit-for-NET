@@ -86,6 +86,26 @@ namespace Salesforce.Force
             return await _serviceHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
         }
 
+        public async Task<SaveResponse> CreateAsync(string objectName, object[] records)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (records == null)
+                throw new ArgumentNullException("record");
+
+            //need to check that all items have an attribute 
+
+            return await _serviceHttpClient.HttpPostAsync<SaveResponse>(records, string.Format("composite/tree/{0}", objectName)).ConfigureAwait(false);
+        }
+
+        public async Task<SaveResponse> CreateAsync(string objectName, IAttributedObject[] records)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (records == null)
+                throw new ArgumentNullException("record");
+
+            return await _serviceHttpClient.HttpPostAsync<SaveResponse>(records, string.Format("composite/tree/{0}", objectName)).ConfigureAwait(false);
+        }
+
         public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
