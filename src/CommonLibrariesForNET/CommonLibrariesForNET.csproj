@@ -59,7 +59,10 @@
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\ErrorResponse.cs" />
     <Compile Include="Models\ErrorResponses.cs" />
+    <Compile Include="Models\ErrorResult.cs" />
     <Compile Include="Models\QueryResult.cs" />
+    <Compile Include="Models\SaveResponse.cs" />
+    <Compile Include="Models\SaveResult.cs" />
     <Compile Include="Models\SuccessResponse.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
