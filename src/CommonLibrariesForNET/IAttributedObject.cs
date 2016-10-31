@@ -1,4 +1,5 @@
-﻿using Salesforce.Common.Models;
+﻿using Newtonsoft.Json;
+using Salesforce.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace Salesforce.Common
     /// </summary>
     public interface IAttributedObject
     {
-        AttributeInfo Attributes { get; set; }
+        [JsonProperty(PropertyName = "attributes")]
+        ObjectAttributes Attributes { get; set; }
+
     }
 }

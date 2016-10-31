@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="ForceClientTests.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\AtrributedAccount.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\ContactsAccountNameQuery.cs" />
     <Compile Include="Models\DeletedRecord.cs" />
@@ -73,7 +74,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

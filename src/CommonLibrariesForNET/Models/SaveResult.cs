@@ -10,7 +10,7 @@ namespace Salesforce.Common.Models
     public class SaveResult
     {
         [JsonProperty(PropertyName = "id")]
-        public string id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty(PropertyName = "referenceId")]
         public string ReferenceId { get; set; }

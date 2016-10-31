@@ -48,7 +48,7 @@
     <Compile Include="Attributes\CreateableAttribute.cs" />
     <Compile Include="Extensions\HttpContentCompressedDataExtensions.cs" />
     <Compile Include="IAttributedObject.cs" />
-    <Compile Include="Models\Attributes.cs" />
+    <Compile Include="Models\CreateRequest.cs" />
     <Compile Include="Models\DescribeGlobalResult.cs" />
     <Compile Include="Models\DisplayTypes.cs" />
     <Compile Include="ForceAuthException.cs" />
@@ -62,6 +62,7 @@
     <Compile Include="Models\ErrorResponse.cs" />
     <Compile Include="Models\ErrorResponses.cs" />
     <Compile Include="Models\ErrorResult.cs" />
+    <Compile Include="Models\ObjectAttributes.cs" />
     <Compile Include="Models\QueryResult.cs" />
     <Compile Include="Models\SaveResponse.cs" />
     <Compile Include="Models\SaveResult.cs" />

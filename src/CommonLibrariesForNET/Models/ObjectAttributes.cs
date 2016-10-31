@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Salesforce.Common.Models
 {
-    public class AttributeInfo
+    public class ObjectAttributes
     {
         [JsonProperty(PropertyName = "type")]
-        public string TypeName { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty(PropertyName = "referenceId")]
         public string ReferenceId { get; set; }
