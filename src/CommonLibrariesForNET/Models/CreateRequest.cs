@@ -10,6 +10,6 @@ namespace Salesforce.Common.Models
     public class CreateRequest
     {
         [JsonProperty(PropertyName = "records")]
-        public List<IAttributedObject> records { get; set; }
+        public List<IAttributedObject> Records { get; set; }
     }
 }

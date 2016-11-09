@@ -7,16 +7,12 @@ using System.Threading.Tasks;
 
 namespace Salesforce.Common.Models
 {
-    public class SaveResult
+    public class AttributeInfo
     {
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        [JsonProperty(PropertyName = "type")]
+        public string TypeName { get; set; }
 
         [JsonProperty(PropertyName = "referenceId")]
         public string ReferenceId { get; set; }
-
-        [JsonProperty(PropertyName = "errors")]
-        public Error[] Errors { get; set; }
     }
-
 }
