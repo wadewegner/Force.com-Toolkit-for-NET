@@ -19,8 +19,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\src\ChatterToolkitForNET\bin\Release\Salesforce.Chatter.dll" target="lib" />
-    <file src="..\..\src\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib" />
+    <file src="..\..\src\ChatterToolkitForNET\bin\Release\Salesforce.Chatter.dll" target="lib\portable-net45+win8\Salesforce.Chatter.dll" />
+    <file src="..\..\src\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib\portable-net45+win8\Salesforce.Common.dll" />
     <file src="..\..\src\ChatterToolkitForNET\tools\Install.ps1" target="tools" />
   </files>
 </package>
