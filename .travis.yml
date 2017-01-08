@@ -1,6 +1,6 @@
 language: csharp
 mono:
-  - 4.4.1
+  - 4.6.2
 sudo: false
 
 solution: src/ForceToolkitForNET.sln
@@ -16,6 +16,11 @@ env:
 install:
   - nuget restore src/ForceToolkitForNET.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+  - nuget install Microsoft.Bcl -OutputDirectory testrunner
+  - nuget install Microsoft.Bcl.Async -OutputDirectory testrunner
+  - nuget install Microsoft.Bcl.Build -OutputDirectory testrunner
+  - nuget install Microsoft.Bcl.Compression -OutputDirectory testrunner
+  - nuget install Microsoft.Net.Http -OutputDirectory testrunner
 
 script:
   - xbuild /p:Configuration=Debug src/ForceToolkitForNET.sln
