@@ -6,6 +6,7 @@ using Salesforce.Common;
 using Salesforce.Force;
 using System.Threading.Tasks;
 using System.Dynamic;
+using System.Net;
 
 namespace SimpleConsole
 {
@@ -20,6 +21,8 @@ namespace SimpleConsole
 
         static void Main()
         {
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             try
             {
                 var task = RunSample();
@@ -38,6 +41,8 @@ namespace SimpleConsole
 
                     innerException = innerException.InnerException;
                 }
+
+                Console.ReadLine(); // Prevent the app from closing so the error can be seen
             }
         }
 
@@ -91,7 +96,8 @@ namespace SimpleConsole
             // Create a sample record
             Console.WriteLine("Creating test record.");
             var account = new Account { Name = "Test Account" };
-            account.Id = await client.CreateAsync(Account.SObjectTypeName, account);
+            var createAccountResponse = await client.CreateAsync(Account.SObjectTypeName, account);
+            account.Id = createAccountResponse.Id;
             if (account.Id == null)
             {
                 Console.WriteLine("Failed to create test record.");
@@ -158,7 +164,8 @@ namespace SimpleConsole
             Console.WriteLine("Creating a parent record (Account)");
             dynamic a = new ExpandoObject();
             a.Name = "Account from .Net Toolkit";
-            a.Id = await client.CreateAsync("Account", a);
+            var createParentAccountResponse = await client.CreateAsync("Account", a);
+            a.Id = createParentAccountResponse.Id;
             if (a.Id == null)
             {
                 Console.WriteLine("Failed to create parent record.");
@@ -170,7 +177,8 @@ namespace SimpleConsole
             c.FirstName = "Joe";
             c.LastName = "Blow";
             c.AccountId = a.Id;
-            c.Id = await client.CreateAsync("Contact", c);
+            var createContactResponse = await client.CreateAsync("Contact", c);
+            c.Id = createContactResponse.Id;
             if (c.Id == null)
             {
                 Console.WriteLine("Failed to create child record.");
