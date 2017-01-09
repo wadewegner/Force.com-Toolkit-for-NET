@@ -19,8 +19,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\src\ForceToolkitForNET\bin\Release\Salesforce.Force.dll" target="lib" />
-    <file src="..\..\src\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib" />
+    <file src="..\..\src\ForceToolkitForNET\bin\Release\Salesforce.Force.dll" target="lib\portable-net45+win8\Salesforce.Force.dll" />
+    <file src="..\..\src\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib\portable-net45+win8\Salesforce.Common.dll" />
     <file src="..\..\src\ForceToolkitForNET\tools\Install.ps1" target="tools" />
   </files>
 </package>

@@ -19,10 +19,10 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.dll" target="lib" />
-    <file src="..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.pdb" target="lib" />
-    <file src="..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib" />
-    <file src="..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib" />
+    <file src="..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.dll" target="lib\portable-net45+win8\Salesforce.Chatter.dll" />
+    <file src="..\..\src\ChatterToolkitForNET\bin\Debug\Salesforce.Chatter.pdb" target="lib\portable-net45+win8\Salesforce.Chatter.pdb" />
+    <file src="..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.dll" target="lib\portable-net45+win8\Salesforce.Common.dll" />
+    <file src="..\..\src\CommonLibrariesForNET\bin\Debug\Salesforce.Common.pdb" target="lib\portable-net45+win8\Salesforce.Commom.pdb" />
     <file src="..\..\src\ChatterToolkitForNET\*.cs" target="src" />
     <file src="..\..\src\ChatterToolkitForNET\Models\*.cs" target="src" />
     <file src="..\..\src\CommonLibrariesForNET\*.cs" target="src" />
