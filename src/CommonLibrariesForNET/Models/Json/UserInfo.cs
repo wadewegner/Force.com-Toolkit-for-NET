@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Salesforce.Common.Models
+namespace Salesforce.Common.Models.Json
 {
     public class UserInfo
     {

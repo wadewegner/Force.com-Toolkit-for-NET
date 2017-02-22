@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using Salesforce.Common.Models;
+﻿using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
 {

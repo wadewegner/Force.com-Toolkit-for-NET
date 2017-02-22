@@ -21,8 +21,8 @@ namespace Salesforce.Chatter.FunctionalTests
 
         private AuthenticationClient _auth;
         private ChatterClient _chatterClient;
-        
-        [OneTimeSetUp]
+
+        [TestFixtureSetUp]
         public void Init()
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password))
@@ -34,7 +34,9 @@ namespace Salesforce.Chatter.FunctionalTests
             }
 
             // Use TLS 1.2 (instead of defaulting to 1.0)
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            const int SecurityProtocolTypeTls11 = 768;
+            const int SecurityProtocolTypeTls12 = 3072;
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
 
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();

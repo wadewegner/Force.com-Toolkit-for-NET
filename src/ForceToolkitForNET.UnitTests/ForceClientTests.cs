@@ -16,8 +16,8 @@ namespace Salesforce.Force.UnitTests
         [Test]
         public async Task Requests_CheckHttpRequestMessage_UserAgent()
         {
-            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + string.Format("/{0}", ApiVersion))));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
+            var httpClient = new HttpClient(new ServiceClientRouteHandler(r => Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v32")));
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient, new HttpClient());
 
            try
            {
@@ -26,35 +26,35 @@ namespace Salesforce.Force.UnitTests
            }
            catch
            {
+               // do nothing
            }
         }
 
         [Test]
         public async Task GetBasicInformationAsync_EmptyObjectName_ThrowsException()
         {
-            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK) {Content = new JsonContent(new {})};
+            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK) { Content = new JsonContent(new { }) };
             var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
-            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient, new HttpClient());
 
             Action<ArgumentNullException> asserts = exception => Assert.That(exception.Message, Is.Not.Null);
             await AssertEx.ThrowsAsync(() => forceClient.BasicInformationAsync<object>(""), asserts);
         }
 
-        // For some reason this test isn't finding the JSON file
-        //[Test]
-        //public async Task GetBasicInformationAsync_ValidObjectName_ReturnsParsedResponse()
-        //{
-        //    var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK)
-        //    {
-        //        Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
-        //    };
-        //    var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
-        //    var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient);
+        [Test]
+        public async void GetBasicInformationAsync_ValidObjectName_ReturnsParsedResponse()
+        {
+            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = JsonContent.FromFile("KnownGoodContent/UserObjectDescribeMetadata.json")
+            };
+            var httpClient = new HttpClient(new FakeHttpRequestHandler(expectedResponse));
+            var forceClient = new ForceClient("http://localhost:1899", "accessToken", ApiVersion, httpClient, new HttpClient());
 
-        //    var result = await forceClient.BasicInformationAsync<ObjectDescribeMetadata>("ValidObjectName");
+            var result = await forceClient.BasicInformationAsync<ObjectDescribeMetadata>("ValidObjectName");
 
-        //    Assert.That(result.Name, Is.Not.Null.And.Not.Empty);
-        //    Assert.AreEqual("User", result.Name);
-        //}
+            Assert.IsNotNull(result.Name);
+            Assert.AreEqual("User", result.Name);
+        }
     }
 }

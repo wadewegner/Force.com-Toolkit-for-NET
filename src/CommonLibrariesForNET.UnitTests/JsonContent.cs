@@ -7,20 +7,20 @@ using Newtonsoft.Json;
 
 namespace Salesforce.Common.UnitTests
 {
-    internal class JsonContent : HttpContent
+    public class JsonContent : HttpContent
     {
         private readonly MemoryStream _stream = new MemoryStream();
+
         public JsonContent(object value)
         {
-
             Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var jw = new JsonTextWriter(new StreamWriter(_stream)) { Formatting = Formatting.Indented };
             var serializer = new JsonSerializer();
             serializer.Serialize(jw, value);
             jw.Flush();
             _stream.Position = 0;
-
         }
+
         protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             return _stream.CopyToAsync(stream);

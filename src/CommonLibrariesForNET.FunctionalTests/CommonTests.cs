@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Common.FunctionalTests.Models;
-using Salesforce.Common.Models;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common.FunctionalTests
 {
@@ -21,7 +21,7 @@ namespace Salesforce.Common.FunctionalTests
         private static string _password = ConfigurationManager.AppSettings["Password"];
 	    
 	    private AuthenticationClient _auth;
-	    private ServiceHttpClient _serviceHttpClient;
+	    private JsonHttpClient _jsonHttpClient;
 
         [TestFixtureSetUp]
         public void Init()
@@ -35,18 +35,29 @@ namespace Salesforce.Common.FunctionalTests
             }
 
             // Use TLS 1.2 (instead of defaulting to 1.0)
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            const int SecurityProtocolTypeTls11 = 768;
+            const int SecurityProtocolTypeTls12 = 3072;
+
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
+
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
             
-            _serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
+            _jsonHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
 
         [Test]
         public async Task Get_UserInfo()
         {
-            var response = await _serviceHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
+            var objectName = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("AccessToken", _auth.AccessToken)
+                });
+
+            var response = await _jsonHttpClient.HttpGetAsync<UserInfo>(new Uri(_auth.Id));
 
             Assert.IsNotNull(response);
         }
@@ -55,7 +66,7 @@ namespace Salesforce.Common.FunctionalTests
         public async Task Query_Describe()
         {
             const string objectName = "Account";
-            var response = await _serviceHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
+            var response = await _jsonHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
             
             Assert.IsNotNull(response);
         }
@@ -63,7 +74,7 @@ namespace Salesforce.Common.FunctionalTests
         [Test]
         public async Task Query_Objects()
         {
-            var response = await _serviceHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
+            var response = await _jsonHttpClient.HttpGetAsync<DescribeGlobalResult<dynamic>>(string.Format("sobjects"));
 
             Assert.IsTrue(response.MaxBatchSize > 0);
             Assert.IsTrue(response.SObjects.Count > 0);
@@ -73,7 +84,7 @@ namespace Salesforce.Common.FunctionalTests
         public async Task Query_Select_Account()
         {
             const string query = "SELECT Id FROM Account";
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            var response = await _jsonHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
             Assert.IsTrue(response.TotalSize > 0);
             Assert.IsTrue(response.Records.Count > 0);
@@ -83,7 +94,7 @@ namespace Salesforce.Common.FunctionalTests
         public async Task Query_Select_Count()
         {
             const string query = "SELECT count() FROM Account";
-            var response = await _serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
+            var response = await _jsonHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
 
             Assert.IsTrue(response.TotalSize > 0);
             Assert.IsTrue(response.Records.Count == 0);
@@ -143,7 +154,7 @@ namespace Salesforce.Common.FunctionalTests
 	    public async Task Upsert_Update_CheckReturn()
 	    {
             var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
-            var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
+            var response = await _jsonHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
 
             Assert.IsNotNull(response);
 	    }
@@ -152,7 +163,7 @@ namespace Salesforce.Common.FunctionalTests
         public async Task Upsert_New_CheckReturnInclude()
         {
             var account = new Account { Name = "New Account" + DateTime.Now.Ticks, Description = "New Account Description" + DateTime.Now.Ticks };
-            var response = await _serviceHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
+            var response = await _jsonHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", DateTime.Now.Ticks));
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Id);
@@ -162,7 +173,7 @@ namespace Salesforce.Common.FunctionalTests
 	    public async Task BadTokenHandling()
 	    {
 	        var badToken = "badtoken";
-            var serviceHttpClient = new ServiceHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
+            var serviceHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
 
             const string query = "SELECT count() FROM Account";
 
@@ -186,7 +197,11 @@ namespace Salesforce.Common.FunctionalTests
             {
                 Assert.IsNotNull(aa);
             }
-            using (IServiceHttpClient aa = new ServiceHttpClient("instanceUrl", "apiVersion", "accessToken"))
+            using (IJsonHttpClient aa = new JsonHttpClient("instanceUrl", "apiVersion", "accessToken", new HttpClient()))
+            {
+                Assert.IsNotNull(aa);
+            }
+            using (IXmlHttpClient aa = new XmlHttpClient("instanceUrl", "apiVersion", "accessToken", new HttpClient()))
             {
                 Assert.IsNotNull(aa);
             }
