@@ -13,8 +13,8 @@ namespace Salesforce.Force
 {
     public class ForceClient : IForceClient, IDisposable
     {
-        private readonly XmlHttpClient _xmlHttpClient;
-        private readonly JsonHttpClient _jsonHttpClient;
+        protected readonly XmlHttpClient _xmlHttpClient;
+        protected readonly JsonHttpClient _jsonHttpClient;
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
