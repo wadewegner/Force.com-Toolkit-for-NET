@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkConstants.cs" />
+    <Compile Include="BulkForceClient.cs" />
+    <Compile Include="IBulkForceClient.cs" />
     <Compile Include="IForceClient.cs" />
     <Compile Include="ForceClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
