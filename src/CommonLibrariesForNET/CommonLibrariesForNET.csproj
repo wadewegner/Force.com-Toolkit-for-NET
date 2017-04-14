@@ -75,6 +75,7 @@
     <Compile Include="Models\Xml\JobInfoState.cs" />
     <Compile Include="Models\Xml\SObject.cs" />
     <Compile Include="Models\Xml\SObjectList.cs" />
+    <Compile Include="Models\Xml\UpsertJobInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Json\ResponseTypes.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />
