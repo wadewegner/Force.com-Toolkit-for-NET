@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -31,17 +32,17 @@ namespace Salesforce.Common
 
         // GET
 
-        public async Task<T> HttpGetAsync<T>(string urlSuffix)
+        public Task<T> HttpGetAsync<T>(string urlSuffix, CancellationToken token)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpGetAsync<T>(url);
+            return HttpGetAsync<T>(url, token);
         }
 
-        public async Task<T> HttpGetAsync<T>(Uri uri)
+        public async Task<T> HttpGetAsync<T>(Uri uri, CancellationToken token)
         {
             try
             {
-                var response = await HttpGetAsync(uri);
+                var response = await HttpGetAsync(uri, token).ConfigureAwait(false);
                 var jToken = JToken.Parse(response);
                 if (jToken.Type == JTokenType.Array)
                 {
@@ -65,7 +66,7 @@ namespace Salesforce.Common
             }
         }
 
-        public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
+        public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName, CancellationToken token)
         {
             string next = null;
             var records = new List<T>();
@@ -79,7 +80,7 @@ namespace Salesforce.Common
                 }
                 try
                 {
-                    var response = await HttpGetAsync(url);
+                    var response = await HttpGetAsync(url, token).ConfigureAwait(false);
                     var jObject = JObject.Parse(response);
                     var jToken = jObject.GetValue(nodeName);
                     next = (jObject.GetValue("nextRecordsUrl") != null) ? jObject.GetValue("nextRecordsUrl").ToString() : null;
@@ -95,21 +96,21 @@ namespace Salesforce.Common
             return records;
         }
 
-        public async Task<T> HttpGetRestApiAsync<T>(string apiName)
+        public Task<T> HttpGetRestApiAsync<T>(string apiName, CancellationToken token)
         {
             var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
-            return await HttpGetAsync<T>(url);
+            return HttpGetAsync<T>(url, token);
         }
 
         // POST
 
-        public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
+        public Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix, CancellationToken token)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPostAsync<T>(inputObject, url);
+            return HttpPostAsync<T>(inputObject, url, token);
         }
 
-        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
+        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri, CancellationToken token)
         {
             var json = JsonConvert.SerializeObject(inputObject,
                    Formatting.None,
@@ -121,7 +122,7 @@ namespace Salesforce.Common
                    });
             try
             {
-                var response = await HttpPostAsync(json, uri);
+                var response = await HttpPostAsync(json, uri, token).ConfigureAwait(false);
                 return JsonConvert.DeserializeObject<T>(response);
             }
             catch (BaseHttpClientException e)
@@ -130,13 +131,13 @@ namespace Salesforce.Common
             }
         }
 
-        public async Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject)
+        public Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject, CancellationToken token)
         {
             var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
-            return await HttpPostAsync<T>(inputObject, url);
+            return HttpPostAsync<T>(inputObject, url, token);
         }
 
-        public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
+        public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName, CancellationToken token)
         {
             // BRAD: I think we should probably, in time, refactor multipart and binary support to the BaseHttpClient.
             // For now though, I just left this in here.
@@ -161,7 +162,7 @@ namespace Salesforce.Common
             byteArrayContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"{0}\"; filename=\"{1}\"", headerName, fileName));
             content.Add(byteArrayContent, headerName, fileName);
 
-            var responseMessage = await HttpClient.PostAsync(uri, content).ConfigureAwait(false);
+            var responseMessage = await HttpClient.PostAsync(uri, content, token).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
@@ -174,13 +175,13 @@ namespace Salesforce.Common
 
         // PATCH
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
+        public Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, CancellationToken token)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPatchAsync(inputObject, url);
+            return HttpPatchAsync(inputObject, url, token);
         }
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri)
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, CancellationToken token)
         {
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
@@ -192,7 +193,7 @@ namespace Salesforce.Common
                 });
             try
             {
-                var response = await base.HttpPatchAsync(json, uri);
+                var response = await base.HttpPatchAsync(json, uri, token).ConfigureAwait(false);
                 return string.IsNullOrEmpty(response) ?
                     new SuccessResponse{ Id = "", Errors = "", Success = true } :
                     JsonConvert.DeserializeObject<SuccessResponse>(response);
@@ -205,17 +206,17 @@ namespace Salesforce.Common
 
         // DELETE
 
-        public async Task<bool> HttpDeleteAsync(string urlSuffix)
+        public Task<bool> HttpDeleteAsync(string urlSuffix, CancellationToken token)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpDeleteAsync(url);
+            return HttpDeleteAsync(url, token);
         }
 
-        public new async Task<bool> HttpDeleteAsync(Uri uri)
+        public new async Task<bool> HttpDeleteAsync(Uri uri, CancellationToken token)
         {
             try
             {
-                await base.HttpDeleteAsync(uri);
+                await base.HttpDeleteAsync(uri, token).ConfigureAwait(false);
                 return true;
             }
             catch (BaseHttpClientException e)

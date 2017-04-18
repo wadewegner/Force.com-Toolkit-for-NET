@@ -28,7 +28,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.GetValues("X-SFDC-Session").First(), "accessToken");
             }, new object()));
 
-            using (var httpClient = new XmlHttpClient("http://localhost:1899", "v32", "accessToken", client))
+            using (IXmlHttpClient httpClient = new XmlHttpClient("http://localhost:1899", "v32", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("brad");
             }
@@ -57,7 +57,7 @@ namespace Salesforce.Common.UnitTests
 
             }, testObject)); // pass in the object to be returned (Same object roundtripped here for simplicity)
 
-            using (var httpClient = new XmlHttpClient("http://localhost:1899", "v32", "accessToken", client))
+            using (IXmlHttpClient httpClient = new XmlHttpClient("http://localhost:1899", "v32", "accessToken", client))
             {
                 var result = await httpClient.HttpPostAsync<SerializerTest>(testObject, "brad");
                 Assert.AreEqual(testObject.TestField, result.TestField);

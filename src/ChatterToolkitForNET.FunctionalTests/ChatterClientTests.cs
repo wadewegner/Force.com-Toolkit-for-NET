@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
-using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Chatter.Models;
@@ -20,7 +20,7 @@ namespace Salesforce.Chatter.FunctionalTests
         private static string _password = ConfigurationManager.AppSettings["Password"];
 
         private AuthenticationClient _auth;
-        private ChatterClient _chatterClient;
+        private IChatterClient _chatterClient;
 
         [TestFixtureSetUp]
         public void Init()
@@ -39,7 +39,7 @@ namespace Salesforce.Chatter.FunctionalTests
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
 
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl, CancellationToken.None).Wait();
             
             _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
@@ -226,7 +226,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         #region private functions
-        private async Task<FeedItem> postFeedItem(ChatterClient chatter)
+        private async Task<FeedItem> postFeedItem(IChatterClient chatter)
         {
             var me = await chatter.MeAsync<UserDetail>();
             var id = me.id;

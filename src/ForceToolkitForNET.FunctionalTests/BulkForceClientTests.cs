@@ -19,8 +19,8 @@ namespace Salesforce.Force.FunctionalTests
         private static string _password = ConfigurationManager.AppSettings["Password"];
         private static string _organizationId = ConfigurationManager.AppSettings["OrganizationId"];
 
-        private AuthenticationClient _auth;
-        private ForceClient _client;
+        private IAuthenticationClient _auth;
+        private IForceClient _client;
 
         [TestFixtureSetUp]
         public void Init()

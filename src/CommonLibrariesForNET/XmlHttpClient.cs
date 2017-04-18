@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -24,17 +25,17 @@ namespace Salesforce.Common
 
         // GET
 
-        public async Task<T> HttpGetAsync<T>(string urlSuffix)
+        public Task<T> HttpGetAsync<T>(string urlSuffix, CancellationToken token)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpGetAsync<T>(url);
+            return HttpGetAsync<T>(url, token);
         }
 
-        public async Task<T> HttpGetAsync<T>(Uri uri)
+        public async Task<T> HttpGetAsync<T>(Uri uri, CancellationToken token)
         {
             try
             {
-                var response = await HttpGetAsync(uri);
+                var response = await HttpGetAsync(uri, token).ConfigureAwait(false);
                 return DeserializeXmlString<T>(response);
             }
             catch (BaseHttpClientException e)
@@ -45,18 +46,18 @@ namespace Salesforce.Common
 
         // POST
 
-        public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
+        public Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix, CancellationToken token)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPostAsync<T>(inputObject, url);
+            return HttpPostAsync<T>(inputObject, url, token);
         }
 
-        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
+        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri, CancellationToken token)
         {
             var postBody = SerializeXmlObject(inputObject);
             try
             {
-                var response = await HttpPostAsync(postBody, uri);
+                var response = await HttpPostAsync(postBody, uri, token).ConfigureAwait(false);
                 return DeserializeXmlString<T>(response);
             }
             catch (BaseHttpClientException e)
