@@ -20,8 +20,8 @@ namespace Salesforce.Common.FunctionalTests
         private static string _username = ConfigurationManager.AppSettings["Username"];
         private static string _password = ConfigurationManager.AppSettings["Password"];
 	    
-	    private AuthenticationClient _auth;
-	    private JsonHttpClient _jsonHttpClient;
+	    private IAuthenticationClient _auth;
+	    private IJsonHttpClient _jsonHttpClient;
 
         [TestFixtureSetUp]
         public void Init()
@@ -173,7 +173,7 @@ namespace Salesforce.Common.FunctionalTests
 	    public async Task BadTokenHandling()
 	    {
 	        var badToken = "badtoken";
-            var serviceHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
+            IJsonHttpClient serviceHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
 
             const string query = "SELECT count() FROM Account";
 

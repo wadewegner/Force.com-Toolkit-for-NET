@@ -17,7 +17,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof (ArgumentNullException))]
         public async void RunJobAndPoll_NullObjectName_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.RunJobAndPollAsync(null, BulkConstants.OperationType.Insert, new List<ISObjectList<SObject>>());
 
             // expects exception
@@ -27,7 +27,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void RunJobAndPoll_NullBatchList_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.RunJobAndPollAsync<List<ISObjectList<SObject>>>("Account", BulkConstants.OperationType.Insert, null);
 
             // expects exception
@@ -37,7 +37,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void RunJob_NullObjectName_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.RunJobAsync(null, BulkConstants.OperationType.Insert, new List<ISObjectList<SObject>>());
 
             // expects exception
@@ -47,7 +47,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void RunJob_NullBatchList_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.RunJobAsync<List<ISObjectList<SObject>>>("Account", BulkConstants.OperationType.Insert, null);
 
             // expects exception
@@ -57,7 +57,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void CreateJobAsync_NullObjectName_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.CreateJobAsync(null, BulkConstants.OperationType.Insert);
 
             // expects exception
@@ -67,7 +67,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void CreateJobBatchAsync_NullJobId_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.CreateJobBatchAsync((string)null, new SObjectList<SObject>());
 
             // expects exception
@@ -77,7 +77,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void CreateJobBatchAsync_NullJobInfo_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.CreateJobBatchAsync((JobInfoResult)null, new SObjectList<SObject>());
 
             // expects exception
@@ -87,7 +87,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void CreateJobBatchAsync_NullObjectList_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.CreateJobBatchAsync<SObjectList<SObject>>("testId", null);
 
             // expects exception
@@ -97,7 +97,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void PollJobAsync_NullJobInfo_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.PollJobAsync((JobInfoResult)null);
 
             // expects exception
@@ -107,7 +107,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void PollJobAsync_NullJobId_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.PollJobAsync((string)null);
 
             // expects exception
@@ -117,7 +117,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void PollBatchAsync_NullBatchInfo_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.PollBatchAsync(null);
 
             // expects exception
@@ -127,7 +127,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void PollBatchAsync_NullBatchId_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.PollBatchAsync(null, "test");
 
             // expects exception
@@ -137,7 +137,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void PollBatchAsync_NullJobId_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.PollBatchAsync("test", null);
 
             // expects exception
@@ -147,7 +147,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void GetBatchResultAsync_NullBatchInfo_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.GetBatchResultAsync(null);
 
             // expects exception
@@ -157,7 +157,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void GetBatchResultAsync_NullBatchId_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.GetBatchResultAsync(null, "test");
 
             // expects exception
@@ -167,7 +167,7 @@ namespace Salesforce.Force.UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public async void GetBatchResultAsync_NullJobId_ArgumentNullException()
         {
-            var client = new ForceClient("test", "test", "v32");
+	        IForceClient client = new ForceClient("test", "test", "v32");
             await client.GetBatchResultAsync("test", null);
 
             // expects exception
@@ -298,7 +298,7 @@ namespace Salesforce.Force.UnitTests
             };
 
             var httpClient = new HttpClient(new BulkFakeHttpRequestHandler(expectedResponses, testingActions));
-            var client = new ForceClient("http://localhost:1899", "accessToken", "v29", new HttpClient(), httpClient);
+	        IForceClient client = new ForceClient("http://localhost:1899", "accessToken", "v29", new HttpClient(), httpClient);
 
             using (client)
             {

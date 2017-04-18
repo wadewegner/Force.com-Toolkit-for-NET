@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Salesforce.Common.Internals
@@ -43,9 +44,9 @@ namespace Salesforce.Common.Internals
             return ApiVersion;
         }
 
-        protected async Task<string> HttpGetAsync(Uri uri)
+        protected async Task<string> HttpGetAsync(Uri uri, CancellationToken token)
         {
-            var responseMessage = await HttpClient.GetAsync(uri).ConfigureAwait(false);
+            var responseMessage = await HttpClient.GetAsync(uri, token).ConfigureAwait(false);
             if (responseMessage.StatusCode == HttpStatusCode.NoContent)
             {
                 return string.Empty;
@@ -60,11 +61,11 @@ namespace Salesforce.Common.Internals
             throw new BaseHttpClientException(response, responseMessage.StatusCode);
         }
 
-        protected async Task<string> HttpPostAsync(string payload, Uri uri)
+        protected async Task<string> HttpPostAsync(string payload, Uri uri, CancellationToken token)
         {
             var content = new StringContent(payload, Encoding.UTF8, _contentType);
 
-            var responseMessage = await HttpClient.PostAsync(uri, content).ConfigureAwait(false);
+            var responseMessage = await HttpClient.PostAsync(uri, content, token).ConfigureAwait(false);
             if (responseMessage.StatusCode == HttpStatusCode.NoContent)
             {
                 return string.Empty;
@@ -79,7 +80,7 @@ namespace Salesforce.Common.Internals
             throw new BaseHttpClientException(response, responseMessage.StatusCode);
         }
 
-        protected async Task<string> HttpPatchAsync(string payload, Uri uri)
+        protected async Task<string> HttpPatchAsync(string payload, Uri uri, CancellationToken token)
         {
             var content = new StringContent(payload, Encoding.UTF8, _contentType);
 
@@ -90,7 +91,7 @@ namespace Salesforce.Common.Internals
                 Content = content
             };
 
-            var responseMessage = await HttpClient.SendAsync(request).ConfigureAwait(false);
+            var responseMessage = await HttpClient.SendAsync(request, token).ConfigureAwait(false);
             if (responseMessage.StatusCode == HttpStatusCode.NoContent)
             {
                 return string.Empty;
@@ -105,9 +106,9 @@ namespace Salesforce.Common.Internals
             throw new BaseHttpClientException(response, responseMessage.StatusCode);
         }
 
-        protected async Task<string> HttpDeleteAsync(Uri uri)
+        protected async Task<string> HttpDeleteAsync(Uri uri, CancellationToken token)
         {
-            var responseMessage = await HttpClient.DeleteAsync(uri).ConfigureAwait(false);
+            var responseMessage = await HttpClient.DeleteAsync(uri, token).ConfigureAwait(false);
             if (responseMessage.StatusCode == HttpStatusCode.NoContent)
             {
                 return string.Empty;

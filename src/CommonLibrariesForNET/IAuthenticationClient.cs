@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Salesforce.Common
@@ -8,9 +9,10 @@ namespace Salesforce.Common
         string InstanceUrl { get; set; }
         string AccessToken { get; set; }
         string ApiVersion { get; set; }
-        Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password);
-        Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl);
-        Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code);
-        Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string tokenRequestEndpointUrl);
+	    string Id { get; set; }
+		Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, CancellationToken token = default(CancellationToken));
+        Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl, CancellationToken token = default(CancellationToken));
+        Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, CancellationToken token = default(CancellationToken));
+        Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string tokenRequestEndpointUrl, CancellationToken token = default(CancellationToken));
     }
 }

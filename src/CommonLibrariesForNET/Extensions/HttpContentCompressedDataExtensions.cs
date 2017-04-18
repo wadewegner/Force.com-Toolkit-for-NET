@@ -38,7 +38,7 @@ namespace Salesforce.Common
             {
                 var responseStream = await responseContent.ReadAsStreamAsync().ConfigureAwait(false);
                 var unzippedContent = new GZipStream(responseStream, CompressionMode.Decompress);
-                content = await(new StreamReader(unzippedContent)).ReadToEndAsync();
+                content = await new StreamReader(unzippedContent).ReadToEndAsync().ConfigureAwait(false);
             }
             else
             {

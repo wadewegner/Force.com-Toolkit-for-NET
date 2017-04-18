@@ -31,7 +31,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Content.ToString(), "System.Net.Http.FormUrlEncodedContent");
             }));
 
-            using (var auth = new AuthenticationClient(client))
+            using (IAuthenticationClient auth = new AuthenticationClient(client))
             {
                 await auth.UsernamePasswordAsync(consumerKey, consumerSecret, username, password);
 
@@ -58,7 +58,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (IJsonHttpClient httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -78,7 +78,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (IJsonHttpClient httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -98,7 +98,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (IJsonHttpClient httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpPostAsync<object>(null, "wade");
             }
@@ -118,7 +118,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (IJsonHttpClient httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpPatchAsync(null, "wade");
             }
@@ -138,7 +138,7 @@ namespace Salesforce.Common.UnitTests
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (IJsonHttpClient httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpDeleteAsync("wade");
             }
@@ -155,7 +155,7 @@ namespace Salesforce.Common.UnitTests
 
             client.DefaultRequestHeaders.Add("headername", "headervalue");
 
-            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
+            using (IJsonHttpClient httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }

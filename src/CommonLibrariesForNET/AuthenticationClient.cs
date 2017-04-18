@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Salesforce.Common.Models.Json;
@@ -32,12 +33,12 @@ namespace Salesforce.Common
             ApiVersion = "v36.0";
         }
 
-        public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password)
+        public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, CancellationToken token)
         {
-            return UsernamePasswordAsync(clientId, clientSecret, username, password, TokenRequestEndpointUrl);
+            return UsernamePasswordAsync(clientId, clientSecret, username, password, TokenRequestEndpointUrl, token);
         }
 
-        public async Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl)
+        public async Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl, CancellationToken token)
         {
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
             if (string.IsNullOrEmpty(clientSecret)) throw new ArgumentNullException("clientSecret");
@@ -64,7 +65,7 @@ namespace Salesforce.Common
 
 			request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
 
-            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var responseMessage = await _httpClient.SendAsync(request, token).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
@@ -82,12 +83,12 @@ namespace Salesforce.Common
             }
         }
 
-        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code)
+        public Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, CancellationToken token)
         {
-            return WebServerAsync(clientId, clientSecret, redirectUri, code, TokenRequestEndpointUrl);
+            return WebServerAsync(clientId, clientSecret, redirectUri, code, TokenRequestEndpointUrl, token);
         }
 
-        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string tokenRequestEndpointUrl)
+        public async Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string tokenRequestEndpointUrl, CancellationToken token)
         {
             if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException("clientId");
             if (string.IsNullOrEmpty(clientSecret)) throw new ArgumentNullException("clientSecret");
@@ -115,7 +116,7 @@ namespace Salesforce.Common
 
 			request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
 
-            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var responseMessage = await _httpClient.SendAsync(request, token).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
@@ -142,12 +143,12 @@ namespace Salesforce.Common
             }
         }
 
-        public Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret = "")
+        public Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret = "", CancellationToken token = default(CancellationToken))
         {
-            return TokenRefreshAsync(clientId, refreshToken, clientSecret, TokenRequestEndpointUrl);
+            return TokenRefreshAsync(clientId, refreshToken, clientSecret, TokenRequestEndpointUrl, token);
         }
 
-        public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string tokenRequestEndpointUrl)
+        public async Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string tokenRequestEndpointUrl, CancellationToken token)
         {
             var url = Common.FormatRefreshTokenUrl(
                 tokenRequestEndpointUrl,
@@ -163,7 +164,7 @@ namespace Salesforce.Common
 
 			request.Headers.UserAgent.ParseAdd(string.Concat(UserAgent, "/", ApiVersion));
 
-            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var responseMessage = await _httpClient.SendAsync(request, token).ConfigureAwait(false);
             var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)

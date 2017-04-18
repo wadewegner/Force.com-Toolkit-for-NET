@@ -23,8 +23,8 @@ namespace Salesforce.Force.FunctionalTests
         private static string _password = ConfigurationManager.AppSettings["Password"];
         private static string _organizationId = ConfigurationManager.AppSettings["OrganizationId"];
 
-        private AuthenticationClient _auth;
-        private ForceClient _client;
+        private IAuthenticationClient _auth;
+        private IForceClient _client;
 
         [TestFixtureSetUp]
         public void Init()
@@ -88,7 +88,7 @@ namespace Salesforce.Force.FunctionalTests
             Assert.AreNotEqual(contacts, nextContacts);
         }
 
-        public async Task CreateLotsOfAccounts(ForceClient forceClient)
+        public async Task CreateLotsOfAccounts(IForceClient forceClient)
         {
             var account = new Account { Name = "Test Account", Description = "New Account Description" };
 

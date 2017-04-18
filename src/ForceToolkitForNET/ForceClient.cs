@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Threading;
 using Salesforce.Common;
 using Salesforce.Common.Models.Json;
 using Salesforce.Common.Models.Xml;
@@ -13,8 +14,8 @@ namespace Salesforce.Force
 {
     public class ForceClient : IForceClient, IDisposable
     {
-        private readonly XmlHttpClient _xmlHttpClient;
-        private readonly JsonHttpClient _jsonHttpClient;
+        private readonly IXmlHttpClient _xmlHttpClient;
+        private readonly IJsonHttpClient _jsonHttpClient;
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
@@ -35,45 +36,43 @@ namespace Salesforce.Force
 
         // STANDARD METHODS
 
-        public Task<QueryResult<T>> QueryAsync<T>(string query)
+        public Task<QueryResult<T>> QueryAsync<T>(string query, CancellationToken token)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", Uri.EscapeDataString(query)));
+            return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("query?q={0}", Uri.EscapeDataString(query)), token);
         }
 
-        public Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl)
+        public Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl, CancellationToken token)
         {
             if (string.IsNullOrEmpty(nextRecordsUrl)) throw new ArgumentNullException("nextRecordsUrl");
 
-            return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(nextRecordsUrl);
+            return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(nextRecordsUrl, token);
         }
 
-        public Task<QueryResult<T>> QueryAllAsync<T>(string query)
+        public Task<QueryResult<T>> QueryAllAsync<T>(string query, CancellationToken token)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
-            return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
+            return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)), token);
         }
 
-        public async Task<T> ExecuteRestApiAsync<T>(string apiName)
+        public Task<T> ExecuteRestApiAsync<T>(string apiName, CancellationToken token)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
 
-            var response = await _jsonHttpClient.HttpGetRestApiAsync<T>(apiName);
-            return response;
+            return _jsonHttpClient.HttpGetRestApiAsync<T>(apiName, token);
         }
 
-        public async Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject)
+        public Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject, CancellationToken token)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
             if (inputObject == null) throw new ArgumentNullException("inputObject");
 
-            var response = await _jsonHttpClient.HttpPostRestApiAsync<T>(apiName, inputObject);
-            return response;
+            return _jsonHttpClient.HttpPostRestApiAsync<T>(apiName, inputObject, token);
         }
 
-		public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
+		public async Task<T> QueryByIdAsync<T>(string objectName, string recordId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
@@ -85,151 +84,151 @@ namespace Salesforce.Force
 		        }));
 
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
-            var results = await QueryAsync<T>(query).ConfigureAwait(false);
+            var results = await QueryAsync<T>(query, token).ConfigureAwait(false);
 
             return results.Records.FirstOrDefault();
         }
 
-        public async Task<SuccessResponse> CreateAsync(string objectName, object record)
+        public Task<SuccessResponse> CreateAsync(string objectName, object record, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (record == null) throw new ArgumentNullException("record");
 
-            return await _jsonHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
+            return _jsonHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName), token);
         }
 
-        public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
+        public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
             if (record == null) throw new ArgumentNullException("record");
 
-            return _jsonHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
+            return _jsonHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId), token);
         }
 
-        public Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record)
+        public Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(externalFieldName)) throw new ArgumentNullException("externalFieldName");
             if (string.IsNullOrEmpty(externalId)) throw new ArgumentNullException("externalId");
             if (record == null) throw new ArgumentNullException("record");
 
-            return _jsonHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId));
+            return _jsonHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId), token);
         }
 
-        public Task<bool> DeleteAsync(string objectName, string recordId)
+        public Task<bool> DeleteAsync(string objectName, string recordId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-            return _jsonHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId));
+            return _jsonHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}", objectName, recordId), token);
         }
 
-        public Task<bool> DeleteExternalAsync(string objectName, string externalFieldName, string externalId)
+        public Task<bool> DeleteExternalAsync(string objectName, string externalFieldName, string externalId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(externalFieldName)) throw new ArgumentNullException("externalFieldName");
             if (string.IsNullOrEmpty(externalId)) throw new ArgumentNullException("externalId");
 
-            return _jsonHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId));
+            return _jsonHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId), token);
         }
         
-        public Task<DescribeGlobalResult<T>> GetObjectsAsync<T>()
+        public Task<DescribeGlobalResult<T>> GetObjectsAsync<T>(CancellationToken token)
         {
-            return _jsonHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
+            return _jsonHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects", token);
         }
 
-        public Task<T> BasicInformationAsync<T>(string objectName)
-        {
-            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
-
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName));
-        }
-
-        public Task<T> DescribeAsync<T>(string objectName)
+        public Task<T> BasicInformationAsync<T>(string objectName, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
 
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/", objectName));
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}", objectName), token);
         }
 
-        public Task<T> GetDeleted<T>(string objectName, DateTime startDateTime, DateTime endDateTime)
+        public Task<T> DescribeAsync<T>(string objectName, CancellationToken token)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/", objectName), token);
+        }
+
+        public Task<T> GetDeleted<T>(string objectName, DateTime startDateTime, DateTime endDateTime, CancellationToken token)
         {
             var sdt = Uri.EscapeDataString(startDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
             var edt = Uri.EscapeDataString(endDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
 
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/deleted/?start={1}&end={2}", objectName, sdt, edt));
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/deleted/?start={1}&end={2}", objectName, sdt, edt), token);
         }
 
-        public Task<T> GetUpdated<T>(string objectName, DateTime startDateTime, DateTime endDateTime)
+        public Task<T> GetUpdated<T>(string objectName, DateTime startDateTime, DateTime endDateTime, CancellationToken token)
         {
             var sdt = Uri.EscapeDataString(startDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
             var edt = Uri.EscapeDataString(endDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00", System.Globalization.CultureInfo.InvariantCulture));
 
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/updated/?start={1}&end={2}", objectName, sdt, edt));
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/updated/?start={1}&end={2}", objectName, sdt, edt), token);
         }
 
-        public Task<T> DescribeLayoutAsync<T>(string objectName)
+        public Task<T> DescribeLayoutAsync<T>(string objectName, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/", objectName));
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/", objectName), token);
         }
 
-        public Task<T> DescribeLayoutAsync<T>(string objectName, string recordTypeId)
+        public Task<T> DescribeLayoutAsync<T>(string objectName, string recordTypeId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordTypeId)) throw new ArgumentNullException("recordTypeId");
 
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/{1}", objectName, recordTypeId));
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("sobjects/{0}/describe/layouts/{1}", objectName, recordTypeId), token);
         }
 
-        public Task<T> RecentAsync<T>(int limit = 200)
+        public Task<T> RecentAsync<T>(int limit = 200, CancellationToken token = default(CancellationToken))
         {
-            return _jsonHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit));
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("recent/?limit={0}", limit), token);
         }
 
-        public Task<List<T>> SearchAsync<T>(string query)
+        public Task<List<T>> SearchAsync<T>(string query, CancellationToken token)
         {
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
             if (!query.Contains("FIND")) throw new ArgumentException("query does not contain FIND");
             if (!query.Contains("{") || !query.Contains("}")) throw new ArgumentException("search term must be wrapped in braces");
 
-            return _jsonHttpClient.HttpGetAsync<List<T>>(string.Format("search?q={0}", Uri.EscapeDataString(query)));
+            return _jsonHttpClient.HttpGetAsync<List<T>>(string.Format("search?q={0}", Uri.EscapeDataString(query)), token);
         }
 
-        public async Task<T> UserInfo<T>(string url)
+        public Task<T> UserInfo<T>(string url, CancellationToken token)
         {
             if (string.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) throw new FormatException("url");
 
-            var response = await _jsonHttpClient.HttpGetAsync<T>(new Uri(url));
-            return response;
+            return _jsonHttpClient.HttpGetAsync<T>(new Uri(url), token);
         }
 
         // BULK METHODS
 
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,
-            IEnumerable<ISObjectList<T>> recordsLists)
+            IEnumerable<ISObjectList<T>> recordsLists, CancellationToken token)
         {
             if (recordsLists == null) throw new ArgumentNullException("recordsLists");
 
-            var jobInfoResult = await CreateJobAsync(objectName, operationType);
+            var jobInfoResult = await CreateJobAsync(objectName, operationType, token).ConfigureAwait(false);
             var batchResults = new List<BatchInfoResult>();
             foreach (var recordList in recordsLists)
             {
-                batchResults.Add(await CreateJobBatchAsync(jobInfoResult, recordList));
+	            var batchInfoResult = await CreateJobBatchAsync(jobInfoResult, recordList, token).ConfigureAwait(false);
+	            batchResults.Add(batchInfoResult);
             }
-            await CloseJobAsync(jobInfoResult);
+            await CloseJobAsync(jobInfoResult, token).ConfigureAwait(false);
             return batchResults;
         }
 
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType,
-            IEnumerable<ISObjectList<T>> recordsLists)
+            IEnumerable<ISObjectList<T>> recordsLists, CancellationToken token)
         {
             const float pollingStart = 1000;
             const float pollingIncrease = 2.0f;
 
-            var batchInfoResults = await RunJobAsync(objectName, operationType, recordsLists);
+            var batchInfoResults = await RunJobAsync(objectName, operationType, recordsLists, token).ConfigureAwait(false);
 
             var currentPoll = pollingStart;
             var finishedBatchInfoResults = new List<BatchInfoResult>();
@@ -238,7 +237,7 @@ namespace Salesforce.Force
                 var removeList = new List<BatchInfoResult>();
                 foreach (var batchInfoResult in batchInfoResults)
                 {
-                    var batchInfoResultNew = await PollBatchAsync(batchInfoResult);
+                    var batchInfoResultNew = await PollBatchAsync(batchInfoResult, token).ConfigureAwait(false);
                     if (batchInfoResultNew.State.Equals(BulkConstants.BatchState.Completed.Value()) ||
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
                         batchInfoResultNew.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
@@ -252,7 +251,7 @@ namespace Salesforce.Force
                     batchInfoResults.Remove(removeItem);
                 }
 
-                await Task.Delay((int)currentPoll);
+                await Task.Delay((int)currentPoll, token).ConfigureAwait(false);
                 currentPoll *= pollingIncrease;
             }
 
@@ -260,12 +259,13 @@ namespace Salesforce.Force
             var batchResults = new List<BatchResultList>();
             foreach (var batchInfoResultComplete in finishedBatchInfoResults)
             {
-                batchResults.Add(await GetBatchResultAsync(batchInfoResultComplete));
+	            var batchResultList = await GetBatchResultAsync(batchInfoResultComplete, token).ConfigureAwait(false);
+	            batchResults.Add(batchResultList);
             }
             return batchResults;
         }
 
-        public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType)
+        public Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType, CancellationToken token)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
 
@@ -276,81 +276,76 @@ namespace Salesforce.Force
                 Operation = operationType.Value()
             };
 
-            return await _xmlHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
+            return _xmlHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job", token);
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, ISObjectList<T> recordsList)
+        public Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, ISObjectList<T> recordsList, CancellationToken token)
         {
             if (jobInfo == null) throw new ArgumentNullException("jobInfo");
-            return await CreateJobBatchAsync(jobInfo.Id, recordsList).ConfigureAwait(false);
+            return CreateJobBatchAsync(jobInfo.Id, recordsList, token);
         }
 
-        public async Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, ISObjectList<T> recordsObject)
+        public Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, ISObjectList<T> recordsObject, CancellationToken token)
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
             if (recordsObject == null) throw new ArgumentNullException("recordsObject");
 
-            return await _xmlHttpClient.HttpPostAsync<BatchInfoResult>(recordsObject, string.Format("/services/async/{{0}}/job/{0}/batch", jobId))
-                .ConfigureAwait(false);
+            return _xmlHttpClient.HttpPostAsync<BatchInfoResult>(recordsObject, string.Format("/services/async/{{0}}/job/{0}/batch", jobId), token);
         }
 
-        public async Task<JobInfoResult> CloseJobAsync(JobInfoResult jobInfo)
+        public Task<JobInfoResult> CloseJobAsync(JobInfoResult jobInfo, CancellationToken token)
         {
             if (jobInfo == null) throw new ArgumentNullException("jobInfo");
-            return await CloseJobAsync(jobInfo.Id);
+            return CloseJobAsync(jobInfo.Id, token);
         }
 
-        public async Task<JobInfoResult> CloseJobAsync(string jobId)
+        public Task<JobInfoResult> CloseJobAsync(string jobId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
             var state = new JobInfoState { State = "Closed" };
-            return await _xmlHttpClient.HttpPostAsync<JobInfoResult>(state, string.Format("/services/async/{{0}}/job/{0}", jobId))
-                .ConfigureAwait(false);
+            return _xmlHttpClient.HttpPostAsync<JobInfoResult>(state, string.Format("/services/async/{{0}}/job/{0}", jobId), token);
         }
 
-        public async Task<JobInfoResult> PollJobAsync(JobInfoResult jobInfo)
+        public Task<JobInfoResult> PollJobAsync(JobInfoResult jobInfo, CancellationToken token)
         {
             if (jobInfo == null) throw new ArgumentNullException("jobInfo");
-            return await PollJobAsync(jobInfo.Id);
+            return PollJobAsync(jobInfo.Id, token);
         }
 
-        public async Task<JobInfoResult> PollJobAsync(string jobId)
+        public Task<JobInfoResult> PollJobAsync(string jobId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
-            return await _xmlHttpClient.HttpGetAsync<JobInfoResult>(string.Format("/services/async/{{0}}/job/{0}", jobId))
-                .ConfigureAwait(false);
+	        return _xmlHttpClient.HttpGetAsync<JobInfoResult>(string.Format("/services/async/{{0}}/job/{0}", jobId), token);
         }
 
-        public async Task<BatchInfoResult> PollBatchAsync(BatchInfoResult batchInfo)
+        public Task<BatchInfoResult> PollBatchAsync(BatchInfoResult batchInfo, CancellationToken token)
         {
             if (batchInfo == null) throw new ArgumentNullException("batchInfo");
-            return await PollBatchAsync(batchInfo.Id, batchInfo.JobId);
+            return PollBatchAsync(batchInfo.Id, batchInfo.JobId, token);
         }
 
-        public async Task<BatchInfoResult> PollBatchAsync(string batchId, string jobId)
+        public Task<BatchInfoResult> PollBatchAsync(string batchId, string jobId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(batchId)) throw new ArgumentNullException("batchId");
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
-            return await _xmlHttpClient.HttpGetAsync<BatchInfoResult>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}", jobId, batchId))
-                .ConfigureAwait(false);
+            return _xmlHttpClient.HttpGetAsync<BatchInfoResult>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}", jobId, batchId), token);
         }
 
-        public async Task<BatchResultList> GetBatchResultAsync(BatchInfoResult batchInfo)
+        public Task<BatchResultList> GetBatchResultAsync(BatchInfoResult batchInfo, CancellationToken token)
         {
             if (batchInfo == null) throw new ArgumentNullException("batchInfo");
-            return await GetBatchResultAsync(batchInfo.Id, batchInfo.JobId);
+            return GetBatchResultAsync(batchInfo.Id, batchInfo.JobId, token);
         }
 
-        public async Task<BatchResultList> GetBatchResultAsync(string batchId, string jobId)
+        public Task<BatchResultList> GetBatchResultAsync(string batchId, string jobId, CancellationToken token)
         {
             if (string.IsNullOrEmpty(batchId)) throw new ArgumentNullException("batchId");
             if (string.IsNullOrEmpty(jobId)) throw new ArgumentNullException("jobId");
 
-            return await _xmlHttpClient.HttpGetAsync<BatchResultList>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}/result", jobId, batchId))
-               .ConfigureAwait(false);
+            return _xmlHttpClient.HttpGetAsync<BatchResultList>(string.Format("/services/async/{{0}}/job/{0}/batch/{1}/result", jobId, batchId), token);
         }
 
         public void Dispose()
