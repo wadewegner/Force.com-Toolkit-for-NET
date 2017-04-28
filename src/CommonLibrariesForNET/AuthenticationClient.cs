@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Salesforce.Common.Models;
 using Newtonsoft.Json;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
 {
@@ -29,7 +29,7 @@ namespace Salesforce.Common
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
             _httpClient = httpClient;
-            ApiVersion = "v34.0";
+            ApiVersion = "v36.0";
         }
 
         public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password)
@@ -78,7 +78,7 @@ namespace Salesforce.Common
             else
             {
                 var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription);
+                throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription, responseMessage.StatusCode);
             }
         }
 
@@ -129,8 +129,16 @@ namespace Salesforce.Common
             }
             else
             {
-                var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription);
+                try
+                {
+                    var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
+                    throw new ForceAuthException(errorResponse.Error, errorResponse.ErrorDescription);
+                }
+                catch (Exception ex)
+                {
+                    throw new ForceAuthException(Error.UnknownException, ex.Message);
+                }
+                
             }
         }
 
@@ -163,6 +171,7 @@ namespace Salesforce.Common
                 var authToken = JsonConvert.DeserializeObject<AuthToken>(response);
 
                 AccessToken = authToken.AccessToken;
+                RefreshToken = refreshToken;
                 InstanceUrl = authToken.InstanceUrl;
                 Id = authToken.Id;
             }

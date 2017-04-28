@@ -11,14 +11,15 @@
     <RootNamespace>Salesforce.Common</RootNamespace>
     <AssemblyName>Salesforce.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <NuGetPackageImportStamp>b6c7f3ef</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,30 +44,44 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AuthenticationClient.cs" />
+    <Compile Include="Internals\BaseHttpClient.cs" />
+    <Compile Include="Internals\BaseHttpClientException.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Attributes\CreateableAttribute.cs" />
     <Compile Include="Extensions\HttpContentCompressedDataExtensions.cs" />
-    <Compile Include="Models\DescribeGlobalResult.cs" />
-    <Compile Include="Models\DisplayTypes.cs" />
+    <Compile Include="IXmlHttpClient.cs" />
+    <Compile Include="Models\Json\DescribeGlobalResult.cs" />
+    <Compile Include="Models\Json\DisplayTypes.cs" />
     <Compile Include="ForceAuthException.cs" />
     <Compile Include="ForceException.cs" />
     <Compile Include="IAuthenticationClient.cs" />
     <Compile Include="IForceException.cs" />
-    <Compile Include="IServiceHttpClient.cs" />
-    <Compile Include="Models\AuthErrorResponse.cs" />
-    <Compile Include="Models\AuthToken.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\ErrorResponse.cs" />
-    <Compile Include="Models\ErrorResponses.cs" />
-    <Compile Include="Models\QueryResult.cs" />
-    <Compile Include="Models\SuccessResponse.cs" />
-    <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="IJsonHttpClient.cs" />
+    <Compile Include="Models\Json\AuthErrorResponse.cs" />
+    <Compile Include="Models\Json\AuthToken.cs" />
+    <Compile Include="Models\Json\Error.cs" />
+    <Compile Include="Models\Json\ErrorResponse.cs" />
+    <Compile Include="Models\Json\ErrorResponses.cs" />
+    <Compile Include="Models\Json\QueryResult.cs" />
+    <Compile Include="Models\Json\SuccessResponse.cs" />
+    <Compile Include="Models\Json\UserInfo.cs" />
+    <Compile Include="Models\Xml\BatchInfoResult.cs" />
+    <Compile Include="Models\Xml\BatchResult.cs" />
+    <Compile Include="Models\Xml\BatchResultErrors.cs" />
+    <Compile Include="Models\Xml\BatchResultList.cs" />
+    <Compile Include="Models\Xml\ISObjectList.cs" />
+    <Compile Include="Models\Xml\JobInfo.cs" />
+    <Compile Include="Models\Xml\JobInfoResult.cs" />
+    <Compile Include="Models\Xml\JobInfoState.cs" />
+    <Compile Include="Models\Xml\SObject.cs" />
+    <Compile Include="Models\Xml\SObjectList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\ResponseTypes.cs" />
+    <Compile Include="Models\Json\ResponseTypes.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />
     <Compile Include="Serializer\UpdateableContractResolver.cs" />
-    <Compile Include="ServiceHttpClient.cs" />
+    <Compile Include="JsonHttpClient.cs" />
     <Compile Include="Attributes\UpdateableAttribute.cs" />
+    <Compile Include="XmlHttpClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -77,47 +92,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Threading.Tasks">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wp8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wp8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.Compression">
-      <HintPath>..\packages\Microsoft.Bcl.Compression.3.9.85\lib\portable-net45+win8+wp8+wpa81\System.IO.Compression.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

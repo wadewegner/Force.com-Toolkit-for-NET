@@ -12,7 +12,7 @@ using Salesforce.Common.Serializer;
 
 namespace Salesforce.Common
 {
-    public class ServiceHttpClient : IServiceHttpClient, IDisposable
+    public class ServiceHttpClient: IServiceHttpClient, IDisposable
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string DateFormat = "s";
@@ -32,14 +32,10 @@ namespace Salesforce.Common
                 _disposeHttpClient = true;
             }
             else
-            {
+            { 
                 _httpClient = httpClient;
             }
-
-            // specify to use TLS 1.2 as default connection
-            //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
-
-
+            
             _httpClient.DefaultRequestHeaders.UserAgent.Clear();
             _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgent, ApiVersion));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -269,6 +265,7 @@ namespace Salesforce.Common
                 Formatting.None,
                 new JsonSerializerSettings
                 {
+                    NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = new UpdateableContractResolver(),
                     DateFormatString = DateFormat
                 });

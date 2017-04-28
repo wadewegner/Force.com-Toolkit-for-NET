@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Salesforce.Common.UnitTests
@@ -13,11 +14,11 @@ namespace Salesforce.Common.UnitTests
         public void Auth_HasApiVersion()
         {
             var auth = new AuthenticationClient();
-            Assert.IsNotNullOrEmpty(auth.ApiVersion);
+            Assert.That(auth.ApiVersion, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
-        public async void Auth_UsernamePassword_Check()
+        public async Task Auth_UsernamePassword_Check()
         {
             const string consumerKey = "CONSUMERKEY";
             const string consumerSecret = "CONSUMERSECRET";
@@ -38,113 +39,113 @@ namespace Salesforce.Common.UnitTests
                 Assert.IsNotNull(auth.ApiVersion);
                 Assert.IsNotNull(auth.InstanceUrl);
                 Assert.AreEqual(auth.AccessToken, "AccessToken");
-                Assert.AreEqual(auth.ApiVersion, "v34.0");
+                Assert.AreEqual(auth.ApiVersion, "v36.0");
                 Assert.AreEqual(auth.InstanceUrl, "InstanceUrl");
             }
         }
 
         [Test]
-        public async void Requests_CheckHttpRequestMessage_HttpGet()
+        public async Task Requests_CheckHttpRequestMessage_HttpGet()
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v34/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v36/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v34");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v36");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
         }
 
         [Test]
-        public async void Requests_CheckHttpRequestMessage_HttpGet_WithNode()
+        public async Task Requests_CheckHttpRequestMessage_HttpGet_WithNode()
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v34/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v36/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v34");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v36");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
         }
 
         [Test]
-        public async void Requests_CheckHttpRequestMessage_HttpPost()
+        public async Task Requests_CheckHttpRequestMessage_HttpPost()
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v34/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v36/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v34");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v36");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpPostAsync<object>(null, "wade");
             }
         }
 
         [Test]
-        public async void Requests_CheckHttpRequestMessage_HttpPatch()
+        public async Task Requests_CheckHttpRequestMessage_HttpPatch()
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v34/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v36/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v34");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v36");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpPatchAsync(null, "wade");
             }
         }
 
         [Test]
-        public async void Requests_CheckHttpRequestMessage_HttpDelete()
+        public async Task Requests_CheckHttpRequestMessage_HttpDelete()
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
-                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v34/wade");
+                Assert.AreEqual(r.RequestUri.ToString(), "http://localhost:1899/services/data/v36/wade");
 
                 Assert.IsNotNull(r.Headers.UserAgent);
-                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v34");
+                Assert.AreEqual(r.Headers.UserAgent.ToString(), UserAgent + "/v36");
 
                 Assert.IsNotNull(r.Headers.Authorization);
                 Assert.AreEqual(r.Headers.Authorization.ToString(), "Bearer accessToken");
             }));
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpDeleteAsync("wade");
             }
         }
 
         [Test]
-        public async void Requests_CheckCustomRequestsHeaders()
+        public async Task Requests_CheckCustomRequestsHeaders()
         {
             var client = new HttpClient(new ServiceClientRouteHandler(r =>
             {
@@ -154,7 +155,7 @@ namespace Salesforce.Common.UnitTests
 
             client.DefaultRequestHeaders.Add("headername", "headervalue");
 
-            using (var httpClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", client))
+            using (var httpClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", client))
             {
                 await httpClient.HttpGetAsync<object>("wade");
             }
@@ -163,14 +164,14 @@ namespace Salesforce.Common.UnitTests
         [Test]
         public void NewServiceHttpClient_ResetsUserAgents()
         {
-            var httpClientUserAgent = UserAgent + "/v34";
+            var httpClientUserAgent = UserAgent + "/v36";
 
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(httpClientUserAgent);
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(httpClientUserAgent);
             Assert.AreEqual(httpClientUserAgent + " " + httpClientUserAgent, httpClient.DefaultRequestHeaders.UserAgent.ToString());
 
-            var serviceClient = new ServiceHttpClient("http://localhost:1899", "v34", "accessToken", httpClient);
+            var serviceClient = new JsonHttpClient("http://localhost:1899", "v36", "accessToken", httpClient);
 
             // Ensure the old user agent header is replaced.
             Assert.AreEqual(httpClientUserAgent, httpClient.DefaultRequestHeaders.UserAgent.ToString());

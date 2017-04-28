@@ -1,5 +1,5 @@
 ﻿using System;
-using Salesforce.Common.Models;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
 {
@@ -14,6 +14,11 @@ namespace Salesforce.Common
             if (resourceName.StartsWith("/services/data", StringComparison.CurrentCultureIgnoreCase))
             {
                 return new Uri(new Uri(instanceUrl), resourceName);
+            }
+
+	        if (resourceName.StartsWith("/services/async", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return new Uri(new Uri(instanceUrl), string.Format(resourceName, apiVersion));
             }
 
             return new Uri(new Uri(instanceUrl), string.Format("/services/data/{0}/{1}", apiVersion, resourceName));

@@ -21,7 +21,7 @@ namespace Salesforce.Chatter.FunctionalTests
 
         private AuthenticationClient _auth;
         private ChatterClient _chatterClient;
-        // Test Setup
+
         [TestFixtureSetUp]
         public void Init()
         {
@@ -33,15 +33,15 @@ namespace Salesforce.Chatter.FunctionalTests
                 _password = Environment.GetEnvironmentVariable("Password");
             }
 
+            // Use TLS 1.2 (instead of defaulting to 1.0)
+            const int SecurityProtocolTypeTls11 = 768;
+            const int SecurityProtocolTypeTls12 = 3072;
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
+
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, TokenRequestEndpointUrl).Wait();
-
-            const string apiVersion = "v34.0";
-
-            // Use TLS 1.2 (instead of defaulting to 1.0)
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, apiVersion);
+            
+            _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Feeds_IsNotNull()
+        public async Task Chatter_Feeds_IsNotNull()
         {
             var feeds = await _chatterClient.FeedsAsync<object>();
 
@@ -59,7 +59,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Users_Me_IsNotNull()
+        public async Task Chatter_Users_Me_IsNotNull()
         {
             var me = await _chatterClient.MeAsync<UserDetail>();
 
@@ -67,7 +67,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Users_Me_Id_IsNotNull()
+        public async Task Chatter_Users_Me_Id_IsNotNull()
         {
             var me = await _chatterClient.MeAsync<UserDetail>();
 
@@ -75,14 +75,14 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_PostFeedItem()
+        public async Task Chatter_PostFeedItem()
         {
             var feedItem = await postFeedItem(_chatterClient);
             Assert.IsNotNull(feedItem);
         }
 
         [Test]
-        public async void Chatter_Add_Comment()
+        public async Task Chatter_Add_Comment()
         {
             var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.Id;
@@ -105,7 +105,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Add_Comment_With_Mention_IsNotNull()
+        public async Task Chatter_Add_Comment_With_Mention_IsNotNull()
         {
             var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.Id;
@@ -144,7 +144,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Like_FeedItem_IsNotNull()
+        public async Task Chatter_Like_FeedItem_IsNotNull()
         {
             var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.Id;
@@ -155,7 +155,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Share_FeedItem_IsNotNull()
+        public async Task Chatter_Share_FeedItem_IsNotNull()
         {
             var feedItem = await postFeedItem(_chatterClient);
             var feedId = feedItem.Id;
@@ -169,7 +169,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Get_My_News_Feed_IsNotNull()
+        public async Task Chatter_Get_My_News_Feed_IsNotNull()
         {
             var myNewsFeeds = await _chatterClient.GetMyNewsFeedAsync<FeedItemPage>();
 
@@ -177,7 +177,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Get_My_News_Feed_WithQuery_IsNotNull()
+        public async Task Chatter_Get_My_News_Feed_WithQuery_IsNotNull()
         {
             var myNewsFeeds = await _chatterClient.GetMyNewsFeedAsync<FeedItemPage>("wade");
 
@@ -185,7 +185,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Get_Groups_IsNotNull()
+        public async Task Chatter_Get_Groups_IsNotNull()
         {
             var groups = await _chatterClient.GetGroupsAsync<GroupPage>();
 
@@ -193,7 +193,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
         
         [Test]
-        public async void Chatter_Get_Group_News_Feed_IsNotNull()
+        public async Task Chatter_Get_Group_News_Feed_IsNotNull()
         {
             var groups = await _chatterClient.GetGroupsAsync<GroupPage>();
             if (groups.Groups.Count > 0)
@@ -210,7 +210,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Get_Topics_IsNotNull()
+        public async Task Chatter_Get_Topics_IsNotNull()
         {
             var topics = await _chatterClient.GetTopicsAsync<TopicCollection>();
 
@@ -218,7 +218,7 @@ namespace Salesforce.Chatter.FunctionalTests
         }
 
         [Test]
-        public async void Chatter_Get_Users_IsNotNull()
+        public async Task Chatter_Get_Users_IsNotNull()
         {
             var users = await _chatterClient.GetUsersAsync<UserPage>();
 

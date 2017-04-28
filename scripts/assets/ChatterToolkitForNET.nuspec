@@ -3,7 +3,7 @@
   <metadata>
     <id>DeveloperForce.Chatter</id>
     <title>DeveloperForce.Chatter</title>
-    <version>1.2.3</version>
+    <version>1.4.0-beta</version>
     <authors>developerforce,wadewegner</authors>
     <owners>developerforce,wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force-Toolkit-for-NET/master/LICENSE</licenseUrl>
@@ -12,15 +12,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The DeveloperForce.Chatter NuGet provides a .NET library for interacting with the Salesforce Chatter APIs.</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2016</copyright>
     <tags>salesforce chatter rest api</tags>
     <dependencies>
-      <dependency id="Microsoft.Bcl" version="1.1.10" />
-      <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-      <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
-      <dependency id="Microsoft.Bcl.Compression" version="3.9.85" />
-      <dependency id="Microsoft.Net.Http" version="2.2.29" />
-      <dependency id="Newtonsoft.Json" version="8.0.2" />
+      <dependency id="Newtonsoft.Json" version="8.0.3" />
     </dependencies>
   </metadata>
   <files>

@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
 
 namespace Salesforce.Common
 {
-    public interface IAuthenticationClient
+    public interface IAuthenticationClient : IDisposable
     {
         string InstanceUrl { get; set; }
         string AccessToken { get; set; }
@@ -15,6 +16,5 @@ namespace Salesforce.Common
         Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string tokenRequestEndpointUrl);
         Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret = "");
         Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string tokenRequestEndpointUrl);
-        void Dispose();
     }
 }
