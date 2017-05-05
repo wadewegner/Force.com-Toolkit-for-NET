@@ -81,8 +81,8 @@ namespace SimpleConsole
                 while (true)
                 {
                     var continuationResults = await client.QueryContinuationAsync<Account>(nextRecordsUrl);
-                    totalSize = continuationResults.TotalSize;
-                    Console.WriteLine("Queried an additional " + totalSize + " records.");
+                    int additional = continuationResults.Records.Count;
+                    Console.WriteLine("Queried an additional " + additional + " records.");
 
                     accts.AddRange(continuationResults.Records);
                     if (string.IsNullOrEmpty(continuationResults.NextRecordsUrl)) break;
