@@ -82,6 +82,7 @@
     <Compile Include="JsonHttpClient.cs" />
     <Compile Include="Attributes\UpdateableAttribute.cs" />
     <Compile Include="XmlHttpClient.cs" />
+    <Compile Include="XmlSerializerCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
