@@ -13,7 +13,13 @@ namespace Salesforce.Common
             XmlSerializerDictionary = new Dictionary<string, XmlSerializer>();
         }
 
-        public static XmlSerializerCache Instance => _instance ?? (_instance = new XmlSerializerCache());
+        public static XmlSerializerCache GetInstance()
+        {
+            if (_instance == null)
+                _instance = new XmlSerializerCache();
+            return _instance;
+        }
+
         public Dictionary<string, XmlSerializer> XmlSerializerDictionary { get; set; }
     }
 }

@@ -34,10 +34,10 @@ namespace Salesforce.Common.Models.Xml
                 else
                 {
                     XmlSerializer xmlSerializer;
-                    if (!XmlSerializerCache.Instance.XmlSerializerDictionary.TryGetValue(typeof(T).FullName, out xmlSerializer))
+                    if (!XmlSerializerCache.GetInstance().XmlSerializerDictionary.TryGetValue(typeof(T).FullName, out xmlSerializer))
                     {
                         xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute("sObject"));
-                        XmlSerializerCache.Instance.XmlSerializerDictionary.Add(typeof(T).FullName, xmlSerializer);
+                        XmlSerializerCache.GetInstance().XmlSerializerDictionary.Add(typeof(T).FullName, xmlSerializer);
                     }
 
                     var ns = new XmlSerializerNamespaces();
