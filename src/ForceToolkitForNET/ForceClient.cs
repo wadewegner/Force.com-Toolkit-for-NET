@@ -208,16 +208,16 @@ namespace Salesforce.Force
 
         // BULK METHODS
 
-        public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,
+        public async Task<Queue<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
             if (recordsLists == null) throw new ArgumentNullException("recordsLists");
 
             var jobInfoResult = await CreateJobAsync(objectName, operationType);
-            var batchResults = new List<BatchInfoResult>();
+            var batchResults = new Queue<BatchInfoResult>();
             foreach (var recordList in recordsLists)
             {
-                batchResults.Add(await CreateJobBatchAsync(jobInfoResult, recordList));
+                batchResults.Enqueue(await CreateJobBatchAsync(jobInfoResult, recordList));
             }
             await CloseJobAsync(jobInfoResult);
             return batchResults;
@@ -226,36 +226,35 @@ namespace Salesforce.Force
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
-            const float pollingStart = 1000;
-            const float pollingIncrease = 2.0f;
+            Int32 pollingStart = 1000;
 
             var batchInfoResults = await RunJobAsync(objectName, operationType, recordsLists);
 
-            var currentPoll = pollingStart;
             var finishedBatchInfoResults = new List<BatchInfoResult>();
+
+
+            int processCount = batchInfoResults.Count;
             while (batchInfoResults.Count > 0)
             {
-                var removeList = new List<BatchInfoResult>();
-                foreach (var batchInfoResult in batchInfoResults)
+                var batchInfoResult = batchInfoResults.Dequeue();
+                var batchInfoResultNew = await PollBatchAsync(batchInfoResult);
+                if (batchInfoResultNew.State.Equals(BulkConstants.BatchState.Completed.Value()) ||
+                    batchInfoResultNew.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
+                    batchInfoResultNew.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
                 {
-                    var batchInfoResultNew = await PollBatchAsync(batchInfoResult);
-                    if (batchInfoResultNew.State.Equals(BulkConstants.BatchState.Completed.Value()) ||
-                        batchInfoResultNew.State.Equals(BulkConstants.BatchState.Failed.Value()) ||
-                        batchInfoResultNew.State.Equals(BulkConstants.BatchState.NotProcessed.Value()))
-                    {
-                        finishedBatchInfoResults.Add(batchInfoResultNew);
-                        removeList.Add(batchInfoResult);
-                    }
-                }
-                foreach (var removeItem in removeList)
+                    finishedBatchInfoResults.Add(batchInfoResultNew);
+                } else
                 {
-                    batchInfoResults.Remove(removeItem);
+                    batchInfoResults.Enqueue(batchInfoResult);
                 }
+                processCount--;
 
-                await Task.Delay((int)currentPoll);
-                currentPoll *= pollingIncrease;
+                if (batchInfoResults.Count > 0 && processCount == 0)
+                {
+                    processCount = batchInfoResults.Count;
+                    await Task.Delay(pollingStart =+ pollingStart);
+                }
             }
-
 
             var batchResults = new List<BatchResultList>();
             foreach (var batchInfoResultComplete in finishedBatchInfoResults)
@@ -264,7 +263,7 @@ namespace Salesforce.Force
             }
             return batchResults;
         }
-
+	
         public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
