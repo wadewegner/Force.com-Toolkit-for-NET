@@ -56,6 +56,13 @@ namespace Salesforce.Force
             return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
         }
 
+        public Task<T> ExecuteReportAsync<T>(string reportName)
+        {
+            if (string.IsNullOrEmpty(reportName)) throw new ArgumentNullException("reportName");
+
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("analytics/reports/{0}?includeDetails=true", reportName));
+        }
+
         public async Task<T> ExecuteRestApiAsync<T>(string apiName)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");

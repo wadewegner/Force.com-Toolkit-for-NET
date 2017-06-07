@@ -14,6 +14,7 @@ namespace Salesforce.Force
         Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl);
         Task<QueryResult<T>> QueryAllAsync<T>(string query);
         Task<T> QueryByIdAsync<T>(string objectName, string recordId);
+        Task<T> ExecuteReportAsync<T>(string reportName);
         Task<T> ExecuteRestApiAsync<T>(string apiName);
         Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject);
         Task<SuccessResponse> CreateAsync(string objectName, object record);
