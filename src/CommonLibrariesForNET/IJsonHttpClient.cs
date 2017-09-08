@@ -21,8 +21,8 @@ namespace Salesforce.Common
         Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName);
 
         // PATCH
-        Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix);
-        Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri);
+        Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool shouldSerializeNulls = false);
+        Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, bool shouldSerializeNulls = false);
 
         // DELETE
         Task<bool> HttpDeleteAsync(string urlSuffix);
