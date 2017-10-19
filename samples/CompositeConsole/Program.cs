@@ -60,7 +60,7 @@ namespace CompositeConsole
             // Get a bulk client
             var client = new ForceClient(auth.InstanceUrl, auth.AccessToken, auth.ApiVersion);
 
-
+            //Create some Accounts using the SOobject Tree
             var sObjectTreeRecords = new
             {
                 records = new[]
@@ -106,20 +106,46 @@ namespace CompositeConsole
 
             var results = (await client.SObjectTreeSave("Account", sObjectTreeRecords)).results;
 
+            //Record the AccountIds to a List
+            var newAccountIds = new List<string>();
             foreach (var successResponseObjectTreeResult in results)
             {
-                Console.Write(successResponseObjectTreeResult.referenceId + " : " + successResponseObjectTreeResult.id);
+                Console.WriteLine(successResponseObjectTreeResult.referenceId + " : " + successResponseObjectTreeResult.id);
+                newAccountIds.Add(successResponseObjectTreeResult.id);
             }
 
-            var accounts = (await client.QueryAsync<Account>("SELECT Id FROM Account WHERE website = 'nicode.org'")).Records;
 
             //Using the partition extension method to split into partitions of 25 (requirement for batch request)
-            foreach (var partition in accounts.Partition(25))
+            foreach (var newAccountIdPartition in newAccountIds.Partition(25))
+            {
+                //Update the industry of each Account
+                var updateObject = new
+                {
+                    batchRequests = newAccountIdPartition
+                        .Select(id => new
+                        {
+                            method = "PATCH",
+                            url = "v34.0/sobjects/Account/" + id,
+                            richInput = new { Industry = "Engineering" }
+                        })
+                        .ToArray()
+                };
+                var unused = (await client.BatchSave(updateObject)).results;
+            }
+
+            //Verifying industry changed
+            var accounts = (await client.QueryAsync<Account>("SELECT Id, Industry FROM Account WHERE website = 'nicode.org'")).Records;
+            foreach (var account in accounts)
+            {
+                Console.WriteLine(account.Id + " : " + account.Industry);
+            }
+
+            foreach (var accountPartition in accounts.Partition(25))
             {
                 var deleteObjects = new
                 {
-                    batchRequests = partition
-                        .Select(i => new { method = "DELETE", url = "v34.0/sobjects/Account/" + i.Id })
+                    batchRequests = accountPartition
+                        .Select(account => new { method = "DELETE", url = "v34.0/sobjects/Account/" + account.Id })
                         .ToArray()
                 };
                 var unused = (await client.BatchSave(deleteObjects)).results;
@@ -128,8 +154,7 @@ namespace CompositeConsole
         public class Account
         {
             public string Id { get; set; }
+            public string Industry { get; set; }
         }
-
-        
     }
 }
