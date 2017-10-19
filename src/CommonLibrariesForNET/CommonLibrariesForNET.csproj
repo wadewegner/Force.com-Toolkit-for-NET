@@ -20,6 +20,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +67,8 @@
     <Compile Include="Models\Json\ErrorResponse.cs" />
     <Compile Include="Models\Json\ErrorResponses.cs" />
     <Compile Include="Models\Json\QueryResult.cs" />
+    <Compile Include="Models\Json\SuccessResponseBatchSave.cs" />
+    <Compile Include="Models\Json\SuccessResponseSObjectTree.cs" />
     <Compile Include="Models\Json\SuccessResponse.cs" />
     <Compile Include="Models\Json\UserInfo.cs" />
     <Compile Include="Models\Xml\BatchInfoResult.cs" />
@@ -82,6 +88,7 @@
     <Compile Include="JsonHttpClient.cs" />
     <Compile Include="Attributes\UpdateableAttribute.cs" />
     <Compile Include="XmlHttpClient.cs" />
+    <Compile Include="XmlSerializerCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

@@ -121,3 +121,9 @@ artifacts
 # Test
 testrunner
 scripts/output.txt
+/.vs
+/.vs
+/.vs/slnx.sqlite
+/src/.vs/config
+/src/.vs/config
+/src/.vs/config/applicationhost.config

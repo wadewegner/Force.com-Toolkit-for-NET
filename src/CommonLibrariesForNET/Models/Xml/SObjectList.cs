@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Salesforce.Common.Serializer;
 
 namespace Salesforce.Common.Models.Xml
 {
@@ -32,10 +33,16 @@ namespace Salesforce.Common.Models.Xml
                 }
                 else
                 {
-                    var xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute("sObject"));
+                    XmlSerializer xmlSerializer;
+                    if (!XmlSerializerCache.GetInstance().XmlSerializerDictionary.TryGetValue(typeof(T).FullName, out xmlSerializer))
+                    {
+                        xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute("sObject"));
+                        XmlSerializerCache.GetInstance().XmlSerializerDictionary.Add(typeof(T).FullName, xmlSerializer);
+                    }
+
                     var ns = new XmlSerializerNamespaces();
                     ns.Add(string.Empty, string.Empty);
-                    var settings = new XmlWriterSettings {OmitXmlDeclaration = true};
+                    var settings = new XmlWriterSettings { OmitXmlDeclaration = true };
                     var stringBuilder = new StringBuilder();
                     using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
                     {

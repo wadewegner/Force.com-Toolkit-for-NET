@@ -206,6 +206,20 @@ namespace Salesforce.Force
             return response;
         }
 
+        public async Task<SuccessResponseSObjectTree> SObjectTreeSave(string objectName, object sObjectTree)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (sObjectTree == null) throw new ArgumentNullException("sObjectTree");
+
+            return await _jsonHttpClient.HttpPostAsync<SuccessResponseSObjectTree>(sObjectTree, string.Format("composite/tree/{0}/", objectName));
+        }
+        public async Task<SuccessResponseBatchSave> BatchSave(object batchRequest)
+        {
+            if (batchRequest == null) throw new ArgumentNullException("batchRequest");
+
+            return await _jsonHttpClient.HttpPostAsync<SuccessResponseBatchSave>(batchRequest, "composite/batch/");
+        }
+
         // BULK METHODS
 
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,
