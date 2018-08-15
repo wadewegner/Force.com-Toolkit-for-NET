@@ -9,6 +9,7 @@ using Salesforce.Common.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Salesforce.Common.Serializer;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
 {
