@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Salesforce.Common.Models;
+using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
 {
