@@ -1,9 +1,6 @@
 language: csharp
-mono:
-  - 4.6.2
-sudo: false
-
-solution: src/ForceToolkitForNET.sln
+mono: none
+dotnet: 2.1.400
 
 env:
   global:
@@ -13,19 +10,6 @@ env:
     - secure: "gKbbduuB3GslGVGr0IsFnearI2EDm/PD/EYum2zRDvZsRHy2b4uMl2tpSCjF382PKXWk46ZJ2c2zIvqcxgfHc0NDqloMAH6wwE4VnEDBk5j22X+ea50tdjB0r+RcjG5SbdjqYSSUxM3Ygngl87LfWAZGPWfL5Nm14L/4rhT3cj8=" #Password
     - secure: "Ez7qB2PZ/gBXCdOirR0jqcOYDRK9DtPiBFg9p9LTo4VTNZ6UqBrpPLsKGyQSry/zzvI532Y8vtOPL8PNpBaGOexyJ6M0fWQUjjT0/+p53w3syhYRiqJZOiY0PWoq2beRYIFScUNzbaRdZL4cDNsLHaNV+h8KGTYZ+gVXhYerU94=" #OrganizationId
 
-install:
-  - nuget restore src/ForceToolkitForNET.sln
-  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
-  - nuget install Microsoft.Bcl -OutputDirectory testrunner
-  - nuget install Microsoft.Bcl.Async -OutputDirectory testrunner
-  - nuget install Microsoft.Bcl.Build -OutputDirectory testrunner
-  - nuget install Microsoft.Bcl.Compression -OutputDirectory testrunner
-  - nuget install Microsoft.Net.Http -OutputDirectory testrunner
-
 script:
-  - xbuild /p:Configuration=Debug src/ForceToolkitForNET.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/CommonLibrariesForNET.FunctionalTests/bin/Debug/Salesforce.Common.FunctionalTests.dll
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/CommonLibrariesForNET.UnitTests/bin/Debug/Salesforce.Common.UnitTests.dll
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/ForceToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Force.FunctionalTests.dll
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/ForceToolkitForNET.UnitTests/bin/Debug/Salesforce.Force.UnitTests.dll
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe src/ChatterToolkitForNET.FunctionalTests/bin/Debug/Salesforce.Chatter.FunctionalTests.dll
+  - dotnet build src/ForceToolkitForNET.sln
+  - dotnet test tests/ForceToolkitForNET.Tests.sln
