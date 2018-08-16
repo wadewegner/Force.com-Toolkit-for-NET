@@ -20,8 +20,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <!-- 11.0.2 is netstandard, 8.0 wasn't -->
-
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
