@@ -13,7 +13,6 @@ namespace Salesforce.Common.FunctionalTests
 	[TestFixture]
     public class CommonTests
     {
-        private static string _tokenRequestEndpointUrl = ConfigurationManager.AppSettings["TokenRequestEndpointUrl"];
         private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
         private static string _username = ConfigurationManager.AppSettings["Username"];
@@ -27,7 +26,6 @@ namespace Salesforce.Common.FunctionalTests
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password))
             {
-                _tokenRequestEndpointUrl = Environment.GetEnvironmentVariable("TokenRequestEndpointUrl");
                 _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
                 _consumerSecret = Environment.GetEnvironmentVariable("ConsumerSecret");
                 _username = Environment.GetEnvironmentVariable("Username");
@@ -44,7 +42,7 @@ namespace Salesforce.Common.FunctionalTests
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
             
             _jsonHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
@@ -117,7 +115,7 @@ namespace Salesforce.Common.FunctionalTests
         {
             try
             {
-                await _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, "WRONGPASSWORD", _tokenRequestEndpointUrl);
+                await _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, "WRONGPASSWORD");
             }
             catch (ForceAuthException ex)
             {

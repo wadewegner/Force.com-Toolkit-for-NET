@@ -13,7 +13,6 @@ namespace Salesforce.Chatter.FunctionalTests
     [TestFixture]
     public class ChatterClientTests
     {
-        private static string _tokenRequestEndpointUrl = ConfigurationManager.AppSettings["TokenRequestEndpointUrl"];
         private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
         private static string _username = ConfigurationManager.AppSettings["Username"];
@@ -27,7 +26,6 @@ namespace Salesforce.Chatter.FunctionalTests
         {
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password))
             {
-                _tokenRequestEndpointUrl = Environment.GetEnvironmentVariable("TokenRequestEndpointUrl");
                 _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
                 _consumerSecret = Environment.GetEnvironmentVariable("ConsumerSecret");
                 _username = Environment.GetEnvironmentVariable("Username");
@@ -40,7 +38,7 @@ namespace Salesforce.Chatter.FunctionalTests
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
 
             _auth = new AuthenticationClient();
-            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password, _tokenRequestEndpointUrl).Wait();
+            _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
             
             _chatterClient = new ChatterClient(_auth.InstanceUrl, _auth.AccessToken, _auth.ApiVersion);
         }
