@@ -1,8 +1,8 @@
-# Force.com Toolkit for .NET [![Build Status](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET.svg?branch=master)](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET) [![Build status](https://ci.appveyor.com/api/projects/status/43y1npcb2q0u7aca)](https://ci.appveyor.com/project/WadeWegner/force-com-toolkit-for-net)
+# Force.com Toolkit for .NET [![Build Status](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET.svg?branch=master)](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET)
 
 The Force.com Toolkit for .NET provide an easy way for .NET developers to interact with the Force.com, Force.com Bulk & Chatter REST APIs using native libraries.
 
-These toolkits are built using the [Async/Await pattern](http://msdn.microsoft.com/en-us/library/hh191443.aspx) for asynchronous development and .NET [portable class libraries](http://msdn.microsoft.com/en-us/library/gg597391.aspx), making it easy to target multiple Microsoft platforms, including .NET 4.5, Windows Phone 8, Windows 8/8.1, and iOS/Android using Xamarin and Mono.NET.
+This SDK is now targeting .NET Standard and .NET Core 2.0.
 
 The Common Libraries for .NET provides functionality used by the [Force.com Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ForceToolkitForNET) and the [Chatter Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ChatterToolkitForNET). While you can use the Common Libraries for .NET independently, it is recommended that you use it through one of the toolkits.
 
@@ -17,7 +17,7 @@ Install-Package DeveloperForce.Force
 Install-Package DeveloperForce.Chatter
 ```
 
-## Samples 
+## Samples
 
 The toolkit includes the following sample applications.
 
@@ -43,7 +43,7 @@ This sample shows how to write a console application to create, update and delet
 
 You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/AdvancedBulkConsole
 
-This sample shows how to use the methods on the ```BulkForceClient``` to control bulk jobs step by step. It gives an example of a polling method that you could change to implement your own custom polling.
+This sample shows how to use the methods on the `BulkForceClient` to control bulk jobs step by step. It gives an example of a polling method that you could change to implement your own custom polling.
 
 ## Operations
 
@@ -193,7 +193,7 @@ Below are some simple examples that show how to use the ```BulkForceClient```
 You can create multiple records at once with the Bulk client:
 
 ```
-public class Account 
+public class Account
 {
     public string Id { get; set; }
     public string Name { get; set; }
@@ -218,14 +218,14 @@ var accountsBatch3 = new SObjectList<Account>
 	new Account {Name = "TestStAccount6"}
 };
 
-var accountsBatchList = new List<SObjectList<Account>> 
-{ 
+var accountsBatchList = new List<SObjectList<Account>>
+{
 	accountsBatch1,
 	accountsBatch2,
 	accountsBatch3
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account", 
+var results = await bulkClient.RunJobAndPollAsync("Account",
 						Bulk.OperationType.Insert, accountsBatchList);
 ```
 
@@ -237,26 +237,26 @@ You can also create objects dynamically using the inbuilt SObject class:
 ```
 var accountsBatch1 = new SObjectList<SObject>
 {
-	new SObject 
+	new SObject
 	{
 		{"Name" = "TestDyAccount1"}
 	},
-	new SObject 
+	new SObject
 	{
 		{"Name" = "TestDyAccount2"}
 	}
 };
 
-var accountsBatchList = new List<SObjectList<SObject>> 
-{ 
+var accountsBatchList = new List<SObjectList<SObject>>
+{
 	accountsBatch1
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account", 
+var results = await bulkClient.RunJobAndPollAsync("Account",
 						Bulk.OperationType.Insert, accountsBatchList);
 
 ```
- 
+
 #### Update
 
 Updating multiple records follows the same pattern as above, just change the ```Bulk.OperationType``` to ```Bulk.OperationType.Update```
@@ -264,24 +264,24 @@ Updating multiple records follows the same pattern as above, just change the ```
 ```
 var accountsBatch1 = new SObjectList<SObject>
 {
-	new SObject 
+	new SObject
 	{
 		{"Id" = "YOUR_RECORD_ID"},
 		{"Name" = "TestDyAccount1Renamed"}
 	},
-	new SObject 
+	new SObject
 	{
 		{"Id" = "YOUR_RECORD_ID"},
 		{"Name" = "TestDyAccount2Renamed"}
 	}
 };
 
-var accountsBatchList = new List<SObjectList<SObject>> 
-{ 
+var accountsBatchList = new List<SObjectList<SObject>>
+{
 	accountsBatch1
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account", 
+var results = await bulkClient.RunJobAndPollAsync("Account",
 						Bulk.OperationType.Update, accountsBatchList);
 
 ```
@@ -293,22 +293,22 @@ As above, you can delete multiple records with ```Bulk.OperationType.Delete```
 ```
 var accountsBatch1 = new SObjectList<SObject>
 {
-	new SObject 
+	new SObject
 	{
 		{"Id" = "YOUR_RECORD_ID"}
 	},
-	new SObject 
+	new SObject
 	{
 		{"Id" = "YOUR_RECORD_ID"}
 	}
 };
 
-var accountsBatchList = new List<SObjectList<SObject>> 
-{ 
+var accountsBatchList = new List<SObjectList<SObject>>
+{
 	accountsBatch1
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account", 
+var results = await bulkClient.RunJobAndPollAsync("Account",
 						Bulk.OperationType.Delete, accountsBatchList);
 
 ```
@@ -320,3 +320,4 @@ If you find any issues or opportunities for improving this respository, fix them
 ## Reporting Issues ###
 
 If you find any issues with this demo that you can't fix, feel free to report them in the [issues](https://github.com/developerforce/Force.com-Toolkit-for-NET/issues) section of this repository.
+````
