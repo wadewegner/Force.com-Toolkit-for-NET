@@ -174,19 +174,19 @@ namespace Salesforce.Common
 
         // PATCH
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool shouldSerializeNulls = false)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPatchAsync(inputObject, url);
+            return await HttpPatchAsync(inputObject, url, shouldSerializeNulls);
         }
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri)
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, bool shouldSerializeNulls = false)
         {
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
                 new JsonSerializerSettings
                 {
-                    NullValueHandling = NullValueHandling.Ignore,
+                    NullValueHandling = shouldSerializeNulls ? NullValueHandling.Include : NullValueHandling.Ignore,
                     ContractResolver = new UpdateableContractResolver(),
                     DateFormatString = DateFormat
                 });
