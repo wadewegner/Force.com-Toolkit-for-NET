@@ -123,3 +123,4 @@ testrunner
 scripts/output.txt
 
 .vscode
+coverage.json
