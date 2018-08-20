@@ -1,8 +1,8 @@
 # Force.com Toolkit for .NET [![Build Status](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET.svg?branch=master)](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET)
 
-The Force.com Toolkit for .NET provide an easy way for .NET developers to interact with the Force.com, Force.com Bulk & Chatter REST APIs using native libraries.
-
 This SDK is now targeting .NET Standard and .NET Core 2.0.
+
+The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Lighting Platform APIs using native libraries.
 
 The Common Libraries for .NET provides functionality used by the [Force.com Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ForceToolkitForNET) and the [Chatter Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ChatterToolkitForNET). While you can use the Common Libraries for .NET independently, it is recommended that you use it through one of the toolkits.
 
@@ -16,34 +16,6 @@ You can try the libraries immmediately by installing the following [DeveloperFor
 Install-Package DeveloperForce.Force
 Install-Package DeveloperForce.Chatter
 ```
-
-## Samples
-
-The toolkit includes the following sample applications.
-
-### WebServerOAuthFlow
-
-You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
-
-This sample shows how you can use the [Web Server OAuth Authentication Flow](http://www.salesforce.com/us/developer/docs/api_rest/Content/intro_understanding_web_server_oauth_flow.htm) to authorize a user and query the Force.com API. This sample uses MVC 5 and WebAPIs to demonstrate how you can retrieve a user access token and make an AJAX call to your API to retrieve data from Force.com and bind to your page using Knockout.js.
-
-### Simple Console Application
-
-You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/SimpleConsole
-
-This sample shows how to write a console application that leverages the async/await paradigm of .NET 4.5 and uses the toolkit to log in to and communicate with a Salesforce organization. Useful for quick POC applications and scheduled jobs.
-
-### Simple Bulk Console Application
-
-You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/SimpleBulkConsole
-
-This sample shows how to write a console application to create, update and delete multiple records using the bulk functionality in the toolkit.
-
-### Advanced Bulk Console Application
-
-You can find this sample here: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/AdvancedBulkConsole
-
-This sample shows how to use the methods on the `BulkForceClient` to control bulk jobs step by step. It gives an example of a polling method that you could change to implement your own custom polling.
 
 ## Operations
 
@@ -63,7 +35,6 @@ var auth = new AuthenticationClient();
 await auth.UsernamePasswordAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME", "YOURPASSWORD");
 ```
 
-
 #### Web-Server Authentication Flow
 
 The Web-Server Authentication Flow requires a few additional steps but has the advantage of allowing you to authenticate your users and let them interact with the Force.com using their own access token.
@@ -78,7 +49,6 @@ var url =
         "YOURCONSUMERKEY",
         HttpUtility.UrlEncode("YOURCALLBACKURL"));
 ```
-
 
 After the user logs in you'll need to handle the callback and retrieve the code that is returned. Using this code, you can then request an access token.
 
@@ -158,7 +128,6 @@ var success = await client.DeleteAsync("Account", id)
 
 You can query for objects:
 
-
 ```cs
 public class Account
 {
@@ -178,21 +147,21 @@ foreach (var account in accounts.records)
 
 ### Bulk Sample Code
 
-Below are some simple examples that show how to use the ```BulkForceClient```
+Below are some simple examples that show how to use the `BulkForceClient`
 
 **NOTE:** The following features are currently not supported
 
-* CSV data type requests / responses
-* Zipped attachment uploads
-* Serial bulk jobs
-* Query type bulk jobs
+- CSV data type requests / responses
+- Zipped attachment uploads
+- Serial bulk jobs
+- Query type bulk jobs
 
 #### Create
 
 You can create multiple records at once with the Bulk client:
 
 ```cs
-public class Account 
+public class Account
 {
     public string Id { get; set; }
     public string Name { get; set; }
@@ -255,7 +224,7 @@ var results = await bulkClient.RunJobAndPollAsync("Account",
 
 #### Update
 
-Updating multiple records follows the same pattern as above, just change the ```Bulk.OperationType``` to ```Bulk.OperationType.Update```
+Updating multiple records follows the same pattern as above, just change the `Bulk.OperationType` to `Bulk.OperationType.Update`
 
 ```cs
 var accountsBatch1 = new SObjectList<SObject>
@@ -283,7 +252,7 @@ var results = await bulkClient.RunJobAndPollAsync("Account",
 
 #### Delete
 
-As above, you can delete multiple records with ```Bulk.OperationType.Delete```
+As above, you can delete multiple records with `Bulk.OperationType.Delete`
 
 ```cs
 var accountsBatch1 = new SObjectList<SObject>
@@ -307,10 +276,10 @@ var results = await bulkClient.RunJobAndPollAsync("Account",
 						Bulk.OperationType.Delete, accountsBatchList);
 ```
 
-## Contributing to the Repository ###
+## Contributing to the Repository
 
-If you find any issues or opportunities for improving this respository, fix them!  Feel free to contribute to this project by [forking](http://help.github.com/fork-a-repo/) this repository and make changes to the content.  Once you've made your changes, share them back with the community by sending a pull request. Please see [How to send pull requests](http://help.github.com/send-pull-requests/) for more information about contributing to Github projects.
+If you find any issues or opportunities for improving this respository, fix them! Feel free to contribute to this project by [forking](http://help.github.com/fork-a-repo/) this repository and make changes to the content. Once you've made your changes, share them back with the community by sending a pull request. Please see [How to send pull requests](http://help.github.com/send-pull-requests/) for more information about contributing to Github projects.
 
-## Reporting Issues ###
+## Reporting Issues
 
 If you find any issues with this demo that you can't fix, feel free to report them in the [issues](https://github.com/developerforce/Force.com-Toolkit-for-NET/issues) section of this repository.
