@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     public class XmlContent : HttpContent
     {

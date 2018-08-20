@@ -3,12 +3,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using System.Net;
-using Salesforce.Force.UnitTests.Models;
+using Salesforce.Force.Tests.Models;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     [TestFixture]
-    public class ForceClientTests
+    public class ForceClientUnitTests
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string ApiVersion = "v36";

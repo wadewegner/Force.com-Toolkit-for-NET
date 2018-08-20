@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Salesforce.Common.Models.Json;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     internal class AuthenticationClientRouteHandler : DelegatingHandler
     {

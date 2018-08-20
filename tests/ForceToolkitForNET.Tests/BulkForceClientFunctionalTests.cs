@@ -12,7 +12,7 @@ using Salesforce.Force.Tests.Models;
 namespace Salesforce.Force.Tests
 {
     [TestFixture]
-    public class BulkForceClientTests
+    public class BulkForceClientFunctionalTests
     {
         private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];

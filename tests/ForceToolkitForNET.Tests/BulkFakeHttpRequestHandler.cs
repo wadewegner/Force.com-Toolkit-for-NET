@@ -4,11 +4,10 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     public class BulkFakeHttpRequestHandler : DelegatingHandler
     {
-
         readonly List<Action<HttpRequestMessage>> _testingActions;
         readonly List<HttpResponseMessage> _expectedResponses;
         private int _callNum;

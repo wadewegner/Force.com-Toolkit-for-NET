@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 using Salesforce.Common;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     [TestFixture]
     public class BulkTests

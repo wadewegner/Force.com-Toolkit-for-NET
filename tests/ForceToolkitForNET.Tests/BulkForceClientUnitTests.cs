@@ -9,10 +9,10 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 using Salesforce.Common.Models.Xml;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     [TestFixture]
-    public class BulkForceClientTests
+    public class BulkForceClientUnitTests
     {
         [Test]
         [ExpectedException(typeof (ArgumentNullException))]

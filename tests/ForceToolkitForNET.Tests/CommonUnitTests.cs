@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Common;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     [TestFixture]
-    public class CommonTests
+    public class CommonUnitTests
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
 

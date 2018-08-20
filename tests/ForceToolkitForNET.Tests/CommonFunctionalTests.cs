@@ -13,7 +13,7 @@ using Salesforce.Common.Models.Json;
 namespace Salesforce.Force.Tests
 {
     [TestFixture]
-    public class CommonTests
+    public class CommonFunctionalTests
     {
         private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];

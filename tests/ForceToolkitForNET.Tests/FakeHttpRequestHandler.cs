@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     public class FakeHttpRequestHandler : DelegatingHandler
     {

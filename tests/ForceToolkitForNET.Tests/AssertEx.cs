@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Salesforce.Force.UnitTests
+namespace Salesforce.Force.Tests
 {
     public static class AssertEx
     {
