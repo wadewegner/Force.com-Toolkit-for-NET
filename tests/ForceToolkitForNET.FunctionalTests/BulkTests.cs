@@ -5,8 +5,9 @@ using System.Xml;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using NUnit.Framework;
+using Salesforce.Common;
 
-namespace Salesforce.Common.UnitTests
+namespace Salesforce.Force.UnitTests
 {
     [TestFixture]
     public class BulkTests
@@ -38,7 +39,7 @@ namespace Salesforce.Common.UnitTests
         [Test]
         public async Task Requests_CheckHttpRequestMessageAndResponseDeserialization_HttpPostXml()
         {
-            var testObject = new SerializerTest {TestField = "testMessage"};
+            var testObject = new SerializerTest { TestField = "testMessage" };
             var client = new HttpClient(new BulkServiceClientRouteHandler(r =>
             {
                 // the v should be removed...

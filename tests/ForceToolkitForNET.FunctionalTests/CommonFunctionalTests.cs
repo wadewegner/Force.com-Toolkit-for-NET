@@ -5,21 +5,23 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Salesforce.Common.FunctionalTests.Models;
+using Salesforce.Force.FunctionalTests.Models;
+using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Common.Models.Json;
 
-namespace Salesforce.Common.FunctionalTests
+namespace Salesforce.Force.FunctionalTests
 {
-	[TestFixture]
+    [TestFixture]
     public class CommonTests
     {
         private static string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
         private static string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
         private static string _username = ConfigurationManager.AppSettings["Username"];
         private static string _password = ConfigurationManager.AppSettings["Password"];
-	    
-	    private AuthenticationClient _auth;
-	    private JsonHttpClient _jsonHttpClient;
+
+        private AuthenticationClient _auth;
+        private JsonHttpClient _jsonHttpClient;
 
         [OneTimeSetUp]
         public void Init()
@@ -37,13 +39,13 @@ namespace Salesforce.Common.FunctionalTests
             const int SecurityProtocolTypeTls11 = 768;
             const int SecurityProtocolTypeTls12 = 3072;
 
-            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11); 
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11);
 
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             _auth = new AuthenticationClient();
             _auth.UsernamePasswordAsync(_consumerKey, _consumerSecret, _username, _password).Wait();
-            
+
             _jsonHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, _auth.AccessToken, new HttpClient());
         }
 
@@ -65,7 +67,7 @@ namespace Salesforce.Common.FunctionalTests
         {
             const string objectName = "Account";
             var response = await _jsonHttpClient.HttpGetAsync<dynamic>(string.Format("sobjects/{0}", objectName));
-            
+
             Assert.IsNotNull(response);
         }
 
@@ -130,32 +132,32 @@ namespace Salesforce.Common.FunctionalTests
             }
         }
 
-	    [Test]
-	    public async Task Auth_InvalidRequestEndpointUrl()
-	    {
-	        const string requestEndpointUrl = "https://login.salesforce.com/services/oauth2/authorizeee"; // typo in the url
+        [Test]
+        public async Task Auth_InvalidRequestEndpointUrl()
+        {
+            const string requestEndpointUrl = "https://login.salesforce.com/services/oauth2/authorizeee"; // typo in the url
 
-	        try
-	        {
+            try
+            {
                 await _auth.WebServerAsync("clientId", "clientSecret", "sfdc://success", "code", requestEndpointUrl);
-	        }
+            }
             catch (ForceAuthException ex)
-	        {
-	            Assert.IsNotNull(ex);
-                
+            {
+                Assert.IsNotNull(ex);
+
                 Assert.AreEqual(ex.Error, Error.UnknownException);
                 Assert.AreEqual(ex.Message, "Unexpected character encountered while parsing value: <. Path '', line 0, position 0.");
-	        }
-	    }
+            }
+        }
 
-	    [Test]
-	    public async Task Upsert_Update_CheckReturn()
-	    {
+        [Test]
+        public async Task Upsert_Update_CheckReturn()
+        {
             var account = new Account { Name = "New Account ExternalID", Description = "New Account Description" };
             var response = await _jsonHttpClient.HttpPatchAsync(account, string.Format("sobjects/{0}/{1}/{2}", "Account", "ExternalID__c", "2"));
 
             Assert.IsNotNull(response);
-	    }
+        }
 
         [Test]
         public async Task Upsert_New_CheckReturnInclude()
@@ -167,18 +169,18 @@ namespace Salesforce.Common.FunctionalTests
             Assert.IsNotNull(response.Id);
         }
 
-	    [Test]
-	    public async Task BadTokenHandling()
-	    {
-	        var badToken = "badtoken";
+        [Test]
+        public async Task BadTokenHandling()
+        {
+            var badToken = "badtoken";
             var serviceHttpClient = new JsonHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
 
             const string query = "SELECT count() FROM Account";
 
-	        try
-	        {
+            try
+            {
                 await serviceHttpClient.HttpGetAsync<QueryResult<dynamic>>(string.Format("query?q={0}", query));
-	        }
+            }
             catch (ForceException ex)
             {
                 Assert.IsNotNull(ex);
@@ -186,11 +188,11 @@ namespace Salesforce.Common.FunctionalTests
                 Assert.That(ex.Message, Is.EqualTo("Session expired or invalid"));
                 Assert.IsNotNull(ex.Error);
             }
-	    }
+        }
 
-	    [Test]
-	    public void CheckInterfaces()
-	    {
+        [Test]
+        public void CheckInterfaces()
+        {
             using (IAuthenticationClient aa = new AuthenticationClient())
             {
                 Assert.IsNotNull(aa);
@@ -203,6 +205,6 @@ namespace Salesforce.Common.FunctionalTests
             {
                 Assert.IsNotNull(aa);
             }
-	    }
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Salesforce.Common.UnitTests
+namespace Salesforce.Force.UnitTests
 {
     internal class BulkServiceClientRouteHandler : DelegatingHandler
     {

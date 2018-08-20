@@ -3,14 +3,15 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Salesforce.Common.Models.Json;
 
-namespace Salesforce.Common.UnitTests
+namespace Salesforce.Force.UnitTests
 {
-    internal class ServiceClientRouteHandler : DelegatingHandler
+    internal class AuthenticationClientRouteHandler : DelegatingHandler
     {
         readonly Action<HttpRequestMessage> _testingAction;
 
-        public ServiceClientRouteHandler(Action<HttpRequestMessage> testingAction)
+        public AuthenticationClientRouteHandler(Action<HttpRequestMessage> testingAction)
         {
             _testingAction = testingAction;
         }
@@ -18,15 +19,16 @@ namespace Salesforce.Common.UnitTests
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
         {
             _testingAction(request);
+
             var resp = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new JsonContent(new
+                Content = new JsonContent(new AuthToken
                 {
-                    node = new JsonContent(new
-                    {
-                        Success = true,
-                        Message = "Success"
-                    })
+                    AccessToken = "AccessToken",
+                    Id = "Id",
+                    InstanceUrl = "InstanceUrl",
+                    IssuedAt = "IssuedAt",
+                    Signature = "Signature"
                 })
             };
 
