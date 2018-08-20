@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Salesforce.Force.FunctionalTests.Models
+namespace Salesforce.Force.Tests.Models
 {
     public class UpdatedRecordRootObject
     {

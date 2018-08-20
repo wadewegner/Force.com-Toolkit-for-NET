@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET.FunctionalTests", "ForceToolkitForNET.FunctionalTests\ForceToolkitForNET.FunctionalTests.csproj", "{732F58EE-5777-4568-81F2-2F37FD957969}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForceToolkitForNET.Tests", "ForceToolkitForNET.Tests\ForceToolkitForNET.Tests.csproj", "{732F58EE-5777-4568-81F2-2F37FD957969}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

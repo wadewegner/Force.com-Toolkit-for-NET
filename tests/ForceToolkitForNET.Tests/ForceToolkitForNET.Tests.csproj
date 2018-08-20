@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>Salesforce.Force.FunctionalTests</RootNamespace>
-    <AssemblyName>Salesforce.Force.FunctionalTests</AssemblyName>
+    <RootNamespace>Salesforce.Force.Tests</RootNamespace>
+    <AssemblyName>Salesforce.Force.Tests</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\src\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
-    <AssemblyTitle>Salesforce.Force.FunctionalTests</AssemblyTitle>
+    <AssemblyTitle>Salesforce.Force.Tests</AssemblyTitle>
     <Company>salesforce.com</Company>
-    <Product>Salesforce.Force.FunctionalTests</Product>
+    <Product>Salesforce.Force.Tests</Product>
     <Description></Description>
     <Copyright>Copyright © 2018</Copyright>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

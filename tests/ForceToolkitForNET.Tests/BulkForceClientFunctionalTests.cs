@@ -7,9 +7,9 @@ using NUnit.Framework;
 using System.Threading.Tasks;
 using Salesforce.Common;
 using Salesforce.Common.Models.Xml;
-using Salesforce.Force.FunctionalTests.Models;
+using Salesforce.Force.Tests.Models;
 
-namespace Salesforce.Force.FunctionalTests
+namespace Salesforce.Force.Tests
 {
     [TestFixture]
     public class BulkForceClientTests

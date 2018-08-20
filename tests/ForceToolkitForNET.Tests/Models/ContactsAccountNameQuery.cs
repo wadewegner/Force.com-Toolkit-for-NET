@@ -1,4 +1,4 @@
-﻿namespace Salesforce.Force.FunctionalTests.Models.QueryTest
+﻿namespace Salesforce.Force.Tests.Models.QueryTest
 {
     public class Contact
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Salesforce.Force.FunctionalTests.Models
+namespace Salesforce.Force.Tests.Models
 {
     public class Event
     {

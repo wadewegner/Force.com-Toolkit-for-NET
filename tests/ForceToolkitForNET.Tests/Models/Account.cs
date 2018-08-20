@@ -1,4 +1,4 @@
-﻿namespace Salesforce.Force.FunctionalTests.Models
+﻿namespace Salesforce.Force.Tests.Models
 {
     public class Account
     {

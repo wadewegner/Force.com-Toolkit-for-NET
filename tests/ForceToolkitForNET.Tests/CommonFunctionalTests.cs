@@ -5,12 +5,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Salesforce.Force.FunctionalTests.Models;
+using Salesforce.Force.Tests.Models;
 using Salesforce.Common;
 using Salesforce.Common.Models;
 using Salesforce.Common.Models.Json;
 
-namespace Salesforce.Force.FunctionalTests
+namespace Salesforce.Force.Tests
 {
     [TestFixture]
     public class CommonTests

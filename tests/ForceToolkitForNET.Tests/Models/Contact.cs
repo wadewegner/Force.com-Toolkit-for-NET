@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Salesforce.Common;
 using Salesforce.Common.Attributes;
 
-namespace Salesforce.Force.FunctionalTests.Models
+namespace Salesforce.Force.Tests.Models
 {
     public class Contact
     {
