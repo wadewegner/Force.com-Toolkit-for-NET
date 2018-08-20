@@ -92,7 +92,7 @@ After this completes successfully you will receive a valid Access Token and Inst
 
 Using this information, we can now construct our Force.com client.
 
-````
+```
 var instanceUrl = auth.InstanceUrl;
 var accessToken = auth.AccessToken;
 var apiVersion = auth.ApiVersion;
@@ -320,4 +320,3 @@ If you find any issues or opportunities for improving this respository, fix them
 ## Reporting Issues ###
 
 If you find any issues with this demo that you can't fix, feel free to report them in the [issues](https://github.com/developerforce/Force.com-Toolkit-for-NET/issues) section of this repository.
-````
