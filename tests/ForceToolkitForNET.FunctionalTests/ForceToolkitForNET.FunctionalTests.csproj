@@ -19,6 +19,7 @@
     <AssemblyOriginatorKeyFile>..\..\src\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\ChatterToolkitForNET\ChatterToolkitForNET.csproj" />
     <ProjectReference Include="..\..\src\CommonLibrariesForNET\CommonLibrariesForNET.csproj" />
     <ProjectReference Include="..\..\src\ForceToolkitForNET\ForceToolkitForNET.csproj" />
   </ItemGroup>
