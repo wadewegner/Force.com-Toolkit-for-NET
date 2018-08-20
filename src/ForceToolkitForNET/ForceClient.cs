@@ -13,8 +13,8 @@ namespace Salesforce.Force
 {
     public class ForceClient : IForceClient, IDisposable
     {
-        private readonly XmlHttpClient _xmlHttpClient;
-        private readonly JsonHttpClient _jsonHttpClient;
+        protected readonly XmlHttpClient _xmlHttpClient;
+        protected readonly JsonHttpClient _jsonHttpClient;
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
@@ -73,16 +73,17 @@ namespace Salesforce.Force
             return response;
         }
 
-		public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
+        public async Task<T> QueryByIdAsync<T>(string objectName, string recordId)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
-		        .Select(p => {
-		            var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
-		            return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
-		        }));
+            var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
+                .Select(p =>
+                {
+                    var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
+                    return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
+                }));
 
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
@@ -133,7 +134,7 @@ namespace Salesforce.Force
 
             return _jsonHttpClient.HttpDeleteAsync(string.Format("sobjects/{0}/{1}/{2}", objectName, externalFieldName, externalId));
         }
-        
+
         public Task<DescribeGlobalResult<T>> GetObjectsAsync<T>()
         {
             return _jsonHttpClient.HttpGetAsync<DescribeGlobalResult<T>>("sobjects");
