@@ -3,24 +3,24 @@
   <metadata>
     <id>DeveloperForce.Force</id>
     <title>DeveloperForce.Force</title>
-    <version>1.4.0-beta</version>
-    <authors>developerforce,wadewegner</authors>
-    <owners>developerforce,wadewegner</owners>
+    <version>2.0.0</version>
+    <authors>wadewegner</authors>
+    <owners>wadewegner</owners>
     <licenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/developerforce/Force.com-Toolkit-for-NET/</projectUrl>
     <iconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/scripts/assets/avatar.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The DeveloperForce.Force NuGet provides a .NET library for interacting with Salesforce's Force.com REST APIs.</description>
+    <description>The DeveloperForce.Force NuGet provides a .NET library for interacting with Salesforce Lightning REST APIs.</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright 2018</copyright>
     <tags>salesforce forcedotcom force.com force rest api</tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="8.0.3" />
+      <dependency id="Newtonsoft.Json" version="11.0.2" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\src\ForceToolkitForNET\bin\Release\Salesforce.Force.dll" target="lib" />
-    <file src="..\..\src\CommonLibrariesForNET\bin\Release\Salesforce.Common.dll" target="lib" />
-    <file src="..\..\src\ForceToolkitForNET\tools\Install.ps1" target="tools" />
+    <file src="..\ForceToolkitForNET\bin\Release\netstandard20\Salesforce.Force.dll" target="lib" />
+    <file src="..\ForceToolkitForNET\bin\Release\netstandard20\Salesforce.Common.dll" target="lib" />
+    <file src="..\ForceToolkitForNET\tools\Install.ps1" target="tools" />
   </files>
 </package>
