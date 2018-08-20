@@ -15,6 +15,18 @@
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup>
+    <PackageId>DeveloperForce.Force</PackageId>
+    <Title>DeveloperForce.Force</Title>
+    <Version>2.0.1</Version>
+    <Authors>wadewegner</Authors>
+    <Description>The DeveloperForce.Force NuGet provides a .NET library for interacting with Salesforce Lightning REST APIs.</Description>
+    <PackageLicenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/developerforce/Force.com-Toolkit-for-NET/</PackageProjectUrl>
+    <PackageIconUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/scripts/assets/avatar.png</PackageIconUrl>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageTags>salesforce forcedotcom force.com force rest api</PackageTags>
+  </PropertyGroup>
+  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
