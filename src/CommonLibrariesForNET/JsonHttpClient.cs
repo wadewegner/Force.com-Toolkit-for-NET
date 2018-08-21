@@ -204,6 +204,21 @@ namespace Salesforce.Common
             return await HttpPatchAsync(inputObject, url);
         }
 
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool ignoreNull)
+        {
+            var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
+            if (ignoreNull == true)
+            {
+                return await HttpPatchAsync(inputObject, url);
+            }
+            else
+            {
+                return await HttpPatchAsync(inputObject, url, NullValueHandling.Include);
+            }
+         //   return await HttpPatchAsync(inputObject, url, ignoreNull);
+        }
+
+
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri)
         {
             var json = JsonConvert.SerializeObject(inputObject,
@@ -219,6 +234,32 @@ namespace Salesforce.Common
                 var response = await base.HttpPatchAsync(json, uri);
                 return string.IsNullOrEmpty(response) ?
                     new SuccessResponse{ Id = "", Errors = "", Success = true } :
+                    JsonConvert.DeserializeObject<SuccessResponse>(response);
+            }
+            catch (BaseHttpClientException e)
+            {
+                throw ParseForceException(e.Message);
+            }
+        }
+
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, NullValueHandling nullValueHandling )
+        {
+            
+                var json = JsonConvert.SerializeObject(inputObject,
+                              Formatting.None,
+                              new JsonSerializerSettings
+                              {
+                                  NullValueHandling = nullValueHandling,
+                                  ContractResolver = new UpdateableContractResolver(),
+                                  DateFormatString = DateFormat
+                              });
+            
+           
+            try
+            {
+                var response = await base.HttpPatchAsync(json, uri);
+                return string.IsNullOrEmpty(response) ?
+                    new SuccessResponse { Id = "", Errors = "", Success = true } :
                     JsonConvert.DeserializeObject<SuccessResponse>(response);
             }
             catch (BaseHttpClientException e)
