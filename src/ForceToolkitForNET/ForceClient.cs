@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Reflection;
 using Salesforce.Common;
+using Salesforce.Common.Models;
+using Salesforce.Common.Soql;
 using Salesforce.Common.Models.Json;
 using Salesforce.Common.Models.Xml;
 
@@ -15,6 +17,8 @@ namespace Salesforce.Force
     {
         protected readonly XmlHttpClient _xmlHttpClient;
         protected readonly JsonHttpClient _jsonHttpClient;
+
+	      public ISelectListResolver SelectListResolver { get; set; }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
@@ -31,6 +35,8 @@ namespace Salesforce.Force
 
             _jsonHttpClient = new JsonHttpClient(instanceUrl, apiVersion, accessToken, httpClientForJson);
             _xmlHttpClient = new XmlHttpClient(instanceUrl, apiVersion, accessToken, httpClientForXml);
+            
+            SelectListResolver = new DataMemberSelectListResolver();
         }
 
         // STANDARD METHODS
@@ -87,16 +93,7 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
 
-		    var fields = string.Join(", ", typeof(T).GetRuntimeProperties()
-                .Where(p => {
-                    var customAttribute = p.GetCustomAttribute<IgnoreDataMemberAttribute>();
-                    return (customAttribute == null);                    
-                })
-		        .Select(p => { 
-		            var customAttribute = p.GetCustomAttribute<DataMemberAttribute>();
-		            return (customAttribute == null || customAttribute.Name == null) ? p.Name : customAttribute.Name;
-		        }));
-
+            var fields = SelectListResolver.GetFieldsList<T>();
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
 
