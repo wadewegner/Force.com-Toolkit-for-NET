@@ -625,6 +625,26 @@ namespace Salesforce.Force.Tests
     }
 
     [Test]
+    public async Task QueryBlobContents()
+    {            
+        var success = await _client.CreateAsync("Account", new Account { Name = "Test Account", Description = "New Account Description" });
+        Assert.IsNotNull(success.Id);
+
+        String accountId = success.Id;
+        String input = "QueryBlobContents - Unit Test";
+        var contents = System.Text.Encoding.UTF8.GetBytes(input);
+        success = await _client.CreateAsync("Attachment", new { ParentId = accountId, Name = "BlobFunctionalTest.txt", Body = contents });
+
+        String attachmentId = success.Id;
+        var stream = await _client.GetBlobAsync("Attachment", attachmentId, "Body");
+        using (System.IO.StreamReader reader = new System.IO.StreamReader(stream))
+        {
+            var output = reader.ReadToEnd();
+            Assert.AreEqual(input, output);
+        }
+    }
+
+    [Test]
     public async Task SearchAsync()
     {
       var result = await _client.SearchAsync<dynamic>("FIND {test}");
