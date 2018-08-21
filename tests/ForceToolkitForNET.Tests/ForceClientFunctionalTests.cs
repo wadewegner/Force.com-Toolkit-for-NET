@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models.Json;
 using Salesforce.Force.Tests.Models;
+using System.Collections.Generic;
 //using WadeWegner.Salesforce.SOAPHelpers;
 
 namespace Salesforce.Force.Tests
@@ -150,6 +151,41 @@ namespace Salesforce.Force.Tests
       var successResponse = await _client.CreateAsync("Account", account);
 
       Assert.That(successResponse.Id, Is.Not.Null.And.Not.Empty);
+    }
+
+
+    [Test]
+    public async Task Create_Accounts_Typed()
+    {
+      var lstAccounts = new List<IAttributedObject>();
+
+      lstAccounts.Add(new AtrributedAccount { Name = "New Account 1", Description = "New Account Description", Attributes = new ObjectAttributes()
+        {
+          Type = "Account",
+          ReferenceId="ACC1",
+        },
+      });
+      lstAccounts.Add(new AtrributedAccount { Name = "New Account 2", Description = "New Account Description", Attributes = new ObjectAttributes()
+        {
+          Type = "Account",
+          ReferenceId = "ACC2",
+        },
+      });
+      lstAccounts.Add(new AtrributedAccount { Name = "New Account 3", Description = "New Account Description", Attributes = new ObjectAttributes()
+        {
+          Type = "Account",
+          ReferenceId = "ACC3",
+        },
+      });
+
+      var theRequest = new CreateRequest()
+      {
+        Records = lstAccounts
+      };
+
+      var successResponse = await _client.CreateAsync("Account", theRequest);
+
+      Assert.That(successResponse.Results, Is.Not.Null.And.Not.Empty);
     }
 
     [Test]

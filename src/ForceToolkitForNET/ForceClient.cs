@@ -64,7 +64,7 @@ namespace Salesforce.Force
 
             return await _jsonHttpClient.HttpGetBlobAsync($"sobjects/{objectName}/{objectId}/{fieldName}");
         }
-        
+
         public async Task<T> ExecuteRestApiAsync<T>(string apiName)
         {
             if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
@@ -106,6 +106,17 @@ namespace Salesforce.Force
             if (record == null) throw new ArgumentNullException("record");
 
             return await _jsonHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
+        }
+
+        public async Task<SaveResponse> CreateAsync(string objectName, CreateRequest request)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            var result = await _jsonHttpClient.HttpPostAsync<SaveResponse>(request, string.Format("composite/tree/{0}", objectName)).ConfigureAwait(false);
+
+            return result;
         }
 
         public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
