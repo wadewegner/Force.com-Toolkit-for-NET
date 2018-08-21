@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard20</TargetFramework>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeSalesforceCommon</TargetsForTfmSpecificBuildOutput>
     <RootNamespace>Salesforce.Force</RootNamespace>
     <AssemblyName>Salesforce.Force</AssemblyName>
     <SignAssembly>true</SignAssembly>
@@ -17,7 +18,7 @@
   <PropertyGroup>
     <PackageId>DeveloperForce.Force</PackageId>
     <Title>DeveloperForce.Force</Title>
-    <Version>2.0.1</Version>
+    <Version>2.0.4</Version>
     <Authors>wadewegner</Authors>
     <Description>The DeveloperForce.Force NuGet provides a .NET library for interacting with Salesforce Lightning REST APIs.</Description>
     <PackageLicenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</PackageLicenseUrl>
@@ -31,9 +32,14 @@
     <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonLibrariesForNET\CommonLibrariesForNET.csproj" />
+    <ProjectReference Include="..\CommonLibrariesForNET\CommonLibrariesForNET.csproj" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
+  <Target Name="IncludeSalesforceCommon">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)\Salesforce.Common.dll" />
+    </ItemGroup>
+  </Target>
 </Project>

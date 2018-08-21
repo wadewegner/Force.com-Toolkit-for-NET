@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard20</TargetFramework>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeSalesforceCommon</TargetsForTfmSpecificBuildOutput>
     <RootNamespace>Salesforce.Chatter</RootNamespace>
     <AssemblyName>Salesforce.Chatter</AssemblyName>
     <SignAssembly>true</SignAssembly>
@@ -17,7 +18,7 @@
   <PropertyGroup>
     <PackageId>DeveloperForce.Chatter</PackageId>
     <Title>DeveloperForce.Chatter</Title>
-    <Version>2.0.1</Version>
+    <Version>2.0.4</Version>
     <Authors>wadewegner</Authors>
     <Description>The DeveloperForce.Chatter NuGet provides a .NET library for interacting with the Salesforce Lightning Chatter APIs.</Description>
     <PackageLicenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</PackageLicenseUrl>
@@ -31,9 +32,14 @@
     <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonLibrariesForNET\CommonLibrariesForNET.csproj" />
+    <ProjectReference Include="..\CommonLibrariesForNET\CommonLibrariesForNET.csproj" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" /> 
   </ItemGroup>
+  <Target Name="IncludeSalesforceCommon">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)\Salesforce.Common.dll" />
+    </ItemGroup>
+  </Target>
 </Project>
