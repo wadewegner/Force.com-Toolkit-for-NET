@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace Salesforce.Common
@@ -15,5 +15,7 @@ namespace Salesforce.Common
         Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl);
         Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code);
         Task WebServerAsync(string clientId, string clientSecret, string redirectUri, string code, string tokenRequestEndpointUrl);
+        Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret = "");
+        Task TokenRefreshAsync(string clientId, string refreshToken, string clientSecret, string tokenRequestEndpointUrl);
     }
 }
