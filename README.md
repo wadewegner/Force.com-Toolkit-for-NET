@@ -10,11 +10,20 @@ The Common Libraries for .NET provides functionality used by the [Force.com Tool
 
 ### Published Packages
 
-You can try the libraries immmediately by installing the following [DeveloperForce NuGet packages](https://www.nuget.org/profiles/DeveloperForce/).
+You can try the libraries immmediately by installing the [DeveloperForce.Force](https://www.nuget.org/packages/DeveloperForce.Force/) and [DeveloperForce.Chatter](https://www.nuget.org/packages/DeveloperForce.Chatter/) packages:
+
+Package Manager:
 
 ```
 Install-Package DeveloperForce.Force
 Install-Package DeveloperForce.Chatter
+```
+
+.NET CLI:
+
+```
+dotnet add package DeveloperForce.Force
+dotnet add package DeveloperForce.Chatter
 ```
 
 ## Operations
