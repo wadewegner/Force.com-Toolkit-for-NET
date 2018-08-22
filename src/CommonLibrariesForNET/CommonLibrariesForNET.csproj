@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard20</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net452;net462;net472</TargetFrameworks>
     <RootNamespace>Salesforce.Common</RootNamespace>
     <AssemblyName>Salesforce.Common</AssemblyName>
     <SignAssembly>true</SignAssembly>
@@ -9,11 +9,35 @@
     <Company>salesforce.com</Company>
     <Product>Salesforce.Common</Product>
     <Description></Description>
-    <Copyright>Copyright ©  2018</Copyright>
+    <Copyright>Copyright © 2018</Copyright>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net452'">
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.5.2\1.0.1\lib\net452\</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net452'">
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.5.2" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net462'">
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.6.2\1.0.1\lib\net462\</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.6.2" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net472'">
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.7.2\1.0.0\lib\net472\</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7.2" Version="1.0.0" ExcludeAssets="All" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+  </ItemGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
