@@ -1,6 +1,6 @@
 # Force.com Toolkit for .NET [![Build Status](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET.svg?branch=master)](https://travis-ci.org/developerforce/Force.com-Toolkit-for-NET)
 
-This SDK is now targeting .NET Standard and .NET Core 2.0.
+This SDK is now targeting .NET Standard 2.0 and .NET 4.5.2.
 
 The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Lighting Platform APIs using native libraries.
 
