@@ -11,6 +11,6 @@ env:
     - secure: "Ez7qB2PZ/gBXCdOirR0jqcOYDRK9DtPiBFg9p9LTo4VTNZ6UqBrpPLsKGyQSry/zzvI532Y8vtOPL8PNpBaGOexyJ6M0fWQUjjT0/+p53w3syhYRiqJZOiY0PWoq2beRYIFScUNzbaRdZL4cDNsLHaNV+h8KGTYZ+gVXhYerU94=" #OrganizationId
 
 script:
-  - dotnet build src/ForceToolkitForNET.sln
+  - dotnet build src/ForceToolkitForNET.sln -f netstandard2.0
   - dotnet test tests/ForceToolkitForNET.Tests.sln --list-tests
   - dotnet test tests/ForceToolkitForNET.Tests.sln /p:CollectCoverage=true
