@@ -10,13 +10,12 @@
     <Company>salesforce.com</Company>
     <Product>Salesforce.Force</Product>
     <Description></Description>
-    <Copyright>Copyright ©  2018</Copyright>
+    <Copyright>Copyright © 2018</Copyright>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net452'">
-    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.5.2\1.0.1\lib\net452\</FrameworkPathOverride>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net452'">
@@ -24,7 +23,6 @@
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
   </ItemGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net462'">
-    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.6.2\1.0.1\lib\net462\</FrameworkPathOverride>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net462'">
@@ -32,7 +30,6 @@
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
   </ItemGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net472'">
-    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.7.2\1.0.0\lib\net472\</FrameworkPathOverride>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
@@ -42,7 +39,7 @@
   <PropertyGroup>
     <PackageId>DeveloperForce.Force</PackageId>
     <Title>DeveloperForce.Force</Title>
-    <Version>2.0.6</Version>
+    <Version>2.0.7</Version>
     <Authors>wadewegner</Authors>
     <Description>The DeveloperForce.Force NuGet provides a .NET library for interacting with Salesforce Lightning REST APIs.</Description>
     <PackageLicenseUrl>https://raw.github.com/developerforce/Force.com-Toolkit-for-NET/master/LICENSE</PackageLicenseUrl>
