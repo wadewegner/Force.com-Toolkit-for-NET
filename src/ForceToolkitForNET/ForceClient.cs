@@ -114,6 +114,19 @@ namespace Salesforce.Force
             return results.Records.FirstOrDefault();
         }
 
+        public async Task<T> QueryAllFieldsByExternalIdAsync<T>(string objectName, string externalIdFieldName, string externalId)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException("externalIdFieldName");
+            if (string.IsNullOrEmpty(externalId)) throw new ArgumentNullException("externalId");
+
+            var fields = await GetFieldsCommaSeparatedListAsync(objectName);
+            var query = string.Format("SELECT {0} FROM {1} WHERE {2} = '{3}'", fields, objectName, externalIdFieldName, externalId);
+            var results = await QueryAsync<T>(query).ConfigureAwait(false);
+
+            return results.Records.FirstOrDefault();
+        }
+
         public async Task<SuccessResponse> CreateAsync(string objectName, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
