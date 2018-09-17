@@ -238,6 +238,12 @@ namespace Salesforce.Force
             return response;
         }
 
+        public Task<T> ExecuteAnonymousAsync<T>(string apex)
+        {
+            if (string.IsNullOrEmpty(apex)) throw new ArgumentNullException("apex");
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("tooling/executeAnonymous/?anonymousBody={0}", Uri.EscapeDataString(apex)));
+        }
+
         // BULK METHODS
 
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,

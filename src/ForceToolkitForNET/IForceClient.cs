@@ -33,6 +33,7 @@ namespace Salesforce.Force
         Task<T> RecentAsync<T>(int limit = 200);
         Task<List<T>> SearchAsync<T>(string query);
         Task<T> UserInfo<T>(string url);
+        Task<T> ExecuteAnonymousAsync<T>(string apex);
 
         // BULK
         Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);
