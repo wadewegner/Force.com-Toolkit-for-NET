@@ -19,17 +19,17 @@ namespace Salesforce.Common
         private const string TokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
         private readonly HttpClient _httpClient;
 
-        public AuthenticationClient()
-            : this(new HttpClient())
+        public AuthenticationClient(string apiVersion = "v36.0")
+            : this(new HttpClient(), apiVersion)
         {
         }
 
-        public AuthenticationClient(HttpClient httpClient)
+        public AuthenticationClient(HttpClient httpClient, string apiVersion)
         {
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
             _httpClient = httpClient;
-            ApiVersion = "v36.0";
+            ApiVersion = apiVersion;
         }
 
         public Task UsernamePasswordAsync(string clientId, string clientSecret, string username, string password)
