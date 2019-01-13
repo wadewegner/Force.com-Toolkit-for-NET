@@ -135,7 +135,6 @@ namespace Salesforce.Force.Tests
             Assert.IsFalse(results4[0].Items[0].Created);
             Assert.IsTrue(results4[0].Items[0].Success);
         }
-    }
 
         [Test]
         public async Task UpsertTests()
