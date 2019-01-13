@@ -13,6 +13,12 @@ namespace Salesforce.Common.Models.Xml
         [XmlElement(ElementName = "object")]
         public string Object { get; set; }
 
+        [XmlElement(ElementName = "externalIdFieldName")]
+        public string ExternalIdFieldName { get; set; }
+
+        [XmlIgnore]
+        public bool ExternalIdFieldNameSpecified => !string.IsNullOrEmpty(ExternalIdFieldName);
+
         [XmlElement(ElementName = "contentType")]
         public string ContentType { get; set; }
 
