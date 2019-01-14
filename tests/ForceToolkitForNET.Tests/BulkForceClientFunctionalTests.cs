@@ -194,5 +194,56 @@ namespace Salesforce.Force.Tests
             }
 
         }
+
+        [Test]
+        public async Task UpsertAccountTests()
+        {
+            var dtContactsBatch1 = new SObjectList<SObject>
+            {
+                new SObject {{"Name", "Upsert 1"}},
+                new SObject {{"Name", "Upsert 2"}}
+            };
+
+            var resultsUpsert1 = await _client.RunJobAndPollAsync("Campaign", "Name",
+                BulkConstants.OperationType.Upsert, new List<SObjectList<SObject>> {dtContactsBatch1});
+
+            Assert.IsTrue(resultsUpsert1 != null);
+            Assert.AreEqual(resultsUpsert1.Count, 1);
+            Assert.AreEqual(resultsUpsert1[0].Items.Count, 2);
+            Assert.IsTrue(resultsUpsert1[0].Items[0].Created);
+            Assert.IsTrue(resultsUpsert1[0].Items[0].Success);
+            Assert.IsTrue(resultsUpsert1[0].Items[1].Created);
+            Assert.IsTrue(resultsUpsert1[0].Items[1].Success);
+
+            var dtContactsBatch2 = new SObjectList<SObject>
+            {
+                new SObject {{"Name", "Upsert 2"}, {"Description", "Updated via Upsert"}},
+                new SObject {{"Name", "Upsert 3"}}
+            };
+
+            var resultsUpsert2 = await _client.RunJobAndPollAsync("Campaign", "Name",
+                BulkConstants.OperationType.Upsert, new List<SObjectList<SObject>> {dtContactsBatch2});
+
+            Assert.IsTrue(resultsUpsert2 != null);
+            Assert.AreEqual(resultsUpsert2.Count, 1);
+            Assert.AreEqual(resultsUpsert2[0].Items.Count, 2);
+            Assert.IsFalse(resultsUpsert2[0].Items[0].Created);
+            Assert.IsTrue(resultsUpsert2[0].Items[0].Success);
+            Assert.IsTrue(resultsUpsert2[0].Items[1].Created);
+            Assert.IsTrue(resultsUpsert2[0].Items[1].Success);
+
+            // create an Id list for the original strongly typed accounts created
+            var idBatch = new SObjectList<SObject>();
+            idBatch.AddRange(resultsUpsert1[0].Items.Select(result => new SObject {{"Id", result.Id}}));
+            idBatch.Add(new SObject {{"Id", resultsUpsert2[0].Items[1].Id}});
+
+            var resultsDelete = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Delete,
+                new List<SObjectList<SObject>> {idBatch});
+
+            Assert.IsTrue(resultsDelete != null, "[results4] empty result object");
+            Assert.AreEqual(resultsDelete.Count, 1, "[results4] wrong number of results");
+            Assert.AreEqual(resultsDelete[0].Items.Count, 3, "[results4] wrong number of result records");
+        }
+
     }
 }
