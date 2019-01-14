@@ -36,12 +36,13 @@ To access the Force.com APIs you must have a valid Access Token. Currently there
 
 #### Username-Password Authentication Flow
 
-The Username-Password Authentication Flow is a straightforward way to get an access token. Simply provide your consumer key, consumer secret, username, and password.
+The Username-Password Authentication Flow is a straightforward way to get an access token. Simply provide your consumer key, consumer secret, username, and password concatenated with your API Token.
 
 ```cs
 var auth = new AuthenticationClient();
 
-await auth.UsernamePasswordAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME", "YOURPASSWORD");
+await auth.UsernamePasswordAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME",
+                                 "YOURPASSWORDANDTOKEN");
 ```
 
 #### Web-Server Authentication Flow
@@ -67,7 +68,7 @@ await auth.WebServerAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURCALLBACK
 
 You can see a demonstration of this in the following sample application: https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/samples/WebServerOAuthFlow
 
-#### Creating the ForceClient or BulkForceClient
+#### Creating the ForceClient
 
 After this completes successfully you will receive a valid Access Token and Instance URL. The Instance URL returned identifies the web service URL you'll use to call the Force.com REST APIs, passing in the Access Token. Additionally, the authentication client will return the API version number, which is used to construct a valid HTTP request.
 
@@ -201,7 +202,7 @@ var accountsBatchList = new List<SObjectList<Account>>
 };
 
 var results = await bulkClient.RunJobAndPollAsync("Account",
-						Bulk.OperationType.Insert, accountsBatchList);
+						BulkConstants.OperationType.Insert, accountsBatchList);
 ```
 
 The above code will create 6 accounts in 3 batches. Each batch can hold upto 10,000 records and you can use multiple batches for Insert and all of the operations below.
@@ -228,12 +229,12 @@ var accountsBatchList = new List<SObjectList<SObject>>
 };
 
 var results = await bulkClient.RunJobAndPollAsync("Account",
-						Bulk.OperationType.Insert, accountsBatchList);
+                       BulkConstants.OperationType.Insert, accountsBatchList);
 ```
 
 #### Update
 
-Updating multiple records follows the same pattern as above, just change the `Bulk.OperationType` to `Bulk.OperationType.Update`
+Updating multiple records follows the same pattern as above, just change the `BulkConstants.OperationType` to `BulkConstants.OperationType.Update`
 
 ```cs
 var accountsBatch1 = new SObjectList<SObject>
@@ -256,12 +257,12 @@ var accountsBatchList = new List<SObjectList<SObject>>
 };
 
 var results = await bulkClient.RunJobAndPollAsync("Account",
-						Bulk.OperationType.Update, accountsBatchList);
+                       BulkConstants.OperationType.Update, accountsBatchList);
 ```
 
 #### Delete
 
-As above, you can delete multiple records with `Bulk.OperationType.Delete`
+As above, you can delete multiple records with `BulkConstants.OperationType.Delete`
 
 ```cs
 var accountsBatch1 = new SObjectList<SObject>
@@ -282,12 +283,44 @@ var accountsBatchList = new List<SObjectList<SObject>>
 };
 
 var results = await bulkClient.RunJobAndPollAsync("Account",
-						Bulk.OperationType.Delete, accountsBatchList);
+                       BulkConstants.OperationType.Delete, accountsBatchList);
+```
+
+#### Upsert
+
+If your object includes a custom field with the External Id property set, you can use that to perform bulk upsert (update or insert) actions with `BulkConstants.OperationType.Upsert`. Note that you also have to specify the External Id field name when starting the job.
+
+```cs
+// Assumes you have a custom field "ExampleId" on your Account object
+// that has the "External Id" flag set.
+
+var accountsBatch1 = new SObjectList<SObject>
+{
+	new SObject
+	{
+		{"Name" = "TestDyAccount1"},
+		{"ExampleId" = "ID00001"}
+	},
+	new SObject
+	{
+		{"Name" = "TestDyAccount2"},
+		{"ExampleId" = "ID00002"}
+	}
+};
+
+var accountsBatchList = new List<SObjectList<SObject>>
+{
+	accountsBatch1
+};
+
+var results = await bulkClient.RunJobAndPollAsync("Account", "ExampleId"
+                       BulkConstants.OperationType.Upsert, accountsBatchList);
+
 ```
 
 ## Contributing to the Repository
 
-If you find any issues or opportunities for improving this respository, fix them! Feel free to contribute to this project by [forking](http://help.github.com/fork-a-repo/) this repository and make changes to the content. Once you've made your changes, share them back with the community by sending a pull request. Please see [How to send pull requests](http://help.github.com/send-pull-requests/) for more information about contributing to Github projects.
+If you find any issues or opportunities for improving this repository, fix them! Feel free to contribute to this project by [forking](http://help.github.com/fork-a-repo/) this repository and make changes to the content. Once you've made your changes, share them back with the community by sending a pull request. Please see [How to send pull requests](http://help.github.com/send-pull-requests/) for more information about contributing to Github projects.
 
 ## Reporting Issues
 
