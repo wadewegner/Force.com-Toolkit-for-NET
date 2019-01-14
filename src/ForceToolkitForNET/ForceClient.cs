@@ -320,6 +320,8 @@ namespace Salesforce.Force
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException(nameof(objectName));
 
+            if (operationType == BulkConstants.OperationType.Upsert && string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException(nameof(externalIdFieldName));
+
             var jobInfo = new JobInfo
             {
                 ContentType = "XML",
