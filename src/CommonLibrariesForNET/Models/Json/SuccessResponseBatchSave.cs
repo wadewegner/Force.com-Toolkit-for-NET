@@ -6,7 +6,7 @@ namespace Salesforce.Common.Models.Json
     public class SuccessResponseBatchSave
     {
         public bool hasErrors { get; set; }
-        public SuccessResponseBatchSave[] results { get; set; }
+        public dynamic results { get; set; }
     }
 
     public class SuccessResponseBatchSaveResult
