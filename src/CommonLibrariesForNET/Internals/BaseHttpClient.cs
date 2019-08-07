@@ -18,7 +18,7 @@ namespace Salesforce.Common.Internals
         protected string ApiVersion;
         protected readonly HttpClient HttpClient;
 
-        internal BaseHttpClient(string instanceUrl, string apiVersion, string contentType, HttpClient httpClient, bool callerWillDisposeHttpClient)
+        internal BaseHttpClient(string instanceUrl, string apiVersion, string contentType, HttpClient httpClient, bool callerWillDisposeHttpClient = false)
         {
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
