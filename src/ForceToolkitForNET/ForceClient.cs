@@ -18,14 +18,14 @@ namespace Salesforce.Force
         protected readonly XmlHttpClient _xmlHttpClient;
         protected readonly JsonHttpClient _jsonHttpClient;
 
-	      public ISelectListResolver SelectListResolver { get; set; }
+	    public ISelectListResolver SelectListResolver { get; set; }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
         {
         }
 
-        public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClientForJson, HttpClient httpClientForXml)
+        public ForceClient(string instanceUrl, string accessToken, string apiVersion, HttpClient httpClientForJson, HttpClient httpClientForXml, bool callerWillDisposeHttpClients = false)
         {
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(accessToken)) throw new ArgumentNullException("accessToken");
@@ -33,8 +33,8 @@ namespace Salesforce.Force
             if (httpClientForJson == null) throw new ArgumentNullException("httpClientForJson");
             if (httpClientForXml == null) throw new ArgumentNullException("httpClientForXml");
 
-            _jsonHttpClient = new JsonHttpClient(instanceUrl, apiVersion, accessToken, httpClientForJson);
-            _xmlHttpClient = new XmlHttpClient(instanceUrl, apiVersion, accessToken, httpClientForXml);
+            _jsonHttpClient = new JsonHttpClient(instanceUrl, apiVersion, accessToken, httpClientForJson, callerWillDisposeHttpClients);
+            _xmlHttpClient = new XmlHttpClient(instanceUrl, apiVersion, accessToken, httpClientForXml, callerWillDisposeHttpClients);
             
             SelectListResolver = new DataMemberSelectListResolver();
         }
