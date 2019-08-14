@@ -17,8 +17,8 @@ namespace Salesforce.Common
     {
         private const string DateFormat = "s";
 
-        public JsonHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
-            : base(instanceUrl, apiVersion, "application/json", httpClient)
+        public JsonHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient, bool callerWillDisposeHttpClient = false)
+            : base(instanceUrl, apiVersion, "application/json", httpClient, callerWillDisposeHttpClient)
         {
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }

@@ -11,9 +11,8 @@ namespace Salesforce.Common
 {
     public class XmlHttpClient : BaseHttpClient, IXmlHttpClient
     {
-
-        public XmlHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient)
-            : base(instanceUrl, apiVersion, "application/xml", httpClient)
+        public XmlHttpClient(string instanceUrl, string apiVersion, string accessToken, HttpClient httpClient, bool callerWillDisposeHttpClient = false)
+            : base(instanceUrl, apiVersion, "application/xml", httpClient, callerWillDisposeHttpClient)
         {
             if (ApiVersion.StartsWith("v", StringComparison.OrdinalIgnoreCase))
             {
