@@ -24,7 +24,7 @@ namespace Salesforce.Common
         {
         }
 
-        public AuthenticationClient(HttpClient httpClient, string apiVersion)
+        public AuthenticationClient(HttpClient httpClient, string apiVersion  = "v36.0")
         {
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
