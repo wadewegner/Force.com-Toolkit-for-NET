@@ -36,6 +36,16 @@ namespace Salesforce.Force.Tests
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
+        public async Task RunJobAndPoll_NullExternalIdOnUpsert_ArgumentNullException()
+        {
+            var client = new ForceClient("test", "test", "v32");
+            await client.RunJobAndPollAsync("Account", null, BulkConstants.OperationType.Upsert, new List<ISObjectList<SObject>>());
+
+            // expects exception
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
         public async Task RunJob_NullObjectName_ArgumentNullException()
         {
             var client = new ForceClient("test", "test", "v32");
@@ -63,6 +73,17 @@ namespace Salesforce.Force.Tests
 
             // expects exception
         }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public async Task CreateJobAsync_NullExternalIdOnUpsert_ArgumentNullException()
+        {
+            var client = new ForceClient("test", "test", "v32");
+            await client.CreateJobAsync("Account", null, BulkConstants.OperationType.Upsert);
+
+            // expects exception
+        }
+
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
