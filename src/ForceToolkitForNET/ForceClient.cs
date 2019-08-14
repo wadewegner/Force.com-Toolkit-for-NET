@@ -10,6 +10,8 @@ using Salesforce.Common.Models;
 using Salesforce.Common.Soql;
 using Salesforce.Common.Models.Json;
 using Salesforce.Common.Models.Xml;
+using System.Dynamic;
+using System.Collections;
 
 namespace Salesforce.Force
 {
@@ -18,7 +20,7 @@ namespace Salesforce.Force
         protected readonly XmlHttpClient _xmlHttpClient;
         protected readonly JsonHttpClient _jsonHttpClient;
 
-	      public ISelectListResolver SelectListResolver { get; set; }
+        public ISelectListResolver SelectListResolver { get; set; }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
@@ -35,7 +37,7 @@ namespace Salesforce.Force
 
             _jsonHttpClient = new JsonHttpClient(instanceUrl, apiVersion, accessToken, httpClientForJson);
             _xmlHttpClient = new XmlHttpClient(instanceUrl, apiVersion, accessToken, httpClientForXml);
-            
+
             SelectListResolver = new DataMemberSelectListResolver();
         }
 
@@ -95,6 +97,31 @@ namespace Salesforce.Force
 
             var fields = SelectListResolver.GetFieldsList<T>();
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
+            var results = await QueryAsync<T>(query).ConfigureAwait(false);
+
+            return results.Records.FirstOrDefault();
+        }
+
+        public async Task<T> QueryAllFieldsByIdAsync<T>(string objectName, string recordId)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
+
+            var fields = await GetFieldsCommaSeparatedListAsync(objectName);
+            var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
+            var results = await QueryAsync<T>(query).ConfigureAwait(false);
+
+            return results.Records.FirstOrDefault();
+        }
+
+        public async Task<T> QueryAllFieldsByExternalIdAsync<T>(string objectName, string externalIdFieldName, string externalId)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException("externalIdFieldName");
+            if (string.IsNullOrEmpty(externalId)) throw new ArgumentNullException("externalId");
+
+            var fields = await GetFieldsCommaSeparatedListAsync(objectName);
+            var query = string.Format("SELECT {0} FROM {1} WHERE {2} = '{3}'", fields, objectName, externalIdFieldName, externalId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
 
             return results.Records.FirstOrDefault();
@@ -236,6 +263,18 @@ namespace Salesforce.Force
 
             var response = await _jsonHttpClient.HttpGetAsync<T>(new Uri(url));
             return response;
+        }
+
+        public async Task<string> GetFieldsCommaSeparatedListAsync(string objectName)
+        {
+            IDictionary<string, object> objectProperties = await DescribeAsync<ExpandoObject>(objectName);
+            objectProperties.TryGetValue("fields", out object fields);
+            List<string> objectDescription = new List<string>();
+            foreach (ExpandoObject field in fields as IEnumerable)
+            {
+                objectDescription.Add((field).FirstOrDefault(x => x.Key == "name").Value.ToString());                
+            }
+            return string.Join(", ", objectDescription);
         }
 
         // BULK METHODS
