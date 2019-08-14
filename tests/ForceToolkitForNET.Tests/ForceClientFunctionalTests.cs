@@ -369,6 +369,26 @@ namespace Salesforce.Force.Tests
     }
 
     [Test]
+    public async Task Update_Account_ExternalIdChanged()
+    {
+      string originalExternalId = string.Concat(Guid.NewGuid().ToString("N").Take(16)); 
+      string newExternalId = string.Concat(Guid.NewGuid().ToString("N").Take(16));
+      
+      dynamic account = new ExpandoObject();
+      account.Name = "New Account";
+      account.Description = "New Account Description";
+      account.ExternalId__c = originalExternalId;
+      var successResponse = await _client.CreateAsync("Account", account);
+      
+      account.ExternalId__c = newExternalId;
+      await _client.UpdateAsync("Account", successResponse.Id, account);
+
+      var result = await _client.QueryAllFieldsByIdAsync<Account>("Account", successResponse.Id);
+      
+      Assert.True(result.ExternalId__c.ToString() == newExternalId);
+    }
+
+    [Test]
     public async Task Delete_Account_IsSuccess()
     {
       var account = new Account { Name = "New Account", Description = "New Account Description" };
