@@ -10,6 +10,8 @@ using Salesforce.Common.Models;
 using Salesforce.Common.Soql;
 using Salesforce.Common.Models.Json;
 using Salesforce.Common.Models.Xml;
+using System.Dynamic;
+using System.Collections;
 
 namespace Salesforce.Force
 {
@@ -18,7 +20,7 @@ namespace Salesforce.Force
         protected readonly XmlHttpClient _xmlHttpClient;
         protected readonly JsonHttpClient _jsonHttpClient;
 
-	      public ISelectListResolver SelectListResolver { get; set; }
+        public ISelectListResolver SelectListResolver { get; set; }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
@@ -35,7 +37,7 @@ namespace Salesforce.Force
 
             _jsonHttpClient = new JsonHttpClient(instanceUrl, apiVersion, accessToken, httpClientForJson);
             _xmlHttpClient = new XmlHttpClient(instanceUrl, apiVersion, accessToken, httpClientForXml);
-            
+
             SelectListResolver = new DataMemberSelectListResolver();
         }
 
@@ -95,6 +97,31 @@ namespace Salesforce.Force
 
             var fields = SelectListResolver.GetFieldsList<T>();
             var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
+            var results = await QueryAsync<T>(query).ConfigureAwait(false);
+
+            return results.Records.FirstOrDefault();
+        }
+
+        public async Task<T> QueryAllFieldsByIdAsync<T>(string objectName, string recordId)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
+
+            var fields = await GetFieldsCommaSeparatedListAsync(objectName);
+            var query = string.Format("SELECT {0} FROM {1} WHERE Id = '{2}'", fields, objectName, recordId);
+            var results = await QueryAsync<T>(query).ConfigureAwait(false);
+
+            return results.Records.FirstOrDefault();
+        }
+
+        public async Task<T> QueryAllFieldsByExternalIdAsync<T>(string objectName, string externalIdFieldName, string externalId)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException("externalIdFieldName");
+            if (string.IsNullOrEmpty(externalId)) throw new ArgumentNullException("externalId");
+
+            var fields = await GetFieldsCommaSeparatedListAsync(objectName);
+            var query = string.Format("SELECT {0} FROM {1} WHERE {2} = '{3}'", fields, objectName, externalIdFieldName, externalId);
             var results = await QueryAsync<T>(query).ConfigureAwait(false);
 
             return results.Records.FirstOrDefault();
@@ -238,14 +265,40 @@ namespace Salesforce.Force
             return response;
         }
 
+        public async Task<string> GetFieldsCommaSeparatedListAsync(string objectName)
+        {
+            IDictionary<string, object> objectProperties = await DescribeAsync<ExpandoObject>(objectName);
+            objectProperties.TryGetValue("fields", out object fields);
+            List<string> objectDescription = new List<string>();
+            foreach (ExpandoObject field in fields as IEnumerable)
+            {
+                objectDescription.Add((field).FirstOrDefault(x => x.Key == "name").Value.ToString());                
+            }
+            return string.Join(", ", objectDescription);
+        }
+        
+        public Task<T> ExecuteAnonymousAsync<T>(string apex)
+        {
+            if (string.IsNullOrEmpty(apex)) throw new ArgumentNullException("apex");
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("tooling/executeAnonymous/?anonymousBody={0}", Uri.EscapeDataString(apex)));
+        }
+
         // BULK METHODS
 
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
+            return await RunJobAsync(objectName, null, operationType, recordsLists);
+        }
+
+        public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, string externalIdFieldName,
+            BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists)
+        {
             if (recordsLists == null) throw new ArgumentNullException("recordsLists");
 
-            var jobInfoResult = await CreateJobAsync(objectName, operationType);
+            if (operationType == BulkConstants.OperationType.Upsert && string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException(nameof(externalIdFieldName));
+
+            var jobInfoResult = await CreateJobAsync(objectName, externalIdFieldName, operationType);
             var batchResults = new List<BatchInfoResult>();
             foreach (var recordList in recordsLists)
             {
@@ -258,10 +311,16 @@ namespace Salesforce.Force
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
+            return await RunJobAndPollAsync(objectName, null, operationType, recordsLists);
+        }
+
+        public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType,
+            IEnumerable<ISObjectList<T>> recordsLists)
+        {
             const float pollingStart = 1000;
             const float pollingIncrease = 2.0f;
 
-            var batchInfoResults = await RunJobAsync(objectName, operationType, recordsLists);
+            var batchInfoResults = await RunJobAsync(objectName, externalIdFieldName, operationType, recordsLists);
 
             var currentPoll = pollingStart;
             var finishedBatchInfoResults = new List<BatchInfoResult>();
@@ -299,12 +358,20 @@ namespace Salesforce.Force
 
         public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType)
         {
-            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            return await CreateJobAsync(objectName, null, operationType);
+        }
+
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException(nameof(objectName));
+
+            if (operationType == BulkConstants.OperationType.Upsert && string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException(nameof(externalIdFieldName));
 
             var jobInfo = new JobInfo
             {
                 ContentType = "XML",
                 Object = objectName,
+                ExternalIdFieldName = externalIdFieldName,
                 Operation = operationType.Value()
             };
 
