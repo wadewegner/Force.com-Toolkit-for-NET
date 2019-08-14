@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Salesforce.Common.Models.Json;
 
 namespace Salesforce.Common
@@ -181,6 +183,49 @@ namespace Salesforce.Common
             {
                 var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
                 throw new ForceException(errorResponse.Error, errorResponse.ErrorDescription);
+            }
+        }
+
+
+        public async Task GetLatestVersionAsync()
+        {
+            try
+            {
+                string serviceURL = InstanceUrl + @"/services/data/";
+                HttpResponseMessage responseMessage = await _httpClient.GetAsync(serviceURL);
+
+                var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    try
+                    {
+                        var jToken = JToken.Parse(response);
+                        if (jToken.Type == JTokenType.Array)
+                        {
+                            var jArray = JArray.Parse(response);
+                            List<Models.Json.Version> versionList = JsonConvert.DeserializeObject<List<Models.Json.Version>>(jArray.ToString());
+                            if (versionList != null && versionList.Count > 0)
+                            {
+                                versionList.Sort();
+                                if (!string.IsNullOrEmpty(versionList.Last().version))
+                                    ApiVersion = "v" + versionList.Last().version;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new ForceException(Error.UnknownException, e.Message);
+                    }
+                }
+                else
+                {
+                    var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
+                    throw new ForceException(errorResponse.Error, errorResponse.ErrorDescription);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ForceAuthException(Error.UnknownException, ex.Message);
             }
         }
 
