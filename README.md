@@ -338,7 +338,7 @@ var results = await bulkClient.RunJobAndPollAsync("Account", "ExampleId"
 
 ## Contributing to the Repository
 
-If you find any issues or opportunities for improving this repository, fix them! Feel free to contribute to this project by [forking](http://help.github.com/fork-a-repo/) this repository and make changes to the content. Once you've made your changes, share them back with the community by sending a pull request. Please see [How to send pull requests](http://help.github.com/send-pull-requests/) for more information about contributing to Github projects.
+If you find any issues or opportunities for improving this respository, fix them! Feel free to contribute to this project by [forking](http://help.github.com/fork-a-repo/) this repository and make changes to the content. Once you've made your changes, share them back with the community by sending a pull request. Please see [How to send pull requests](http://help.github.com/send-pull-requests/) for more information about contributing to Github projects. You will be required to sign a Salesforce CLA for your submission to be considered.
 
 ## Reporting Issues
 
