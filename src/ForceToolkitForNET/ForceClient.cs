@@ -288,9 +288,17 @@ namespace Salesforce.Force
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
+            return await RunJobAsync(objectName, null, operationType, recordsLists);
+        }
+
+        public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, string externalIdFieldName,
+            BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists)
+        {
             if (recordsLists == null) throw new ArgumentNullException("recordsLists");
 
-            var jobInfoResult = await CreateJobAsync(objectName, operationType);
+            if (operationType == BulkConstants.OperationType.Upsert && string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException(nameof(externalIdFieldName));
+
+            var jobInfoResult = await CreateJobAsync(objectName, externalIdFieldName, operationType);
             var batchResults = new List<BatchInfoResult>();
             foreach (var recordList in recordsLists)
             {
@@ -303,10 +311,16 @@ namespace Salesforce.Force
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType,
             IEnumerable<ISObjectList<T>> recordsLists)
         {
+            return await RunJobAndPollAsync(objectName, null, operationType, recordsLists);
+        }
+
+        public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType,
+            IEnumerable<ISObjectList<T>> recordsLists)
+        {
             const float pollingStart = 1000;
             const float pollingIncrease = 2.0f;
 
-            var batchInfoResults = await RunJobAsync(objectName, operationType, recordsLists);
+            var batchInfoResults = await RunJobAsync(objectName, externalIdFieldName, operationType, recordsLists);
 
             var currentPoll = pollingStart;
             var finishedBatchInfoResults = new List<BatchInfoResult>();
@@ -344,12 +358,20 @@ namespace Salesforce.Force
 
         public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType)
         {
-            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            return await CreateJobAsync(objectName, null, operationType);
+        }
+
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException(nameof(objectName));
+
+            if (operationType == BulkConstants.OperationType.Upsert && string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException(nameof(externalIdFieldName));
 
             var jobInfo = new JobInfo
             {
                 ContentType = "XML",
                 Object = objectName,
+                ExternalIdFieldName = externalIdFieldName,
                 Operation = operationType.Value()
             };
 
