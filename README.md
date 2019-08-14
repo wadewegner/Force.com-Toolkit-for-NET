@@ -44,6 +44,12 @@ var auth = new AuthenticationClient();
 await auth.UsernamePasswordAsync("YOURCONSUMERKEY", "YOURCONSUMERSECRET", "YOURUSERNAME", "YOURPASSWORD");
 ```
 
+You can also specify a SalesForce API version when creating an authentication client if your use case requires it. The default API Version is currently v36.0
+
+```cs
+var auth = new AuthenticationClient("v44.0");
+```
+
 #### Web-Server Authentication Flow
 
 The Web-Server Authentication Flow requires a few additional steps but has the advantage of allowing you to authenticate your users and let them interact with the Force.com using their own access token.
