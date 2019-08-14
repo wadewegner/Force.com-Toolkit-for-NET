@@ -35,6 +35,7 @@ namespace Salesforce.Force
         Task<T> RecentAsync<T>(int limit = 200);
         Task<List<T>> SearchAsync<T>(string query);
         Task<T> UserInfo<T>(string url);
+        Task<System.IO.Stream> GetBlobAsync(String objectName, String objectId, String fieldName);
         Task<string> GetFieldsCommaSeparatedListAsync(string objectName);
         Task<T> ExecuteAnonymousAsync<T>(string apex);
 
