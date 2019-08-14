@@ -36,6 +36,7 @@ namespace Salesforce.Force
         Task<List<T>> SearchAsync<T>(string query);
         Task<T> UserInfo<T>(string url);
         Task<string> GetFieldsCommaSeparatedListAsync(string objectName);
+        Task<T> ExecuteAnonymousAsync<T>(string apex);
 
         // BULK
         Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);

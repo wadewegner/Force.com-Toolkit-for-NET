@@ -763,6 +763,13 @@ namespace Salesforce.Force.Tests
       Assert.AreEqual(echo, response);
     }
 
+    [Test]
+    public async Task ExecuteAnonymousAsync()
+    {
+      var response = await _client.ExecuteAnonymousAsync<AnonymousExecutionResponse>("System.debug('Test');");
+      Assert.IsNotNull(response);
+      Assert.IsTrue(response.Success);
+    }
 
     //#region Private methods
     //private static async Task CreateExternalIdField(string objectName, string fieldName)
