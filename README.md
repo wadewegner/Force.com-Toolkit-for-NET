@@ -154,6 +154,18 @@ foreach (var account in accounts.records)
 }
 ```
 
+You can query for metadata:
+
+```cs
+var describe = await client.DescribeAsync<JObject>("Account");
+
+foreach (var field in (JArray)describe["fields"))
+{
+    Console.WriteLine(field["label"]);
+}
+```
+
+
 ### Bulk Sample Code
 
 Below are some simple examples that show how to use the `BulkForceClient`
