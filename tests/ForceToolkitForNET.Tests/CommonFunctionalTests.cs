@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Salesforce.Force.Tests.Models;
 using Salesforce.Common;
-using Salesforce.Common.Models;
 using Salesforce.Common.Models.Json;
+using Salesforce.Common.Models.Xml;
 
 namespace Salesforce.Force.Tests
 {
@@ -186,6 +186,32 @@ namespace Salesforce.Force.Tests
                 Assert.IsNotNull(ex);
                 Assert.IsNotNull(ex.Message);
                 Assert.That(ex.Message, Is.EqualTo("Session expired or invalid"));
+                Assert.IsNotNull(ex.Error);
+            }
+        }
+
+        [Test]
+        public async Task BadTokenHandlingWithXml()
+        {
+            var badToken = "badtoken";
+            var serviceHttpClient = new XmlHttpClient(_auth.InstanceUrl, _auth.ApiVersion, badToken, new HttpClient());
+
+            var jobInfo = new JobInfo
+            {
+                ContentType = "XML",
+                Object = "BadObject",
+                Operation = "BadOperation"
+            };
+
+            try
+            {
+                await serviceHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
+            }
+            catch (ForceException ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsNotNull(ex.Message);
+                Assert.That(ex.Message, Is.EqualTo("Invalid session id"));
                 Assert.IsNotNull(ex.Error);
             }
         }
