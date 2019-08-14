@@ -8,11 +8,11 @@ namespace Salesforce.Common.Models.Json
      IsNullable = false)]
     public class ErrorResponse
     {
-        [XmlElement(ElementName = "exceptionCode")]
+        [XmlElement(ElementName = "exceptionMessage")]
         [JsonProperty(PropertyName = "message")]
         public string Message;
 
-        [XmlElement(ElementName = "exceptionMessage")]
+        [XmlElement(ElementName = "exceptionCode")]
         [JsonProperty(PropertyName = "errorCode")]
         public string ErrorCode;
     }

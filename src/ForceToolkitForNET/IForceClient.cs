@@ -14,6 +14,8 @@ namespace Salesforce.Force
         Task<QueryResult<T>> QueryContinuationAsync<T>(string nextRecordsUrl);
         Task<QueryResult<T>> QueryAllAsync<T>(string query);
         Task<T> QueryByIdAsync<T>(string objectName, string recordId);
+        Task<T> QueryAllFieldsByIdAsync<T>(string objectName, string recordId);
+        Task<T> QueryAllFieldsByExternalIdAsync<T>(string objectName, string externalIdFieldName, string externalId);        
         Task<T> ExecuteRestApiAsync<T>(string apiName);
         Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject);
         Task<SuccessResponse> CreateAsync(string objectName, object record);
@@ -34,6 +36,8 @@ namespace Salesforce.Force
         Task<List<T>> SearchAsync<T>(string query);
         Task<T> UserInfo<T>(string url);
         Task<System.IO.Stream> GetBlobAsync(String objectName, String objectId, String fieldName);
+        Task<string> GetFieldsCommaSeparatedListAsync(string objectName);
+        Task<T> ExecuteAnonymousAsync<T>(string apex);
 
         // BULK
         Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);

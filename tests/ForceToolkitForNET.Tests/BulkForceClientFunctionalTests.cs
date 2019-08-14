@@ -19,6 +19,7 @@ namespace Salesforce.Force.Tests
         private static string _username = ConfigurationManager.AppSettings["Username"];
         private static string _password = ConfigurationManager.AppSettings["Password"];
         private static string _organizationId = ConfigurationManager.AppSettings["OrganizationId"];
+        private static bool _testUpsert;
 
         private AuthenticationClient _auth;
         private ForceClient _client;
@@ -26,6 +27,7 @@ namespace Salesforce.Force.Tests
         [OneTimeSetUp]
         public void Init()
         {
+            bool.TryParse(ConfigurationManager.AppSettings["TestUpsert"], out _testUpsert);
             if (string.IsNullOrEmpty(_consumerKey) && string.IsNullOrEmpty(_consumerSecret) && string.IsNullOrEmpty(_username) && string.IsNullOrEmpty(_password) && string.IsNullOrEmpty(_organizationId))
             {
                 _consumerKey = Environment.GetEnvironmentVariable("ConsumerKey");
@@ -33,6 +35,7 @@ namespace Salesforce.Force.Tests
                 _username = Environment.GetEnvironmentVariable("Username");
                 _password = Environment.GetEnvironmentVariable("Password");
                 _organizationId = Environment.GetEnvironmentVariable("OrganizationId");
+                bool.TryParse(Environment.GetEnvironmentVariable("TestUpsert"), out _testUpsert);
             }
 
             // Use TLS 1.2 (instead of defaulting to 1.0)
@@ -132,6 +135,115 @@ namespace Salesforce.Force.Tests
             Assert.IsFalse(results4[0].Items[0].Created);
             Assert.IsTrue(results4[0].Items[0].Success);
         }
-    }
 
+        [Test]
+        public async Task UpsertTests()
+        {
+            // Requires a new field on Contact "Unique_Email__c" with External Id set.
+            if (_testUpsert)
+            {
+                var dtContactsBatch1 = new SObjectList<SObject>
+                {
+                    new SObject{{ "FirstName", "TestDtContact1"}, { "LastName", "TestDtContact1" }, { "MailingCity", "London" }, { "Email", "email1@example.com" }, {"Unique_Email__c", "email1@example.com"}},
+                    new SObject{{ "FirstName", "TestDtContact2"}, { "LastName", "TestDtContact2" }, { "MailingCity", "London" }, { "Email", "email2@example.com" }, {"Unique_Email__c", "email2@example.com" }}
+                };
+
+                var resultsUpsert1 = await _client.RunJobAndPollAsync("Contact", "Unique_Email__c",
+                    BulkConstants.OperationType.Upsert, new List<SObjectList<SObject>> { dtContactsBatch1 });
+
+                Assert.IsTrue(resultsUpsert1 != null);
+                Assert.AreEqual(resultsUpsert1.Count, 1);
+                Assert.AreEqual(resultsUpsert1[0].Items.Count, 2);
+                Assert.IsTrue(resultsUpsert1[0].Items[0].Created);
+                Assert.IsTrue(resultsUpsert1[0].Items[0].Success);
+                Assert.IsTrue(resultsUpsert1[0].Items[1].Created);
+                Assert.IsTrue(resultsUpsert1[0].Items[1].Success);
+
+                var dtContactsBatch2 = new SObjectList<SObject>
+                {
+                    new SObject{{ "FirstName", "TestDtContact2"}, { "LastName", "TestDtContact2" }, { "MailingCity", "York" }, { "Email", "email2@example.com" }, {"Unique_Email__c", "email2@example.com" }},
+                    new SObject{{ "FirstName", "TestDtContact3"}, { "LastName", "TestDtContact3" }, { "MailingCity", "York" }, { "Email", "email3@example.com" }, {"Unique_Email__c", "email3@example.com" }}
+                };
+
+                var resultsUpsert2 = await _client.RunJobAndPollAsync("Contact", "Unique_Email__c",
+                    BulkConstants.OperationType.Upsert, new List<SObjectList<SObject>> { dtContactsBatch2 });
+
+                Assert.IsTrue(resultsUpsert2 != null);
+                Assert.AreEqual(resultsUpsert2.Count, 1);
+                Assert.AreEqual(resultsUpsert2[0].Items.Count, 2);
+                Assert.IsFalse(resultsUpsert2[0].Items[0].Created);
+                Assert.IsTrue(resultsUpsert2[0].Items[0].Success);
+                Assert.IsTrue(resultsUpsert2[0].Items[1].Created);
+                Assert.IsTrue(resultsUpsert2[0].Items[1].Success);
+
+                // create an Id list for the original strongly typed accounts created
+                var idBatch = new SObjectList<SObject>();
+                idBatch.AddRange(resultsUpsert1[0].Items.Select(result => new SObject { { "Id", result.Id } }));
+                idBatch.Add(new SObject { {"Id", resultsUpsert2[0].Items[1].Id}});
+
+                var resultsDelete = await _client.RunJobAndPollAsync("Contact", BulkConstants.OperationType.Delete,
+                    new List<SObjectList<SObject>> { idBatch });
+
+                Assert.IsTrue(resultsDelete != null, "[results4] empty result object");
+                Assert.AreEqual(resultsDelete.Count, 1, "[results4] wrong number of results");
+                Assert.AreEqual(resultsDelete[0].Items.Count, 3, "[results4] wrong number of result records");
+            }
+            else
+            {
+                Assert.Inconclusive("Upsert Tests Skipped.");
+            }
+
+        }
+
+        [Test]
+        public async Task UpsertAccountTests()
+        {
+            var dtContactsBatch1 = new SObjectList<SObject>
+            {
+                new SObject {{"Name", "Upsert 1"}},
+                new SObject {{"Name", "Upsert 2"}}
+            };
+
+            var resultsUpsert1 = await _client.RunJobAndPollAsync("Campaign", "Name",
+                BulkConstants.OperationType.Upsert, new List<SObjectList<SObject>> {dtContactsBatch1});
+
+            Assert.IsTrue(resultsUpsert1 != null);
+            Assert.AreEqual(resultsUpsert1.Count, 1);
+            Assert.AreEqual(resultsUpsert1[0].Items.Count, 2);
+            Assert.IsTrue(resultsUpsert1[0].Items[0].Created);
+            Assert.IsTrue(resultsUpsert1[0].Items[0].Success);
+            Assert.IsTrue(resultsUpsert1[0].Items[1].Created);
+            Assert.IsTrue(resultsUpsert1[0].Items[1].Success);
+
+            var dtContactsBatch2 = new SObjectList<SObject>
+            {
+                new SObject {{"Name", "Upsert 2"}, {"Description", "Updated via Upsert"}},
+                new SObject {{"Name", "Upsert 3"}}
+            };
+
+            var resultsUpsert2 = await _client.RunJobAndPollAsync("Campaign", "Name",
+                BulkConstants.OperationType.Upsert, new List<SObjectList<SObject>> {dtContactsBatch2});
+
+            Assert.IsTrue(resultsUpsert2 != null);
+            Assert.AreEqual(resultsUpsert2.Count, 1);
+            Assert.AreEqual(resultsUpsert2[0].Items.Count, 2);
+            Assert.IsFalse(resultsUpsert2[0].Items[0].Created);
+            Assert.IsTrue(resultsUpsert2[0].Items[0].Success);
+            Assert.IsTrue(resultsUpsert2[0].Items[1].Created);
+            Assert.IsTrue(resultsUpsert2[0].Items[1].Success);
+
+            // create an Id list for the original strongly typed accounts created
+            var idBatch = new SObjectList<SObject>();
+            idBatch.AddRange(resultsUpsert1[0].Items.Select(result => new SObject {{"Id", result.Id}}));
+            idBatch.Add(new SObject {{"Id", resultsUpsert2[0].Items[1].Id}});
+
+            var resultsDelete = await _client.RunJobAndPollAsync("Account", BulkConstants.OperationType.Delete,
+                new List<SObjectList<SObject>> {idBatch});
+
+            Assert.IsTrue(resultsDelete != null, "[results4] empty result object");
+            Assert.AreEqual(resultsDelete.Count, 1, "[results4] wrong number of results");
+            Assert.AreEqual(resultsDelete[0].Items.Count, 3, "[results4] wrong number of result records");
+        }
+
+    }
 }
