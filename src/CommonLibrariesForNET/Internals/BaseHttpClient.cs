@@ -11,12 +11,14 @@ namespace Salesforce.Common.Internals
     {
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private readonly string _contentType;
+        private readonly bool _disposeHttpClient;
+
 
         protected readonly string InstanceUrl;
         protected string ApiVersion;
         protected readonly HttpClient HttpClient;
 
-        internal BaseHttpClient(string instanceUrl, string apiVersion, string contentType, HttpClient httpClient)
+        internal BaseHttpClient(string instanceUrl, string apiVersion, string contentType, HttpClient httpClient, bool callerWillDisposeHttpClient = false)
         {
             if (string.IsNullOrEmpty(instanceUrl)) throw new ArgumentNullException("instanceUrl");
             if (string.IsNullOrEmpty(apiVersion)) throw new ArgumentNullException("apiVersion");
@@ -26,6 +28,7 @@ namespace Salesforce.Common.Internals
             InstanceUrl = instanceUrl;
             ApiVersion = apiVersion;
             _contentType = contentType;
+            _disposeHttpClient = !callerWillDisposeHttpClient;
             HttpClient = httpClient;
 
             HttpClient.DefaultRequestHeaders.UserAgent.Clear();
@@ -124,7 +127,10 @@ namespace Salesforce.Common.Internals
 
         public void Dispose()
         {
-            HttpClient.Dispose();
+            if (_disposeHttpClient)
+            {
+                HttpClient.Dispose();
+            }
         }
     }
 }

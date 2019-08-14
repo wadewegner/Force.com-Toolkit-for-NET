@@ -18,17 +18,19 @@ namespace Salesforce.Common
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string TokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
         private readonly HttpClient _httpClient;
+        private readonly bool _disposeHttpClient;
 
         public AuthenticationClient(string apiVersion = "v36.0")
             : this(new HttpClient(), apiVersion)
         {
         }
 
-        public AuthenticationClient(HttpClient httpClient, string apiVersion  = "v36.0")
+        public AuthenticationClient(HttpClient httpClient, string apiVersion  = "v36.0", bool callerWillDisposeHttpClient = false)
         {
             if (httpClient == null) throw new ArgumentNullException("httpClient");
 
             _httpClient = httpClient;
+            _disposeHttpClient = !callerWillDisposeHttpClient;
             ApiVersion = apiVersion;
         }
 
@@ -184,7 +186,10 @@ namespace Salesforce.Common
 
         public void Dispose()
         {
-            _httpClient.Dispose();
+            if (_disposeHttpClient)
+            {
+                _httpClient.Dispose();
+            }
         }
     }
 }
