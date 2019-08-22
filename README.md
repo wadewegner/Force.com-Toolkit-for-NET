@@ -51,6 +51,13 @@ You can also specify a SalesForce API version when creating an authentication cl
 var auth = new AuthenticationClient("v44.0");
 ```
 
+You can get the latest API version from your Force.com instance in authentication client.
+
+```cs
+var auth = new AuthenticationClient();
+await auth.GetLatestVersionAsync();
+```
+
 #### Web-Server Authentication Flow
 
 The Web-Server Authentication Flow requires a few additional steps but has the advantage of allowing you to authenticate your users and let them interact with the Force.com using their own access token.
