@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -23,10 +24,11 @@ namespace Salesforce.Common
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
-        private static ForceException ParseForceException(string responseMessage)
+        private static ForceException ParseForceException<TErrorResponse>(string responseMessage, HttpStatusCode status)
+            where TErrorResponse : IErrorResponse
         {
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(responseMessage);
-            return new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            var errorResponse = JsonConvert.DeserializeObject<TErrorResponse>(responseMessage);
+            return errorResponse.MapToForceException(status);
         }
 
         // GET
@@ -37,7 +39,20 @@ namespace Salesforce.Common
             return await HttpGetAsync<T>(url);
         }
 
+        public async Task<T> HttpGetAsync<T, TErrorResponse>(string urlSuffix)
+            where TErrorResponse : IErrorResponse
+        {
+            var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
+            return await HttpGetAsync<T, TErrorResponse>(url);
+        }
+
         public async Task<T> HttpGetAsync<T>(Uri uri)
+        {
+            return await HttpGetAsync<T, ErrorResponses>(uri);
+        }
+
+        public async Task<T> HttpGetAsync<T, TErrorResponse>(Uri uri)
+            where TErrorResponse : IErrorResponse
         {
             try
             {
@@ -61,11 +76,17 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException<TErrorResponse>(e.Message, e.GetStatus());
             }
         }
 
         public async Task<IList<T>> HttpGetAsync<T>(string urlSuffix, string nodeName)
+        {
+            return await HttpGetAsync<T, ErrorResponses>(urlSuffix, nodeName);
+        }
+        
+        public async Task<IList<T>> HttpGetAsync<T, TErrorResponse>(string urlSuffix, string nodeName)
+            where TErrorResponse : IErrorResponse
         {
             string next = null;
             var records = new List<T>();
@@ -87,7 +108,7 @@ namespace Salesforce.Common
                 }
                 catch (BaseHttpClientException e)
                 {
-                    throw ParseForceException(e.Message);
+                    throw ParseForceException<TErrorResponse>(e.Message, e.GetStatus());
                 }
             }
             while (!string.IsNullOrEmpty(next));
@@ -125,6 +146,13 @@ namespace Salesforce.Common
             return await HttpGetAsync<T>(url);
         }
 
+        public async Task<T> HttpGetRestApiAsync<T, TErrorResponse>(string apiName)
+            where TErrorResponse : IErrorResponse
+        {
+            var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
+            return await HttpGetAsync<T, TErrorResponse>(url);
+        }
+
         // POST
 
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
@@ -133,7 +161,20 @@ namespace Salesforce.Common
             return await HttpPostAsync<T>(inputObject, url);
         }
 
+        public async Task<T> HttpPostAsync<T, TErrorResponse>(object inputObject, string urlSuffix)
+            where TErrorResponse : IErrorResponse
+        {
+            var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
+            return await HttpPostAsync<T, TErrorResponse>(inputObject, url);
+        }
+        
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
+        {
+            return await HttpPostAsync<T, ErrorResponses>(inputObject, uri);
+        }
+
+        public async Task<T> HttpPostAsync<T, TErrorResponse>(object inputObject, Uri uri)
+            where TErrorResponse : IErrorResponse
         {
             var json = JsonConvert.SerializeObject(inputObject,
                    Formatting.None,
@@ -150,7 +191,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException<TErrorResponse>(e.Message, e.GetStatus());
             }
         }
 
@@ -160,7 +201,20 @@ namespace Salesforce.Common
             return await HttpPostAsync<T>(inputObject, url);
         }
 
+        public async Task<T> HttpPostRestApiAsync<T, TErrorResponse>(string apiName, object inputObject)
+            where TErrorResponse : IErrorResponse
+        {
+            var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
+            return await HttpPostAsync<T, TErrorResponse>(inputObject, url);
+        }
+
         public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
+        {
+            return await HttpBinaryDataPostAsync<T, ErrorResponses>(urlSuffix, inputObject, fileContents, headerName, fileName);
+        }
+
+        public async Task<T> HttpBinaryDataPostAsync<T, TErrorResponse>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
+            where TErrorResponse : IErrorResponse
         {
             // BRAD: I think we should probably, in time, refactor multipart and binary support to the BaseHttpClient.
             // For now though, I just left this in here.
@@ -193,7 +247,7 @@ namespace Salesforce.Common
                 return JsonConvert.DeserializeObject<T>(response);
             }
 
-            throw ParseForceException(response);
+            throw ParseForceException<TErrorResponse>(response, responseMessage.StatusCode);
         }
 
         // PATCH
@@ -238,7 +292,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException<ErrorResponses>(e.Message, e.GetStatus());
             }
         }
 
@@ -264,7 +318,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException<ErrorResponses>(e.Message, e.GetStatus());
             }
         }
 
@@ -285,7 +339,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException<ErrorResponses>(e.Message, e.GetStatus());
             }
         }
     }

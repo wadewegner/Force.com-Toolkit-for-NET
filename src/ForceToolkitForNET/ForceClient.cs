@@ -80,6 +80,15 @@ namespace Salesforce.Force
             var response = await _jsonHttpClient.HttpGetRestApiAsync<T>(apiName);
             return response;
         }
+        
+        public async Task<T> ExecuteRestApiAsync<T, TErrorResponse>(string apiName)
+            where TErrorResponse : IErrorResponse
+        {
+            if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
+
+            var response = await _jsonHttpClient.HttpGetRestApiAsync<T, TErrorResponse>(apiName);
+            return response;
+        }
 
         public async Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject)
         {
@@ -87,6 +96,16 @@ namespace Salesforce.Force
             if (inputObject == null) throw new ArgumentNullException("inputObject");
 
             var response = await _jsonHttpClient.HttpPostRestApiAsync<T>(apiName, inputObject);
+            return response;
+        }
+
+        public async Task<T> ExecuteRestApiAsync<T, TErrorResponse>(string apiName, object inputObject)
+            where TErrorResponse : IErrorResponse
+        {
+            if (string.IsNullOrEmpty(apiName)) throw new ArgumentNullException("apiName");
+            if (inputObject == null) throw new ArgumentNullException("inputObject");
+
+            var response = await _jsonHttpClient.HttpPostRestApiAsync<T, TErrorResponse>(apiName, inputObject);
             return response;
         }
 
