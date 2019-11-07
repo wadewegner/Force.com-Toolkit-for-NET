@@ -34,14 +34,14 @@ namespace Salesforce.Common
         public async Task<T> HttpGetAsync<T>(string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpGetAsync<T>(url);
+            return await HttpGetAsync<T>(url).ConfigureAwait(false);
         }
 
         public async Task<T> HttpGetAsync<T>(Uri uri)
         {
             try
             {
-                var response = await HttpGetAsync(uri);
+                var response = await HttpGetAsync(uri).ConfigureAwait(false);
                 var jToken = JToken.Parse(response);
                 if (jToken.Type == JTokenType.Array)
                 {
@@ -79,7 +79,7 @@ namespace Salesforce.Common
                 }
                 try
                 {
-                    var response = await HttpGetAsync(url);
+                    var response = await HttpGetAsync(url).ConfigureAwait(false);
                     var jObject = JObject.Parse(response);
                     var jToken = jObject.GetValue(nodeName);
                     next = (jObject.GetValue("nextRecordsUrl") != null) ? jObject.GetValue("nextRecordsUrl").ToString() : null;
@@ -107,7 +107,7 @@ namespace Salesforce.Common
             };
 
             var responseMessage = await HttpClient.SendAsync(request).ConfigureAwait(false);
-            var response = await responseMessage.Content.ReadAsStreamAsync();
+            var response = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -122,7 +122,7 @@ namespace Salesforce.Common
         public async Task<T> HttpGetRestApiAsync<T>(string apiName)
         {
             var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
-            return await HttpGetAsync<T>(url);
+            return await HttpGetAsync<T>(url).ConfigureAwait(false);
         }
 
         // POST
@@ -130,7 +130,7 @@ namespace Salesforce.Common
         public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPostAsync<T>(inputObject, url);
+            return await HttpPostAsync<T>(inputObject, url).ConfigureAwait(false);
         }
 
         public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri)
@@ -145,7 +145,7 @@ namespace Salesforce.Common
                    });
             try
             {
-                var response = await HttpPostAsync(json, uri);
+                var response = await HttpPostAsync(json, uri).ConfigureAwait(false);
                 return JsonConvert.DeserializeObject<T>(response);
             }
             catch (BaseHttpClientException e)
@@ -157,7 +157,7 @@ namespace Salesforce.Common
         public async Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject)
         {
             var url = Common.FormatRestApiUrl(apiName, InstanceUrl);
-            return await HttpPostAsync<T>(inputObject, url);
+            return await HttpPostAsync<T>(inputObject, url).ConfigureAwait(false);
         }
 
         public async Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName)
@@ -201,7 +201,7 @@ namespace Salesforce.Common
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPatchAsync(inputObject, url);
+            return await HttpPatchAsync(inputObject, url).ConfigureAwait(false);
         }
 
         public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool ignoreNull)
@@ -209,13 +209,13 @@ namespace Salesforce.Common
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
             if (ignoreNull == true)
             {
-                return await HttpPatchAsync(inputObject, url);
+                return await HttpPatchAsync(inputObject, url).ConfigureAwait(false);
             }
             else
             {
-                return await HttpPatchAsync(inputObject, url, NullValueHandling.Include);
+                return await HttpPatchAsync(inputObject, url, NullValueHandling.Include).ConfigureAwait(false);
             }
-         //   return await HttpPatchAsync(inputObject, url, ignoreNull);
+         //   return await HttpPatchAsync(inputObject, url, ignoreNull).ConfigureAwait(false);
         }
 
 
@@ -231,7 +231,7 @@ namespace Salesforce.Common
                 });
             try
             {
-                var response = await base.HttpPatchAsync(json, uri);
+                var response = await base.HttpPatchAsync(json, uri).ConfigureAwait(false);
                 return string.IsNullOrEmpty(response) ?
                     new SuccessResponse{ Id = "", Errors = "", Success = true } :
                     JsonConvert.DeserializeObject<SuccessResponse>(response);
@@ -257,7 +257,7 @@ namespace Salesforce.Common
            
             try
             {
-                var response = await base.HttpPatchAsync(json, uri);
+                var response = await base.HttpPatchAsync(json, uri).ConfigureAwait(false);
                 return string.IsNullOrEmpty(response) ?
                     new SuccessResponse { Id = "", Errors = "", Success = true } :
                     JsonConvert.DeserializeObject<SuccessResponse>(response);
@@ -273,14 +273,14 @@ namespace Salesforce.Common
         public async Task<bool> HttpDeleteAsync(string urlSuffix)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpDeleteAsync(url);
+            return await HttpDeleteAsync(url).ConfigureAwait(false);
         }
 
         public new async Task<bool> HttpDeleteAsync(Uri uri)
         {
             try
             {
-                await base.HttpDeleteAsync(uri);
+                await base.HttpDeleteAsync(uri).ConfigureAwait(false);
                 return true;
             }
             catch (BaseHttpClientException e)

@@ -192,7 +192,7 @@ namespace Salesforce.Common
             try
             {
                 string serviceURL = InstanceUrl + @"/services/data/";
-                HttpResponseMessage responseMessage = await _httpClient.GetAsync(serviceURL);
+                HttpResponseMessage responseMessage = await _httpClient.GetAsync(serviceURL).ConfigureAwait(false);
 
                 var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (responseMessage.IsSuccessStatusCode)
