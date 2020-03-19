@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
@@ -38,7 +39,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException(e.Message, e.GetStatus());
             }
         }
 
@@ -60,16 +61,16 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException(e.Message, e.GetStatus());
             }
         }
 
         // HELPER METHODS
 
-        private static ForceException ParseForceException(string responseMessage)
+        private static ForceException ParseForceException(string responseMessage, HttpStatusCode statusCode)
         {
             var errorResponse = DeserializeXmlString<ErrorResponse>(responseMessage);
-            return new ForceException(errorResponse.ErrorCode, errorResponse.Message);
+            return new ForceException(errorResponse.ErrorCode, errorResponse.Message, statusCode);
         }
 
         private static string SerializeXmlObject(object inputObject)

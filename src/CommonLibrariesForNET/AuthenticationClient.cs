@@ -182,7 +182,7 @@ namespace Salesforce.Common
             else
             {
                 var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                throw new ForceException(errorResponse.Error, errorResponse.ErrorDescription);
+                throw new ForceException(errorResponse.Error, errorResponse.ErrorDescription, responseMessage.StatusCode);
             }
         }
 
@@ -220,7 +220,7 @@ namespace Salesforce.Common
                 else
                 {
                     var errorResponse = JsonConvert.DeserializeObject<AuthErrorResponse>(response);
-                    throw new ForceException(errorResponse.Error, errorResponse.ErrorDescription);
+                    throw new ForceException(errorResponse.Error, errorResponse.ErrorDescription, responseMessage.StatusCode);
                 }
             }
             catch (Exception ex)

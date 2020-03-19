@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -23,10 +24,10 @@ namespace Salesforce.Common
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
-        private static ForceException ParseForceException(string responseMessage)
+        private static ForceException ParseForceException(string responseMessage, HttpStatusCode statusCode)
         {
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(responseMessage);
-            return new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
+            return new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message, statusCode);
         }
 
         // GET
@@ -61,7 +62,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException(e.Message, e.GetStatus());
             }
         }
 
@@ -87,7 +88,7 @@ namespace Salesforce.Common
                 }
                 catch (BaseHttpClientException e)
                 {
-                    throw ParseForceException(e.Message);
+                    throw ParseForceException(e.Message, e.GetStatus());
                 }
             }
             while (!string.IsNullOrEmpty(next));
@@ -150,7 +151,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException(e.Message, e.GetStatus());
             }
         }
 
@@ -193,7 +194,7 @@ namespace Salesforce.Common
                 return JsonConvert.DeserializeObject<T>(response);
             }
 
-            throw ParseForceException(response);
+            throw ParseForceException(response, responseMessage.StatusCode);
         }
 
         // PATCH
@@ -238,7 +239,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException(e.Message, e.GetStatus());
             }
         }
 
@@ -264,7 +265,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException(e.Message, e.GetStatus());
             }
         }
 
@@ -285,7 +286,7 @@ namespace Salesforce.Common
             }
             catch (BaseHttpClientException e)
             {
-                throw ParseForceException(e.Message);
+                throw ParseForceException(e.Message, e.GetStatus());
             }
         }
     }
