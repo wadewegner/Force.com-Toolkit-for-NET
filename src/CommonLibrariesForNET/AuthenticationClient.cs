@@ -16,6 +16,8 @@ namespace Salesforce.Common
         public string RefreshToken { get; set; }
         public string Id { get; set; }
         public string ApiVersion { get; set; }
+        public string Signature { get; set; }
+        public string IssuedAt { get; set; }
 
         private const string UserAgent = "forcedotcom-toolkit-dotnet";
         private const string TokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token";
@@ -78,6 +80,8 @@ namespace Salesforce.Common
                 AccessToken = authToken.AccessToken;
                 InstanceUrl = authToken.InstanceUrl;
                 Id = authToken.Id;
+                Signature = authToken.Signature;
+                IssuedAt = authToken.IssuedAt;
             }
             else
             {
@@ -130,6 +134,8 @@ namespace Salesforce.Common
                 InstanceUrl = authToken.InstanceUrl;
                 Id = authToken.Id;
                 RefreshToken = authToken.RefreshToken;
+                Signature = authToken.Signature;
+                IssuedAt = authToken.IssuedAt;
             }
             else
             {
@@ -178,6 +184,8 @@ namespace Salesforce.Common
                 RefreshToken = refreshToken;
                 InstanceUrl = authToken.InstanceUrl;
                 Id = authToken.Id;
+                Signature = authToken.Signature;
+                IssuedAt = authToken.IssuedAt;
             }
             else
             {
