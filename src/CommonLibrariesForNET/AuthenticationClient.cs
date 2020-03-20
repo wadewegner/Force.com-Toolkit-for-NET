@@ -194,6 +194,25 @@ namespace Salesforce.Common
             }
         }
 
+        public async Task TokenRevokeAsync()
+        {
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.Method = HttpMethod.Post;
+            request.RequestUri = new Uri("https://login.salesforce.com/services/oauth2/revoke");
+            request.Content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("token", AccessToken)
+            });
+
+            try
+            {
+                HttpResponseMessage responseMessage = await _httpClient.SendAsync(request);
+            }
+            catch (Exception ex)
+            {
+                throw new ForceAuthException(Error.UnknownException, ex.Message);
+            }
+        }
 
         public async Task GetLatestVersionAsync()
         {
