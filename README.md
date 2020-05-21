@@ -93,7 +93,6 @@ var accessToken = auth.AccessToken;
 var apiVersion = auth.ApiVersion;
 
 var client = new ForceClient(instanceUrl, accessToken, apiVersion);
-var bulkClient = new BulkForceClient(instanceUrl, accessToken, apiVersion);
 ```
 
 ### Sample Code
@@ -182,7 +181,7 @@ foreach (var field in (JArray)describe["fields"))
 
 ### Bulk Sample Code
 
-Below are some simple examples that show how to use the `BulkForceClient`
+Below are some simple examples that show how to use the Bulk API features. 
 
 **NOTE:** The following features are currently not supported
 
@@ -226,7 +225,7 @@ var accountsBatchList = new List<SObjectList<Account>>
 	accountsBatch3
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account",
+var results = await client.RunJobAndPollAsync("Account",
 						BulkConstants.OperationType.Insert, accountsBatchList);
 ```
 
@@ -253,7 +252,7 @@ var accountsBatchList = new List<SObjectList<SObject>>
 	accountsBatch1
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account",
+var results = await client.RunJobAndPollAsync("Account",
                        BulkConstants.OperationType.Insert, accountsBatchList);
 ```
 
@@ -281,7 +280,7 @@ var accountsBatchList = new List<SObjectList<SObject>>
 	accountsBatch1
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account",
+var results = await client.RunJobAndPollAsync("Account",
                        BulkConstants.OperationType.Update, accountsBatchList);
 ```
 
@@ -307,7 +306,7 @@ var accountsBatchList = new List<SObjectList<SObject>>
 	accountsBatch1
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account",
+var results = await client.RunJobAndPollAsync("Account",
                        BulkConstants.OperationType.Delete, accountsBatchList);
 ```
 
@@ -338,7 +337,7 @@ var accountsBatchList = new List<SObjectList<SObject>>
 	accountsBatch1
 };
 
-var results = await bulkClient.RunJobAndPollAsync("Account", "ExampleId"
+var results = await client.RunJobAndPollAsync("Account", "ExampleId"
                        BulkConstants.OperationType.Upsert, accountsBatchList);
 
 ```
