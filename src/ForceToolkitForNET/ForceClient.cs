@@ -155,6 +155,15 @@ namespace Salesforce.Force
             return _jsonHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId));
         }
 
+        public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record, bool ignoreNull)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
+            if (record == null) throw new ArgumentNullException("record");
+
+            return _jsonHttpClient.HttpPatchAsync(record, string.Format("sobjects/{0}/{1}", objectName, recordId), ignoreNull);
+        }
+
         public Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
