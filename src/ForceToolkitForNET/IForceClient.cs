@@ -21,6 +21,7 @@ namespace Salesforce.Force
         Task<SuccessResponse> CreateAsync(string objectName, object record);
         Task<SaveResponse> CreateAsync(string objectName, CreateRequest request);
         Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record);
+        Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record, bool ignoreNull);
         Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record);
         Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record, bool ignoreNull);
         Task<bool> DeleteAsync(string objectName, string recordId);
