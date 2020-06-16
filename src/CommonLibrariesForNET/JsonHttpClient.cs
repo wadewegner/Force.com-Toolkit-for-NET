@@ -25,7 +25,19 @@ namespace Salesforce.Common
 
         private static ForceException ParseForceException(string responseMessage)
         {
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(responseMessage);
+            ErrorResponses errorResponse;
+            
+            try
+            {
+                errorResponse = JsonConvert.DeserializeObject<ErrorResponses>(responseMessage);
+            }
+            catch (Exception e)
+            {
+                // return initial response if can't parse
+                // <h1>Bad Message 414</h1><pre>reason: URI Too Long</pre>
+                return new ForceException(Error.Unknown, responseMessage + Environment.NewLine + e.Message);
+            }
+            
             return new ForceException(errorResponse[0].ErrorCode, errorResponse[0].Message);
         }
 
