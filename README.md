@@ -2,7 +2,7 @@
 
 This SDK is now targeting .NET Standard 2.0, .NET 4.5.2, .NET 4.6.2, and .NET 4.7.2.
 
-The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Lighting Platform APIs using native libraries.
+The Force.com Toolkit for .NET provides an easy way for .NET developers to interact with the Lightning Platform APIs using native libraries.
 
 The Common Libraries for .NET provides functionality used by the [Force.com Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ForceToolkitForNET) and the [Chatter Toolkit for .NET](https://github.com/developerforce/Force.com-Toolkit-for-NET/tree/master/src/ChatterToolkitForNET). While you can use the Common Libraries for .NET independently, it is recommended that you use it through one of the toolkits.
 
