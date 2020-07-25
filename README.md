@@ -162,7 +162,7 @@ public class Account
 
 var accounts = await client.QueryAsync<Account>("SELECT id, name, description FROM Account");
 
-foreach (var account in accounts.records)
+foreach (var account in accounts.Records)
 {
     Console.WriteLine(account.Name);
 }
@@ -173,7 +173,7 @@ You can query for metadata:
 ```cs
 var describe = await client.DescribeAsync<JObject>("Account");
 
-foreach (var field in (JArray)describe["fields"))
+foreach (var field in (JArray)describe["fields"])
 {
     Console.WriteLine(field["label"]);
 }
