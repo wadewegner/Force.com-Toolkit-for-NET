@@ -33,7 +33,9 @@ namespace Salesforce.Common.Models.Xml
                 }
                 else
                 {
-                    writer.WriteRaw(string.Format("<{0}>{1}</{0}>", entry.Key, entry.Value));
+                    writer.WriteStartElement(entry.Key);
+                    writer.WriteValue(entry.Value);
+                    writer.WriteEndElement();
                 }
             }
             writer.WriteRaw("</sObject>");
