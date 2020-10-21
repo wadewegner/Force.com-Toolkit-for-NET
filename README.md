@@ -116,7 +116,7 @@ var account = new Account() { Name = "New Account", Description = "New Account D
 var id = await client.CreateAsync("Account", account);
 ```
 
-You can also create with a non-strongly typed object:
+You can also create with an anonymously typed object:
 
 ```cs
 var client = new ForceClient(_consumerKey, _consumerSecret, _username, _password);
