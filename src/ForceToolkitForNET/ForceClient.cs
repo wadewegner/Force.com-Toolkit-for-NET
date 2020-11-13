@@ -309,13 +309,13 @@ namespace Salesforce.Force
         }
 
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType,
-            IEnumerable<ISObjectList<T>> recordsLists)
+            IEnumerable<ISObjectList<T>> recordsLists, float? maxPollDelayMilliSeconds = null)
         {
-            return await RunJobAndPollAsync(objectName, null, operationType, recordsLists);
+            return await RunJobAndPollAsync(objectName, null, operationType, recordsLists, maxPollDelayMilliSeconds);
         }
 
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType,
-            IEnumerable<ISObjectList<T>> recordsLists)
+            IEnumerable<ISObjectList<T>> recordsLists, float? maxPollDelayMilliSeconds = null)
         {
             const float pollingStart = 1000;
             const float pollingIncrease = 2.0f;
@@ -345,6 +345,7 @@ namespace Salesforce.Force
 
                 await Task.Delay((int)currentPoll);
                 currentPoll *= pollingIncrease;
+                if (maxPollDelayMilliSeconds != null && currentPoll > maxPollDelayMilliSeconds) currentPoll = (float)maxPollDelayMilliSeconds;
             }
 
 
