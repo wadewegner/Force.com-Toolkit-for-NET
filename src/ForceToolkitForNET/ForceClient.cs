@@ -319,6 +319,7 @@ namespace Salesforce.Force
         {
             const float pollingStart = 1000;
             const float pollingIncrease = 2.0f;
+            const float maxPollDeplay = 20000;
 
             var batchInfoResults = await RunJobAsync(objectName, externalIdFieldName, operationType, recordsLists);
 
@@ -345,6 +346,7 @@ namespace Salesforce.Force
 
                 await Task.Delay((int)currentPoll);
                 currentPoll *= pollingIncrease;
+                if (currentPoll > maxPollDeplay) currentPoll = maxPollDeplay;
             }
 
 
