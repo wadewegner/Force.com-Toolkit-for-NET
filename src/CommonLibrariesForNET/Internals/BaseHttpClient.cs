@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -82,7 +83,7 @@ namespace Salesforce.Common.Internals
             throw new BaseHttpClientException(response, responseMessage.StatusCode);
         }
 
-        protected async Task<string> HttpPatchAsync(string payload, Uri uri)
+        protected async Task<string> HttpPatchAsync(string payload, Uri uri, IDictionary<string, string> headers)
         {
             var content = new StringContent(payload, Encoding.UTF8, _contentType);
 
@@ -92,6 +93,11 @@ namespace Salesforce.Common.Internals
                 Method = new HttpMethod("PATCH"),
                 Content = content
             };
+
+            foreach (var keyValuePairHeader in headers ?? new Dictionary<string, string>())
+            {
+                request.Headers.TryAddWithoutValidation(keyValuePairHeader.Key, keyValuePairHeader.Value);
+            }
 
             var responseMessage = await HttpClient.SendAsync(request).ConfigureAwait(false);
             if (responseMessage.StatusCode == HttpStatusCode.NoContent)
