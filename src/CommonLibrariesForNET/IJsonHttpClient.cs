@@ -22,10 +22,10 @@ namespace Salesforce.Common
         Task<T> HttpBinaryDataPostAsync<T>(string urlSuffix, object inputObject, byte[] fileContents, string headerName, string fileName);
 
         // PATCH
-        Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix);
-        Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri);
-        Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool ignoreNull);
-        Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, NullValueHandling nullValueHandling);
+        Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, IDictionary<string, string> headers = default);
+        Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, IDictionary<string, string> headers = default);
+        Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool ignoreNull, IDictionary<string, string> headers = default);
+        Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, NullValueHandling nullValueHandling, IDictionary<string, string> headers = default);
 
         // DELETE
         Task<bool> HttpDeleteAsync(string urlSuffix);

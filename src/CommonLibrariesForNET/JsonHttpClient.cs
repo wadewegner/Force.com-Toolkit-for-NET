@@ -198,28 +198,28 @@ namespace Salesforce.Common
 
         // PATCH
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix)
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, IDictionary<string, string> headers = default)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
-            return await HttpPatchAsync(inputObject, url);
+            return await HttpPatchAsync(inputObject, url, headers);
         }
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool ignoreNull)
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, string urlSuffix, bool ignoreNull, IDictionary<string, string> headers = default)
         {
             var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
             if (ignoreNull == true)
             {
-                return await HttpPatchAsync(inputObject, url);
+                return await HttpPatchAsync(inputObject, url, headers);
             }
             else
             {
-                return await HttpPatchAsync(inputObject, url, NullValueHandling.Include);
+                return await HttpPatchAsync(inputObject, url, NullValueHandling.Include, headers);
             }
-         //   return await HttpPatchAsync(inputObject, url, ignoreNull);
+         //   return await HttpPatchAsync(inputObject, url, ignoreNull, headers);
         }
 
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri)
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, IDictionary<string, string> headers = default)
         {
             var json = JsonConvert.SerializeObject(inputObject,
                 Formatting.None,
@@ -231,7 +231,7 @@ namespace Salesforce.Common
                 });
             try
             {
-                var response = await base.HttpPatchAsync(json, uri);
+                var response = await base.HttpPatchAsync(json, uri, headers);
                 return string.IsNullOrEmpty(response) ?
                     new SuccessResponse{ Id = "", Errors = "", Success = true } :
                     JsonConvert.DeserializeObject<SuccessResponse>(response);
@@ -242,22 +242,21 @@ namespace Salesforce.Common
             }
         }
 
-        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, NullValueHandling nullValueHandling )
+        public async Task<SuccessResponse> HttpPatchAsync(object inputObject, Uri uri, NullValueHandling nullValueHandling, IDictionary<string, string> headers = default)
         {
-            
-                var json = JsonConvert.SerializeObject(inputObject,
-                              Formatting.None,
-                              new JsonSerializerSettings
-                              {
-                                  NullValueHandling = nullValueHandling,
-                                  ContractResolver = new UpdateableContractResolver(),
-                                  DateFormatString = DateFormat
-                              });
+            var json = JsonConvert.SerializeObject(inputObject,
+                Formatting.None,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = nullValueHandling,
+                    ContractResolver = new UpdateableContractResolver(),
+                    DateFormatString = DateFormat
+                });
             
            
             try
             {
-                var response = await base.HttpPatchAsync(json, uri);
+                var response = await base.HttpPatchAsync(json, uri, headers);
                 return string.IsNullOrEmpty(response) ?
                     new SuccessResponse { Id = "", Errors = "", Success = true } :
                     JsonConvert.DeserializeObject<SuccessResponse>(response);
