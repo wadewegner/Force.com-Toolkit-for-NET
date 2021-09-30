@@ -23,6 +23,24 @@
             }
         }
 
+        public sealed class ConcurrencyMode
+        {
+            public static readonly ConcurrencyMode Parallel = new ConcurrencyMode("Parallel");
+            public static readonly ConcurrencyMode Serial = new ConcurrencyMode("Serial");
+
+            private readonly string _value;
+
+            private ConcurrencyMode(string value)
+            {
+                _value = value;
+            }
+
+            public string Value()
+            {
+                return _value;
+            }
+        }
+
         public sealed class BatchState
         {
             public static readonly BatchState Queued = new BatchState("Queued");

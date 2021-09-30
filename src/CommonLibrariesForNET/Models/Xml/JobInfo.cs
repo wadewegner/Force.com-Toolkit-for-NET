@@ -12,6 +12,8 @@ namespace Salesforce.Common.Models.Xml
 
         [XmlElement(ElementName = "object")]
         public string Object { get; set; }
+        [XmlElement(ElementName = "concurrencyMode")]
+        public string ConcurrencyMode { get; set; }
 
         [XmlElement(ElementName = "externalIdFieldName")]
         public string ExternalIdFieldName { get; set; }

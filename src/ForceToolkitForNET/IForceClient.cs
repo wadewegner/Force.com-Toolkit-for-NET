@@ -15,7 +15,7 @@ namespace Salesforce.Force
         Task<QueryResult<T>> QueryAllAsync<T>(string query);
         Task<T> QueryByIdAsync<T>(string objectName, string recordId);
         Task<T> QueryAllFieldsByIdAsync<T>(string objectName, string recordId);
-        Task<T> QueryAllFieldsByExternalIdAsync<T>(string objectName, string externalIdFieldName, string externalId);        
+        Task<T> QueryAllFieldsByExternalIdAsync<T>(string objectName, string externalIdFieldName, string externalId);
         Task<T> ExecuteRestApiAsync<T>(string apiName);
         Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject);
         Task<SuccessResponse> CreateAsync(string objectName, object record);
@@ -37,12 +37,14 @@ namespace Salesforce.Force
         Task<T> UserInfo<T>(string url);
         Task<System.IO.Stream> GetBlobAsync(String objectName, String objectId, String fieldName);
         Task<string> GetFieldsCommaSeparatedListAsync(string objectName);
-        Task<T> ExecuteAnonymousAsync<T>(string apex);
+        Task<T> ExecuteAnonymousAsync<T>(string apex);  
 
         // BULK
-        Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);
-        Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists);
-        Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType);
+        Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null);
+        Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null);
+        Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null);
+        Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null);
+        Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType, BulkConstants.ConcurrencyMode concurrencyMode = null);
         Task<BatchInfoResult> CreateJobBatchAsync<T>(JobInfoResult jobInfo, ISObjectList<T> recordsObject);
         Task<BatchInfoResult> CreateJobBatchAsync<T>(string jobId, ISObjectList<T> recordsObject);
         Task<JobInfoResult> CloseJobAsync(JobInfoResult jobInfo);
