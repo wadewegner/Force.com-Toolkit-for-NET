@@ -20,7 +20,7 @@ namespace Salesforce.Force
         protected readonly XmlHttpClient _xmlHttpClient;
         protected readonly JsonHttpClient _jsonHttpClient;
 
-	    public ISelectListResolver SelectListResolver { get; set; }
+        public ISelectListResolver SelectListResolver { get; set; }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
             : this(instanceUrl, accessToken, apiVersion, new HttpClient(), new HttpClient())
@@ -37,7 +37,7 @@ namespace Salesforce.Force
 
             _jsonHttpClient = new JsonHttpClient(instanceUrl, apiVersion, accessToken, httpClientForJson, callerWillDisposeHttpClients);
             _xmlHttpClient = new XmlHttpClient(instanceUrl, apiVersion, accessToken, httpClientForXml, callerWillDisposeHttpClients);
-            
+
             SelectListResolver = new DataMemberSelectListResolver();
         }
 
@@ -272,11 +272,11 @@ namespace Salesforce.Force
             List<string> objectDescription = new List<string>();
             foreach (ExpandoObject field in fields as IEnumerable)
             {
-                objectDescription.Add((field).FirstOrDefault(x => x.Key == "name").Value.ToString());                
+                objectDescription.Add((field).FirstOrDefault(x => x.Key == "name").Value.ToString());
             }
             return string.Join(", ", objectDescription);
         }
-        
+
         public Task<T> ExecuteAnonymousAsync<T>(string apex)
         {
             if (string.IsNullOrEmpty(apex)) throw new ArgumentNullException("apex");
@@ -286,19 +286,19 @@ namespace Salesforce.Force
         // BULK METHODS
 
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, BulkConstants.OperationType operationType,
-            IEnumerable<ISObjectList<T>> recordsLists)
+            IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null)
         {
-            return await RunJobAsync(objectName, null, operationType, recordsLists);
+            return await RunJobAsync(objectName, null, operationType, recordsLists, concurrencyMode);
         }
 
         public async Task<List<BatchInfoResult>> RunJobAsync<T>(string objectName, string externalIdFieldName,
-            BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists)
+            BulkConstants.OperationType operationType, IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null)
         {
             if (recordsLists == null) throw new ArgumentNullException("recordsLists");
 
             if (operationType == BulkConstants.OperationType.Upsert && string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException(nameof(externalIdFieldName));
 
-            var jobInfoResult = await CreateJobAsync(objectName, externalIdFieldName, operationType);
+            var jobInfoResult = await CreateJobAsync(objectName, externalIdFieldName, operationType, concurrencyMode);
             var batchResults = new List<BatchInfoResult>();
             foreach (var recordList in recordsLists)
             {
@@ -309,18 +309,18 @@ namespace Salesforce.Force
         }
 
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, BulkConstants.OperationType operationType,
-            IEnumerable<ISObjectList<T>> recordsLists)
+            IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null)
         {
-            return await RunJobAndPollAsync(objectName, null, operationType, recordsLists);
+            return await RunJobAndPollAsync(objectName, null, operationType, recordsLists, concurrencyMode);
         }
 
         public async Task<List<BatchResultList>> RunJobAndPollAsync<T>(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType,
-            IEnumerable<ISObjectList<T>> recordsLists)
+            IEnumerable<ISObjectList<T>> recordsLists, BulkConstants.ConcurrencyMode concurrencyMode = null)
         {
             const float pollingStart = 1000;
             const float pollingIncrease = 2.0f;
 
-            var batchInfoResults = await RunJobAsync(objectName, externalIdFieldName, operationType, recordsLists);
+            var batchInfoResults = await RunJobAsync(objectName, externalIdFieldName, operationType, recordsLists, concurrencyMode);
 
             var currentPoll = pollingStart;
             var finishedBatchInfoResults = new List<BatchInfoResult>();
@@ -356,23 +356,26 @@ namespace Salesforce.Force
             return batchResults;
         }
 
-        public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType)
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, BulkConstants.OperationType operationType, BulkConstants.ConcurrencyMode concurrencyMode = null)
         {
-            return await CreateJobAsync(objectName, null, operationType);
+            return await CreateJobAsync(objectName, null, operationType, concurrencyMode);
         }
 
-        public async Task<JobInfoResult> CreateJobAsync(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType)
+        public async Task<JobInfoResult> CreateJobAsync(string objectName, string externalIdFieldName, BulkConstants.OperationType operationType, BulkConstants.ConcurrencyMode concurrencyMode = null)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException(nameof(objectName));
 
             if (operationType == BulkConstants.OperationType.Upsert && string.IsNullOrEmpty(externalIdFieldName)) throw new ArgumentNullException(nameof(externalIdFieldName));
+
+            if (concurrencyMode == null) concurrencyMode = BulkConstants.ConcurrencyMode.Parallel;
 
             var jobInfo = new JobInfo
             {
                 ContentType = "XML",
                 Object = objectName,
                 ExternalIdFieldName = externalIdFieldName,
-                Operation = operationType.Value()
+                Operation = operationType.Value(),
+                ConcurrencyMode = concurrencyMode.Value()
             };
 
             return await _xmlHttpClient.HttpPostAsync<JobInfoResult>(jobInfo, "/services/async/{0}/job");
